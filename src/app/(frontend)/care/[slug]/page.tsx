@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { MediaImage } from '@/components/ui/MediaImage'
+import { RichTextContent } from '@/components/ui/RichTextContent'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { CareSheet } from '@/payload-types'
 import { getCollectionSeo } from '@/lib/content'
@@ -105,11 +106,10 @@ export default async function CareSheetPage({ params }: PageProps) {
           )}
         </dl>
 
-        <div className="prose prose-invert max-w-3xl font-sans text-sm leading-relaxed text-luxury-mist">
-          <p className="text-luxury-silver">
-            Full rich-text rendering coming soon. Edit content in the admin panel under Care Sheets.
-          </p>
-        </div>
+        <RichTextContent
+          content={sheet.content}
+          className="font-sans text-sm font-light leading-relaxed text-luxury-mist"
+        />
 
         <Link href="/care" className="luxury-link mt-16 inline-block">
           ← All care guides

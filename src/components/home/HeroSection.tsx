@@ -1,15 +1,17 @@
 import Link from 'next/link'
 
 import { SITE_TAGLINE } from '@/lib/constants'
+import { getSiteImageUrl } from '@/lib/site-images'
 
 export function HeroSection() {
+  const heroImage = getSiteImageUrl('images/hero-orchid.svg', '/images/hero-orchid.svg')
+
   return (
     <section className="relative min-h-screen">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage:
-            'linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.85) 70%), url("/images/hero-orchid.svg")',
+          backgroundImage: `linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.85) 70%), url("${heroImage}")`,
         }}
         role="img"
         aria-label="Rare orchid in dramatic botanical light"

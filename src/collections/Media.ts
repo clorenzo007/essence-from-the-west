@@ -40,5 +40,14 @@ export const Media: CollectionConfig = {
       name: 'caption',
       type: 'text',
     },
+    {
+      name: 'cloudinaryPublicId',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        description: 'Set automatically when using Cloudinary storage.',
+      },
+    },
   ],
 }

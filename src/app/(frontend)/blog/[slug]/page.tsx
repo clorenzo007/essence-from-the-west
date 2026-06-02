@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { MediaImage } from '@/components/ui/MediaImage'
+import { RichTextContent } from '@/components/ui/RichTextContent'
 import type { BlogPost } from '@/payload-types'
 import { getCollectionSeo } from '@/lib/content'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
@@ -97,11 +98,10 @@ export default async function BlogPostPage({ params }: PageProps) {
           </ul>
         )}
 
-        <div className="mt-12 font-sans text-sm leading-relaxed text-luxury-mist">
-          <p className="text-luxury-silver">
-            Full rich-text rendering coming soon. Edit content in the admin panel under Journal Posts.
-          </p>
-        </div>
+        <RichTextContent
+          content={post.content}
+          className="mt-12 font-sans text-sm font-light leading-relaxed text-luxury-mist"
+        />
 
         <Link href="/blog" className="luxury-link mt-16 inline-block">
           ← Back to journal

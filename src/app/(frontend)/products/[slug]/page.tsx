@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { MediaImage } from '@/components/ui/MediaImage'
+import { RichTextContent } from '@/components/ui/RichTextContent'
 
 import type { Product } from '@/payload-types'
 import { WhatsAppCheckoutButton } from '@/components/products/WhatsAppCheckoutButton'
@@ -116,6 +117,11 @@ export default async function ProductPage({ params }: PageProps) {
             <p className="mt-2 font-sans text-sm text-luxury-silver">
               {product.stock > 0 ? `${product.stock} available` : 'Currently unavailable'}
             </p>
+
+            <RichTextContent
+              content={product.description}
+              className="mt-10 font-sans text-sm font-light leading-relaxed text-luxury-silver"
+            />
 
             <div className="mt-10">
               <WhatsAppCheckoutButton

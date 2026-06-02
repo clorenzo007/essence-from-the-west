@@ -1,9 +1,15 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
+
+import { getCloudinaryConfig, isCloudinaryEnabled } from './lib/cloudinary'
+import { getServerURL } from './lib/env'
+import { cloudinaryAdapter } from './storage/cloudinaryAdapter'
 
 import { BlogPosts } from './collections/BlogPosts'
 import { CareSheets } from './collections/CareSheets'
@@ -16,7 +22,33 @@ import { Users } from './collections/Users'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const useCloudinary = isCloudinaryEnabled()
+const useVercelBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN) && !useCloudinary
+
+const storagePlugins = useCloudinary
+  ? [
+      cloudStoragePlugin({
+        collections: {
+          media: {
+            adapter: cloudinaryAdapter,
+            disableLocalStorage: true,
+            disablePayloadAccessControl: true,
+            prefix: getCloudinaryConfig().folder,
+          },
+        },
+      }),
+    ]
+  : useVercelBlob
+    ? [
+        vercelBlobStorage({
+          collections: { media: true },
+          token: process.env.BLOB_READ_WRITE_TOKEN || '',
+        }),
+      ]
+    : []
+
 export default buildConfig({
+  serverURL: getServerURL(),
   admin: {
     user: Users.slug,
     meta: {
@@ -35,5 +67,6 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
+  plugins: storagePlugins,
   sharp,
 })

@@ -40,4 +40,45 @@
   .luxury-button-ghost {
     @apply inline-flex items-center justify-center border border-luxury-silver/40 px-8 py-3 font-sans text-xs uppercase tracking-luxury text-luxury-silver transition-all hover:border-luxury-ivory hover:text-luxury-ivory;
   }
+
+  .payload-richtext {
+    @apply space-y-6 text-luxury-mist;
+  }
+
+  .payload-richtext h2 {
+    @apply luxury-heading mt-12 text-3xl text-luxury-ivory;
+  }
+
+  .payload-richtext h3 {
+    @apply luxury-heading mt-8 text-2xl text-luxury-ivory;
+  }
+
+  .payload-richtext p {
+    @apply font-sans text-sm font-light leading-relaxed text-luxury-silver;
+  }
+
+  .payload-richtext a {
+    @apply text-luxury-ivory underline underline-offset-4 transition-opacity hover:opacity-70;
+  }
+
+  .payload-richtext ul,
+  .payload-richtext ol {
+    @apply ml-6 list-outside space-y-2 font-sans text-sm text-luxury-silver;
+  }
+
+  .payload-richtext ul {
+    @apply list-disc;
+  }
+
+  .payload-richtext ol {
+    @apply list-decimal;
+  }
+
+  .payload-richtext blockquote {
+    @apply border-l border-luxury-ivory/30 pl-6 italic text-luxury-mist;
+  }
+
+  .payload-richtext img {
+    @apply my-8 w-full object-cover;
+  }
 }

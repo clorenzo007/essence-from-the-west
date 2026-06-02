@@ -1,12 +1,19 @@
 import Link from 'next/link'
 
+import { getSiteImageUrl } from '@/lib/site-images'
+
 export function EditorialStrip() {
+  const editorialImage = getSiteImageUrl(
+    'images/editorial-nursery.svg',
+    '/images/editorial-nursery.svg',
+  )
+
   return (
     <section className="border-t border-white/5">
       <div className="grid md:grid-cols-2">
         <div
           className="relative aspect-square min-h-[400px] bg-cover bg-center md:aspect-auto md:min-h-[600px]"
-          style={{ backgroundImage: 'url("/images/editorial-nursery.svg")' }}
+          style={{ backgroundImage: `url("${editorialImage}")` }}
           role="img"
           aria-label="Orchid nursery greenhouse with natural light"
         />
