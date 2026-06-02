@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { SectionHeading } from '@/components/ui/SectionHeading'
+import type { BlogPost } from '@/payload-types'
+import { mapBlogPostToCard } from '@/lib/content'
 import { getPayloadClient } from '@/lib/payload'
 
 export const metadata: Metadata = {
@@ -15,11 +17,12 @@ export default async function BlogIndexPage() {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'blog-posts',
-    where: { status: { equals: 'published' } },
     limit: 24,
     depth: 1,
     sort: '-publishedAt',
   })
+
+  const posts = (docs as BlogPost[]).map(mapBlogPostToCard)
 
   return (
     <div className="pt-32 pb-24">
@@ -32,7 +35,7 @@ export default async function BlogIndexPage() {
         />
 
         <div className="grid gap-12 md:grid-cols-2">
-          {docs.map((post) => (
+          {posts.map((post) => (
             <article key={post.id} className="border border-white/10 p-8">
               <p className="luxury-label">
                 {post.publishedAt
@@ -56,7 +59,7 @@ export default async function BlogIndexPage() {
           ))}
         </div>
 
-        {docs.length === 0 && (
+        {posts.length === 0 && (
           <p className="font-sans text-sm text-luxury-silver">
             Published posts will appear here from the admin panel.
           </p>

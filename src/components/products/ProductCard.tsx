@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
+import { MediaImage } from '@/components/ui/MediaImage'
 import { formatPrice } from '@/lib/utils'
 
 export type ProductCardData = {
@@ -12,6 +12,9 @@ export type ProductCardData = {
   stock: number
   imageUrl?: string | null
   imageAlt?: string
+  shortDescription?: string
+  featured?: boolean
+  difficulty?: string | null
 }
 
 export function ProductCard({ product }: { product: ProductCardData }) {
@@ -22,7 +25,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden bg-luxury-charcoal">
           {product.imageUrl ? (
-            <Image
+            <MediaImage
               src={product.imageUrl}
               alt={product.imageAlt || product.name}
               fill

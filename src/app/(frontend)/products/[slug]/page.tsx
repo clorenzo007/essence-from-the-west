@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
+
+import { MediaImage } from '@/components/ui/MediaImage'
 
 import type { Product } from '@/payload-types'
 import { WhatsAppCheckoutButton } from '@/components/products/WhatsAppCheckoutButton'
 import { formatPrice } from '@/lib/utils'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
+import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -21,12 +23,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     limit: 1,
   })
 
-  const product = docs[0]
+  const product = docs[0] as Product | undefined
   if (!product) return { title: 'Orchid Not Found' }
 
+  const seo = getProductSeo(product)
+
   return {
-    title: product.meta?.title || product.name,
-    description: product.meta?.description || `${product.species} — ${product.name}`,
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords,
+    robots: seo.noIndex ? { index: false, follow: false } : undefined,
+    openGraph: seo.ogImageUrl
+      ? {
+          images: [{ url: seo.ogImageUrl, alt: product.name }],
+        }
+      : undefined,
   }
 }
 
@@ -46,7 +57,11 @@ export default async function ProductPage({ params }: PageProps) {
   if (!product) notFound()
 
   const gallery = product.gallery ?? []
-  const heroImage = gallery[0]?.image
+  const heroImage = getPrimaryGalleryImage(product)
+
+  const floweringSeasons = Array.isArray(product.floweringSeason)
+    ? product.floweringSeason.join(', ')
+    : product.floweringSeason
 
   return (
     <div className="pt-32 pb-24">
@@ -55,7 +70,7 @@ export default async function ProductPage({ params }: PageProps) {
           <div className="space-y-4">
             <div className="relative aspect-[4/5] bg-luxury-charcoal">
               {getMediaUrl(heroImage) && (
-                <Image
+                <MediaImage
                   src={getMediaUrl(heroImage)!}
                   alt={getMediaAlt(heroImage, product.name)}
                   fill
@@ -72,7 +87,7 @@ export default async function ProductPage({ params }: PageProps) {
                   if (!url) return null
                   return (
                     <div key={i} className="relative aspect-square bg-luxury-charcoal">
-                      <Image
+                      <MediaImage
                         src={url}
                         alt={getMediaAlt(item.image, product.name)}
                         fill
@@ -92,6 +107,11 @@ export default async function ProductPage({ params }: PageProps) {
               <p className="mt-2 font-sans text-sm text-luxury-silver">{product.hybrid}</p>
             )}
             <h1 className="luxury-heading mt-4 text-5xl md:text-6xl">{product.name}</h1>
+            {product.shortDescription && (
+              <p className="mt-6 max-w-lg font-sans text-sm font-light leading-relaxed text-luxury-silver">
+                {product.shortDescription}
+              </p>
+            )}
             <p className="mt-8 font-sans text-2xl">{formatPrice(product.price)}</p>
             <p className="mt-2 font-sans text-sm text-luxury-silver">
               {product.stock > 0 ? `${product.stock} available` : 'Currently unavailable'}
@@ -107,10 +127,10 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
 
             <dl className="mt-16 grid gap-6 border-t border-white/10 pt-10 sm:grid-cols-2">
-              {product.floweringSeason && (
+              {floweringSeasons && (
                 <>
                   <dt className="luxury-label">Flowering</dt>
-                  <dd className="font-sans text-sm">{product.floweringSeason}</dd>
+                  <dd className="font-sans text-sm capitalize">{floweringSeasons}</dd>
                 </>
               )}
               {product.fragrance && (
@@ -134,7 +154,7 @@ export default async function ProductPage({ params }: PageProps) {
               {product.lighting && (
                 <>
                   <dt className="luxury-label">Lighting</dt>
-                  <dd className="font-sans text-sm">{product.lighting}</dd>
+                  <dd className="font-sans text-sm capitalize">{product.lighting.replace('-', ' ')}</dd>
                 </>
               )}
               {product.difficulty && (
