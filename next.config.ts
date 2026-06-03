@@ -2,6 +2,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['payload', 'sharp'],
   outputFileTracingIncludes: {
     '/*': ['./node_modules/@payloadcms/**', './node_modules/payload/**'],
   },
