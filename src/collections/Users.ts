@@ -1,10 +1,21 @@
 import type { CollectionConfig } from 'payload'
 
+import { getAuthCookieDomain } from '@/lib/auth-cookies'
+
 import { canAccessAdminPanel, isAdmin } from './shared/access'
+
+const isProduction = process.env.NODE_ENV === 'production'
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    cookies: {
+      domain: getAuthCookieDomain(),
+      sameSite: 'Lax',
+      secure: isProduction,
+    },
+    useSessions: true,
+  },
   admin: {
     useAsTitle: 'email',
     group: 'Admin',

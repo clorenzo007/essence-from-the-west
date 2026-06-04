@@ -7,6 +7,7 @@ import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
+import { getTrustedOrigins } from './lib/auth-cookies'
 import { getCloudinaryConfig, isCloudinaryEnabled } from './lib/cloudinary'
 import { getServerURL } from './lib/env'
 import { cloudinaryAdapter } from './storage/cloudinaryAdapter'
@@ -49,6 +50,8 @@ const storagePlugins = useCloudinary
 
 export default buildConfig({
   serverURL: getServerURL(),
+  csrf: getTrustedOrigins(),
+  cors: getTrustedOrigins(),
   admin: {
     user: Users.slug,
     meta: {
