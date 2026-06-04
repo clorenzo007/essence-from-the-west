@@ -9,7 +9,7 @@ type FeaturedCollectionProps = {
 
 export function FeaturedCollection({ products }: FeaturedCollectionProps) {
   return (
-    <section className="border-t border-ro-charcoal/8 py-24 md:py-32">
+    <section className="relative border-t border-ro-charcoal/8 bg-ro-ivory/75 py-24 backdrop-blur-[2px] md:py-32">
       <div className="ro-container">
         <div className="mb-16 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
           <SectionHeading

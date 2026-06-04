@@ -1,6 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 @import '../../styles/brand-watermark.css';
 
+/* Marca de agua en admin */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--ro-watermark-image);
+  background-repeat: no-repeat;
+  background-position: var(--ro-watermark-position);
+  background-size: var(--ro-watermark-size);
+  opacity: var(--ro-watermark-opacity);
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Reserva Oeste — admin Payload (misma paleta que el sitio público) */
 :root {
   --theme-bg: #f7f4ef;

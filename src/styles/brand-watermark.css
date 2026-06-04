@@ -1,37 +1,31 @@
 /**
- * Marca de agua Reserva Oeste — storefront y admin Payload.
- * Logo centrado, baja opacidad, no interfiere con clics.
+ * Tokens y utilidades — marca de agua Reserva Oeste.
  */
 :root {
   --ro-watermark-image: url('/images/logo.png');
-  --ro-watermark-opacity: 0.065;
-  --ro-watermark-size: min(52vw, 480px);
+  --ro-watermark-opacity: 0.09;
+  --ro-watermark-size: min(54vw, 520px);
+  --ro-watermark-position: center 40%;
 }
 
-html {
-  min-height: 100%;
-}
-
-body {
+.ro-site-main {
   position: relative;
-  min-height: 100%;
   isolation: isolate;
 }
 
-body::before {
-  content: '';
+.ro-site-main > .ro-watermark-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   background-image: var(--ro-watermark-image);
   background-repeat: no-repeat;
-  background-position: center 42%;
+  background-position: var(--ro-watermark-position);
   background-size: var(--ro-watermark-size);
   opacity: var(--ro-watermark-opacity);
 }
 
-body > * {
+.ro-site-main > *:not(.ro-watermark-layer) {
   position: relative;
   z-index: 1;
 }

@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from 'next/font/google'
 
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import { BrandWatermark } from '@/components/ui/BrandWatermark'
 import { SITE_DESCRIPTOR, SITE_NAME } from '@/lib/constants'
 import { defaultSiteMetadata } from '@/lib/site-metadata'
 
@@ -39,7 +40,10 @@ export default function FrontendLayout({
     <html lang="es" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-ro-ivory font-sans">
         <Header />
-        <main>{children}</main>
+        <main className="ro-site-main">
+          <BrandWatermark className="ro-watermark-layer" />
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

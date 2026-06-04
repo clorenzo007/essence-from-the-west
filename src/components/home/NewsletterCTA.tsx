@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export function NewsletterCTA() {
   return (
-    <section className="border-t border-ro-charcoal/8 py-24 md:py-32">
+    <section className="relative border-t border-ro-charcoal/8 bg-ro-ivory/75 py-24 backdrop-blur-[2px] md:py-32">
       <div className="ro-container text-center">
         <p className="ro-label mb-6 text-ro-gold">Consulta privada</p>
         <h2 className="ro-heading mx-auto max-w-2xl text-4xl md:text-5xl">
