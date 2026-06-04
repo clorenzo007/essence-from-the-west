@@ -1,11 +1,11 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { validatePublishedCareSheet } from './care-sheets/hooks'
+import { editorCollectionAccess } from './shared/access'
 import {
   createMetaSyncHook,
   createSeoTabFields,
   createSlugField,
-  publishedReadAccess,
 } from './shared/fields'
 import { CONTENT_STATUS_OPTIONS, DIFFICULTY_OPTIONS, LIGHTING_OPTIONS } from './shared/options'
 
@@ -48,7 +48,7 @@ export const CareSheets: CollectionConfig = {
     listSearchableFields: ['title', 'slug', 'genus', 'alliance', 'summary'],
     pagination: { defaultLimit: 25 },
   },
-  access: publishedReadAccess,
+  access: editorCollectionAccess,
   hooks: {
     beforeValidate: [
       validatePublishedCareSheet,

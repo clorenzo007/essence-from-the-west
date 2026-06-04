@@ -1,11 +1,11 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { validatePublishedCategory } from './categories/hooks'
+import { editorCollectionAccess } from './shared/access'
 import {
   createMetaSyncHook,
   createSeoTabFields,
   createSlugField,
-  publishedReadAccess,
 } from './shared/fields'
 import { CONTENT_STATUS_OPTIONS } from './shared/options'
 
@@ -57,7 +57,7 @@ export const Categories: CollectionConfig = {
     listSearchableFields: ['name', 'slug', 'description', 'shortDescription'],
     pagination: { defaultLimit: 25 },
   },
-  access: publishedReadAccess,
+  access: editorCollectionAccess,
   hooks: {
     beforeValidate: [
       validatePublishedCategory,

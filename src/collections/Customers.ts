@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { isLoggedIn } from './shared/access'
+
 export const Customers: CollectionConfig = {
   slug: 'customers',
   admin: {
@@ -9,10 +11,10 @@ export const Customers: CollectionConfig = {
     description: 'Customer database for inquiries and WhatsApp orders',
   },
   access: {
-    read: ({ req }) => Boolean(req.user),
-    create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
+    read: isLoggedIn,
+    create: isLoggedIn,
+    update: isLoggedIn,
+    delete: isLoggedIn,
   },
   fields: [
     {

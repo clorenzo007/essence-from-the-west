@@ -1,11 +1,11 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { setPublishedAtOnPublish, validatePublishedBlogPost } from './blog-posts/hooks'
+import { editorCollectionAccess } from './shared/access'
 import {
   createMetaSyncHook,
   createSeoTabFields,
   createSlugField,
-  publishedReadAccess,
 } from './shared/fields'
 import { CONTENT_STATUS_OPTIONS } from './shared/options'
 
@@ -65,7 +65,7 @@ export const BlogPosts: CollectionConfig = {
     listSearchableFields: ['title', 'slug', 'excerpt', 'author'],
     pagination: { defaultLimit: 25 },
   },
-  access: publishedReadAccess,
+  access: editorCollectionAccess,
   hooks: {
     beforeValidate: [
       setPublishedAtOnPublish,

@@ -1,5 +1,6 @@
 import type { CollectionConfig, Field } from 'payload'
 
+import { editorCollectionAccess } from './shared/access'
 import {
   autoGenerateSlug,
   syncMetaFromProduct,
@@ -80,16 +81,7 @@ export const Products: CollectionConfig = {
       defaultLimit: 25,
     },
   },
-  access: {
-    read: ({ req }) => {
-      if (req.user) return true
-      return {
-        status: {
-          equals: 'published',
-        },
-      }
-    },
-  },
+  access: editorCollectionAccess,
   hooks: {
     beforeValidate: [validatePublishedProduct, syncMetaFromProduct],
   },

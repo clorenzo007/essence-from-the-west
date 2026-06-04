@@ -1,11 +1,50 @@
 import type { CollectionConfig } from 'payload'
 
+import { isAdmin, isAdminPanelUser } from './shared/access'
+
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: true,
   admin: {
     useAsTitle: 'email',
     group: 'Admin',
+  },
+  access: {
+    admin: isAdminPanelUser,
+    create: isAdmin,
+    read: ({ req }) => {
+      const user = req.user as { id?: string; role?: string } | undefined
+      if (!user) return false
+      if (user.role === 'admin') return true
+      return { id: { equals: user.id } }
+    },
+    update: ({ req }) => {
+      const user = req.user as { id?: string; role?: string } | undefined
+      if (!user) return false
+      if (user.role === 'admin') return true
+      return { id: { equals: user.id } }
+    },
+    delete: isAdmin,
+  },
+  hooks: {
+    beforeChange: [
+      async ({ data, operation, req }) => {
+        if (!data) return data
+
+        if (operation === 'create') {
+          const { totalDocs } = await req.payload.count({ collection: 'users' })
+          if (totalDocs === 0) {
+            data.role = 'admin'
+          }
+        }
+
+        if (!data.role) {
+          data.role = 'editor'
+        }
+
+        return data
+      },
+    ],
   },
   fields: [
     {
@@ -16,11 +55,27 @@ export const Users: CollectionConfig = {
       name: 'role',
       type: 'select',
       defaultValue: 'editor',
+      required: true,
+      saveToJWT: true,
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'Editor', value: 'editor' },
       ],
-      required: true,
+      access: {
+        read: () => true,
+        create: ({ req }) => (req.user as { role?: string } | undefined)?.role === 'admin',
+        update: async ({ req }) => {
+          if ((req.user as { role?: string } | undefined)?.role === 'admin') return true
+          const { totalDocs } = await req.payload.count({
+            collection: 'users',
+            where: { role: { equals: 'admin' } },
+          })
+          return totalDocs === 0
+        },
+      },
+      admin: {
+        description: 'Solo administradores pueden asignar roles. Cerrá sesión y volvé a entrar tras cambiar el tuyo.',
+      },
     },
   ],
 }

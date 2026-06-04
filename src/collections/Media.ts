@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { isLoggedIn } from './shared/access'
+
 export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
@@ -29,6 +31,12 @@ export const Media: CollectionConfig = {
   },
   admin: {
     group: 'Content',
+  },
+  access: {
+    read: isLoggedIn,
+    create: isLoggedIn,
+    update: isLoggedIn,
+    delete: isLoggedIn,
   },
   fields: [
     {

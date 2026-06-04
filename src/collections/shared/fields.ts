@@ -122,12 +122,7 @@ export function createSeoTabFields(): Tab {
   }
 }
 
-export const publishedReadAccess = {
-  read: ({ req }: { req: { user?: unknown } }) => {
-    if (req.user) return true
-    return { status: { equals: 'published' as const } }
-  },
-}
+export { publishedReadAccess } from './access'
 
 export const publicReadAccess = {
   read: () => true,
