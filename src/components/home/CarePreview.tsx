@@ -11,7 +11,7 @@ const careTopics = [
 
 export function CarePreview() {
   return (
-    <section className="border-t border-ro-charcoal/8 bg-ro-card py-24 md:py-32">
+    <section className="border-t border-ro-charcoal/8 bg-ro-card/85 py-24 backdrop-blur-sm md:py-32">
       <div className="ro-container">
         <SectionHeading
           label="Conocimiento"

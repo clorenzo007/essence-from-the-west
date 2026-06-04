@@ -19,7 +19,7 @@ export function EditorialStrip() {
           aria-label="Orquídea en composición de colección"
         />
 
-        <div className="flex flex-col justify-center bg-ro-card px-6 py-20 md:px-16 lg:px-24">
+        <div className="flex flex-col justify-center bg-ro-card/88 px-6 py-20 backdrop-blur-sm md:px-16 lg:px-24">
           <p className="ro-label mb-6 text-ro-gold">Reserva Oeste</p>
           <h2 className="ro-heading text-4xl md:text-5xl">
             Una colección,

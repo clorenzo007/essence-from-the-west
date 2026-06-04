@@ -57,6 +57,12 @@ export default buildConfig({
     meta: {
       titleSuffix: '— Reserva Oeste',
     },
+    components: {
+      graphics: {
+        Logo: '@/components/admin/AdminLogo#AdminLogo',
+        Icon: '@/components/admin/AdminIcon#AdminIcon',
+      },
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },

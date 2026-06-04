@@ -1,94 +1,64 @@
-# Essence From The West
+# Reserva Oeste
 
-Premium orchid nursery ecommerce — Next.js 15, Payload CMS 3, MongoDB, Tailwind CSS.
+**Orquídeas de Colección** — sitio editorial + catálogo con checkout por WhatsApp.
 
-## Stack
+Stack: **Next.js 15** · **Payload CMS 3** · **MongoDB** · **Tailwind** · **Cloudinary** (opcional).
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | Next.js 15 App Router, React 19, TypeScript |
-| CMS / Admin | Payload CMS 3 (embedded admin at `/admin`) |
-| Database | MongoDB via `@payloadcms/db-mongodb` |
-| Styling | Tailwind CSS — luxury botanical monochrome |
+| Entorno | URL |
+|---------|-----|
+| Producción | https://www.reservaoeste.com.ar |
+| Admin | https://www.reservaoeste.com.ar/admin |
+| Repo | https://github.com/clorenzo007/essence-from-the-west |
 
-## Folder architecture
+## Documentación
 
-```
-essence-from-the-west/
-├── public/images/              # Static assets & placeholders
-├── src/
-│   ├── app/
-│   │   ├── (frontend)/         # Public storefront (SSR)
-│   │   │   ├── layout.tsx
-│   │   │   ├── page.tsx        # Homepage
-│   │   │   ├── catalog/
-│   │   │   ├── products/[slug]/
-│   │   │   ├── care/
-│   │   │   └── blog/
-│   │   ├── (payload)/          # Payload admin + REST/GraphQL API
-│   │   │   ├── admin/[[...segments]]/
-│   │   │   └── api/
-│   │   └── globals.css
-│   ├── collections/            # Payload data models
-│   ├── components/
-│   │   ├── home/
-│   │   ├── layout/
-│   │   ├── products/
-│   │   └── ui/
-│   ├── lib/                    # Payload client, utils, mappers
-│   └── payload.config.ts       # MongoDB + collections
-├── .env.example
-└── package.json
+Toda la guía del código está en **[docs/](./docs/)**:
+
+- [Índice](./docs/README.md)
+- [Arquitectura](./docs/01-arquitectura.md)
+- [Frontend](./docs/02-frontend.md)
+- [Payload CMS](./docs/03-payload-cms.md)
+- [Autenticación](./docs/04-autenticacion.md)
+- [Marca y diseño](./docs/05-marca-y-diseno.md)
+- [Despliegue](./docs/06-despliegue.md)
+- [Referencia de archivos](./docs/07-referencia-archivos.md)
+
+## Inicio rápido
+
+```bash
+cp .env.example .env
+# DATABASE_URI, PAYLOAD_SECRET, NEXT_PUBLIC_SERVER_URL
+npm install
+npm run dev
 ```
 
-## Collections (admin CRUD)
-
-- **products** — catalog, stock, pricing, growing requirements, gallery
-- **categories** — taxonomy for filters
-- **blog-posts** — SEO journal
-- **care-sheets** — orchid care guides
-- **customers** — inquiry database (admin-only)
-- **media** — image uploads with responsive sizes
-- **users** — admin authentication
-
-## Getting started
-
-1. **MongoDB** — local or [MongoDB Atlas](https://www.mongodb.com/atlas):
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Set `DATABASE_URI`, `PAYLOAD_SECRET`, and optionally `NEXT_PUBLIC_WHATSAPP_NUMBER`.
-
-2. **Install & run**:
-
-   ```bash
-   npm install
-   npm run generate:importmap
-   npm run dev
-   ```
-
-3. **Admin** — open [http://localhost:3000/admin](http://localhost:3000/admin) and create the first user.
-
-4. **Storefront** — [http://localhost:3000](http://localhost:3000)
+- Tienda: http://localhost:3000  
+- Admin: http://localhost:3000/admin  
 
 ## Scripts
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `npm run dev` | Development server |
-| `npm run build` | Production build |
-| `npm run generate:types` | Regenerate `payload-types.ts` |
-| `npm run generate:importmap` | Regenerate admin import map |
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build producción (importmap + types + Next) |
+| `npm run generate:types` | Regenerar `payload-types.ts` |
+| `npm run generate:importmap` | Regenerar mapa del admin |
+| `npm run migrate:cloudinary` | Subir media a Cloudinary |
 
-## WhatsApp checkout
+## Estructura resumida
 
-Set `NEXT_PUBLIC_WHATSAPP_NUMBER` (E.164 without `+`). Product pages link to a pre-filled WhatsApp message with name, price, and URL.
+```
+src/app/(frontend)/   → Sitio público
+src/app/(payload)/    → Admin + API
+src/collections/      → Modelos Payload
+src/components/       → UI React
+src/lib/              → Payload client, mappers, utilidades
+```
 
-## Next steps
+## Ayuda rápida
 
-- Replace placeholder SVG hero art with nursery photography in **Media**
-- Add `care/[slug]` and `blog/[slug]` detail templates
-- `robots.txt` / sitemap generation
-- Rich text rendering for product descriptions and blog posts
+| Problema | Solución |
+|----------|----------|
+| No puedo entrar al admin | Ver [04-autenticacion.md](./docs/04-autenticacion.md) |
+| Logout no funciona | https://www.reservaoeste.com.ar/api/cerrar-sesion |
+| Deploy falla | Ver [06-despliegue.md](./docs/06-despliegue.md) |

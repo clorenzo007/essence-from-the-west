@@ -11,7 +11,7 @@ export function Header() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-ro-charcoal/8 bg-ro-ivory/90 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-ro-charcoal/8 bg-ro-ivory/82 backdrop-blur-sm">
       <div className="ro-container flex h-20 items-center justify-between md:h-24">
         <Logo />
 

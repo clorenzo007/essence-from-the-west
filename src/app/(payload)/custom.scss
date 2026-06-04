@@ -1,9 +1,70 @@
-/* Payload admin — Reserva Oeste accent */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+@import '../../styles/brand-watermark.css';
+
+/* Reserva Oeste — admin Payload (misma paleta que el sitio público) */
 :root {
   --theme-bg: #f7f4ef;
   --theme-elevation-0: #fcfbf8;
   --theme-elevation-50: #f7f4ef;
   --theme-elevation-100: #eee9e0;
+  --theme-elevation-150: #e8e3da;
+  --theme-elevation-200: #e0dbd2;
   --theme-text: #1f1f1f;
   --theme-success-500: #5d6a4d;
+  --theme-warning-500: #b08a43;
+  --theme-input-bg: #fcfbf8;
+}
+
+/* Tipografía alineada al storefront */
+.template-default,
+.template-minimal {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Acento dorado en botones primarios */
+.btn--style-primary {
+  background-color: #b08a43;
+  border-color: #b08a43;
+
+  &:hover {
+    background-color: #9a7840;
+    border-color: #9a7840;
+  }
+}
+
+/* Ocultar logo, enlaces y leyenda de Payload */
+a[href*='payloadcms.com'],
+a[href*='github.com/payloadcms'],
+[class*='payload-cloud'],
+[class*='Payload'] svg[aria-label*='Payload'],
+.graphic-logo svg:not(:has(+ img)),
+.login .graphic-logo svg,
+.step-nav__brand svg,
+.nav__brand svg {
+  display: none !important;
+}
+
+/* Login: sin footer / powered-by */
+.template-login footer,
+.template-login [class*='footer'],
+.template-login p a[href*='payload'] {
+  display: none !important;
+}
+
+/* Nav: fondo marfil como el sitio */
+.nav {
+  background-color: var(--theme-elevation-0);
+  border-right: 1px solid rgb(31 31 31 / 8%);
+}
+
+/* Paneles y formularios sobre la marca de agua */
+.template-default .content,
+.template-default .doc-controls,
+.template-login .login__form {
+  background-color: rgb(252 251 248 / 88%);
+  backdrop-filter: blur(2px);
+}
+
+.template-login .login {
+  background-color: transparent;
 }
