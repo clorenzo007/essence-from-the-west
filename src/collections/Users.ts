@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdmin, isAdminPanelUser } from './shared/access'
+import { canAccessAdminPanel, isAdmin } from './shared/access'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -10,7 +10,7 @@ export const Users: CollectionConfig = {
     group: 'Admin',
   },
   access: {
-    admin: isAdminPanelUser,
+    admin: canAccessAdminPanel,
     create: isAdmin,
     read: ({ req }) => {
       const user = req.user as { id?: string; role?: string } | undefined
@@ -27,6 +27,26 @@ export const Users: CollectionConfig = {
     delete: isAdmin,
   },
   hooks: {
+    afterLogin: [
+      async ({ req, user }) => {
+        const { totalDocs } = await req.payload.count({
+          collection: 'users',
+          where: { role: { equals: 'admin' } },
+        })
+
+        if (totalDocs === 0 && user.role !== 'admin') {
+          await req.payload.update({
+            collection: 'users',
+            id: user.id,
+            data: { role: 'admin' },
+            req,
+          })
+          return { ...user, role: 'admin' as const }
+        }
+
+        return user
+      },
+    ],
     beforeChange: [
       async ({ data, operation, req }) => {
         if (!data) return data

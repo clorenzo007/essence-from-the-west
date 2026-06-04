@@ -12,9 +12,10 @@ export const isAdmin: Access = ({ req }) => {
   return user?.role === 'admin'
 }
 
-/** Payload `access.admin` must return boolean only */
-export const isAdminPanelUser = ({ req }: { req: { user?: AuthUser | null } }): boolean => {
-  return req.user?.role === 'admin'
+/** Payload `access.admin` on the auth collection — editors and admins may use the panel */
+export const canAccessAdminPanel = ({ req }: { req: { user?: AuthUser | null } }): boolean => {
+  const role = req.user?.role
+  return role === 'admin' || role === 'editor'
 }
 
 export const publishedReadAccess: { read: Access } = {
