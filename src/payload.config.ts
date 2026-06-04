@@ -52,7 +52,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     meta: {
-      titleSuffix: '— Essence Admin',
+      titleSuffix: '— Reserva Oeste',
     },
     importMap: {
       baseDir: path.resolve(dirname),

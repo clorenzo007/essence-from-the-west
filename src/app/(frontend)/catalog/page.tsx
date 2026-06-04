@@ -8,8 +8,9 @@ import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 
 export const metadata: Metadata = {
-  title: 'Collection',
-  description: 'Browse our curated orchid collection — species and hybrids for collectors.',
+  title: 'Colección',
+  description:
+    'Orquídeas de colección — especies e híbridos seleccionados para coleccionistas y aficionados.',
 }
 
 export const dynamic = 'force-dynamic'
@@ -57,55 +58,55 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
   const products = (docs as Product[]).map(mapProductToCard)
 
   return (
-    <div className="pt-32 pb-24">
-      <div className="luxury-container">
+    <div className="pb-24 pt-32 md:pt-36">
+      <div className="ro-container">
         <SectionHeading
-          label="Catalog"
-          title="The Collection"
-          description="Filter by difficulty, genus category, or search by name and species."
+          label="Colección"
+          title="La colección"
+          description="Explorá ejemplares disponibles. Cada pieza es única dentro de nuestra selección."
           className="mb-12"
         />
 
         <form
           method="get"
-          className="mb-16 flex flex-col gap-4 border border-white/10 p-6 md:flex-row md:items-end"
+          className="mb-16 flex flex-col gap-4 rounded-ro border border-ro-charcoal/10 bg-ro-card p-6 md:flex-row md:items-end"
         >
           <label className="flex-1">
-            <span className="luxury-label mb-2 block">Search</span>
+            <span className="ro-label mb-2 block">Buscar</span>
             <input
               name="q"
               defaultValue={params.q}
-              placeholder="Phalaenopsis, Cattleya..."
-              className="w-full border border-white/20 bg-transparent px-4 py-3 font-sans text-sm text-luxury-ivory placeholder:text-luxury-silver focus:border-luxury-ivory focus:outline-none"
+              placeholder="Nombre, especie..."
+              className="w-full rounded-ro border border-ro-charcoal/15 bg-ro-ivory px-4 py-3 font-sans text-sm text-ro-charcoal placeholder:text-ro-muted focus:border-ro-gold focus:outline-none"
             />
           </label>
           <label>
-            <span className="luxury-label mb-2 block">Difficulty</span>
+            <span className="ro-label mb-2 block">Dificultad</span>
             <select
               name="difficulty"
               defaultValue={params.difficulty}
-              className="w-full border border-white/20 bg-luxury-black px-4 py-3 font-sans text-sm text-luxury-ivory focus:border-luxury-ivory focus:outline-none md:w-48"
+              className="w-full rounded-ro border border-ro-charcoal/15 bg-ro-ivory px-4 py-3 font-sans text-sm text-ro-charcoal focus:border-ro-gold focus:outline-none md:w-48"
             >
-              <option value="">All levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-              <option value="expert">Expert</option>
+              <option value="">Todos</option>
+              <option value="beginner">Principiante</option>
+              <option value="intermediate">Intermedio</option>
+              <option value="advanced">Avanzado</option>
+              <option value="expert">Experto</option>
             </select>
           </label>
-          <button type="submit" className="luxury-button md:mb-0">
-            Apply
+          <button type="submit" className="ro-button md:mb-0">
+            Filtrar
           </button>
         </form>
 
         {products.length > 0 ? (
-          <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <p className="font-sans text-sm text-luxury-silver">No orchids match your filters.</p>
+          <p className="font-sans text-sm text-ro-muted">No hay ejemplares que coincidan con tu búsqueda.</p>
         )}
       </div>
     </div>

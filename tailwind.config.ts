@@ -9,20 +9,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        luxury: {
-          black: '#0a0a0a',
-          charcoal: '#141414',
-          ivory: '#f5f3ef',
-          mist: '#e8e6e1',
-          silver: '#9a9a9a',
+        ro: {
+          gold: '#B08A43',
+          ivory: '#F7F4EF',
+          card: '#FCFBF8',
+          botanical: '#5D6A4D',
+          charcoal: '#1F1F1F',
+          orchid: '#B14679',
+          muted: '#6B6B6B',
         },
       },
       fontFamily: {
         display: ['var(--font-cormorant)', 'Georgia', 'serif'],
-        sans: ['var(--font-jost)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
-        luxury: '0.35em',
+        ro: '0.2em',
+      },
+      borderRadius: {
+        ro: '0.375rem',
       },
       animation: {
         'fade-in': 'fadeIn 1.2s ease-out forwards',

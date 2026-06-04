@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
 
   const product = docs[0] as Product | undefined
-  if (!product) return { title: 'Orchid Not Found' }
+  if (!product) return { title: 'Ejemplar no encontrado' }
 
   const seo = getProductSeo(product)
 
@@ -59,17 +59,18 @@ export default async function ProductPage({ params }: PageProps) {
 
   const gallery = product.gallery ?? []
   const heroImage = getPrimaryGalleryImage(product)
+  const inStock = product.stock > 0
 
   const floweringSeasons = Array.isArray(product.floweringSeason)
     ? product.floweringSeason.join(', ')
     : product.floweringSeason
 
   return (
-    <div className="pt-32 pb-24">
-      <div className="luxury-container">
+    <div className="pb-24 pt-32 md:pt-36">
+      <div className="ro-container">
         <div className="grid gap-16 lg:grid-cols-2">
           <div className="space-y-4">
-            <div className="relative aspect-[4/5] bg-luxury-charcoal">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-ro bg-ro-card ring-1 ring-ro-charcoal/5">
               {getMediaUrl(heroImage) && (
                 <MediaImage
                   src={getMediaUrl(heroImage)!}
@@ -87,7 +88,10 @@ export default async function ProductPage({ params }: PageProps) {
                   const url = getMediaUrl(item.image)
                   if (!url) return null
                   return (
-                    <div key={i} className="relative aspect-square bg-luxury-charcoal">
+                    <div
+                      key={i}
+                      className="relative aspect-square overflow-hidden rounded-ro bg-ro-card"
+                    >
                       <MediaImage
                         src={url}
                         alt={getMediaAlt(item.image, product.name)}
@@ -103,69 +107,80 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
 
           <div>
-            <p className="luxury-label">{product.species}</p>
-            {product.hybrid && (
-              <p className="mt-2 font-sans text-sm text-luxury-silver">{product.hybrid}</p>
-            )}
-            <h1 className="luxury-heading mt-4 text-5xl md:text-6xl">{product.name}</h1>
+            <h1 className="ro-heading text-5xl md:text-6xl">{product.name}</h1>
             {product.shortDescription && (
-              <p className="mt-6 max-w-lg font-sans text-sm font-light leading-relaxed text-luxury-silver">
+              <p className="mt-6 max-w-lg font-sans text-sm font-light leading-relaxed text-ro-muted">
                 {product.shortDescription}
               </p>
             )}
-            <p className="mt-8 font-sans text-2xl">{formatPrice(product.price)}</p>
-            <p className="mt-2 font-sans text-sm text-luxury-silver">
-              {product.stock > 0 ? `${product.stock} available` : 'Currently unavailable'}
+            <p className="mt-8 font-sans text-2xl text-ro-charcoal">{formatPrice(product.price)}</p>
+            <p
+              className={`mt-2 font-sans text-xs uppercase tracking-ro ${
+                inStock ? 'text-ro-botanical' : 'text-ro-muted'
+              }`}
+            >
+              {inStock ? 'Disponible' : 'Agotado'}
             </p>
 
-            <RichTextContent
-              content={product.description}
-              className="mt-10 font-sans text-sm font-light leading-relaxed text-luxury-silver"
-            />
+            <RichTextContent content={product.description} className="payload-richtext mt-10" />
 
             <div className="mt-10">
               <WhatsAppCheckoutButton
                 productName={product.name}
                 price={product.price}
                 slug={product.slug}
-                disabled={product.stock < 1}
+                disabled={!inStock}
               />
             </div>
 
-            <dl className="mt-16 grid gap-6 border-t border-white/10 pt-10 sm:grid-cols-2">
+            <dl className="mt-16 grid gap-6 border-t border-ro-gold/25 pt-10 sm:grid-cols-2">
+              {product.species && (
+                <>
+                  <dt className="ro-label">Especie</dt>
+                  <dd className="font-sans text-sm">{product.species}</dd>
+                </>
+              )}
+              {product.hybrid && (
+                <>
+                  <dt className="ro-label">Híbrido</dt>
+                  <dd className="font-sans text-sm">{product.hybrid}</dd>
+                </>
+              )}
               {floweringSeasons && (
                 <>
-                  <dt className="luxury-label">Flowering</dt>
+                  <dt className="ro-label">Floración</dt>
                   <dd className="font-sans text-sm capitalize">{floweringSeasons}</dd>
                 </>
               )}
               {product.fragrance && (
                 <>
-                  <dt className="luxury-label">Fragrance</dt>
+                  <dt className="ro-label">Fragancia</dt>
                   <dd className="font-sans text-sm capitalize">{product.fragrance}</dd>
                 </>
               )}
               {product.humidity && (
                 <>
-                  <dt className="luxury-label">Humidity</dt>
+                  <dt className="ro-label">Humedad</dt>
                   <dd className="font-sans text-sm">{product.humidity}</dd>
                 </>
               )}
               {product.temperature && (
                 <>
-                  <dt className="luxury-label">Temperature</dt>
+                  <dt className="ro-label">Temperatura</dt>
                   <dd className="font-sans text-sm">{product.temperature}</dd>
                 </>
               )}
               {product.lighting && (
                 <>
-                  <dt className="luxury-label">Lighting</dt>
-                  <dd className="font-sans text-sm capitalize">{product.lighting.replace('-', ' ')}</dd>
+                  <dt className="ro-label">Luz</dt>
+                  <dd className="font-sans text-sm capitalize">
+                    {product.lighting.replace('-', ' ')}
+                  </dd>
                 </>
               )}
               {product.difficulty && (
                 <>
-                  <dt className="luxury-label">Difficulty</dt>
+                  <dt className="ro-label">Dificultad</dt>
                   <dd className="font-sans text-sm capitalize">{product.difficulty}</dd>
                 </>
               )}

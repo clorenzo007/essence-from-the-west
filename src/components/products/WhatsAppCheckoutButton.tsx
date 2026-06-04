@@ -17,9 +17,9 @@ export function WhatsAppCheckoutButton({
 
   if (!url) {
     return (
-      <p className="font-sans text-xs text-luxury-silver">
-        Set <code className="text-luxury-mist">NEXT_PUBLIC_WHATSAPP_NUMBER</code> in your env to
-        enable checkout.
+      <p className="font-sans text-xs text-ro-muted">
+        Configurá <code className="text-ro-charcoal">NEXT_PUBLIC_WHATSAPP_NUMBER</code> en el entorno
+        para habilitar consultas.
       </p>
     )
   }
@@ -29,10 +29,10 @@ export function WhatsAppCheckoutButton({
       href={disabled ? undefined : url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`luxury-button ${disabled ? 'pointer-events-none opacity-40' : ''}`}
+      className={`ro-button ${disabled ? 'pointer-events-none opacity-40' : ''}`}
       aria-disabled={disabled}
     >
-      Inquire via WhatsApp
+      Consultar por WhatsApp
     </a>
   )
 }

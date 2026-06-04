@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
 
   const sheet = docs[0] as CareSheet | undefined
-  if (!sheet) return { title: 'Care Guide Not Found' }
+  if (!sheet) return { title: 'Guía no encontrada' }
 
   const seo = getCollectionSeo(sheet, {
     title: sheet.title,
@@ -59,8 +59,8 @@ export default async function CareSheetPage({ params }: PageProps) {
   const heroUrl = getMediaUrl(sheet.heroImage)
 
   return (
-    <div className="pt-32 pb-24">
-      <div className="luxury-container">
+    <div className="pb-24 pt-32 md:pt-36">
+      <div className="ro-container">
         <SectionHeading
           label={sheet.genus}
           title={sheet.title}
@@ -69,7 +69,7 @@ export default async function CareSheetPage({ params }: PageProps) {
         />
 
         {heroUrl && (
-          <div className="relative mb-16 aspect-[21/9] bg-luxury-charcoal">
+          <div className="relative mb-16 aspect-[21/9] overflow-hidden rounded-ro bg-ro-card">
             <MediaImage
               src={heroUrl}
               alt={getMediaAlt(sheet.heroImage, sheet.title)}
@@ -81,38 +81,35 @@ export default async function CareSheetPage({ params }: PageProps) {
           </div>
         )}
 
-        <dl className="mb-16 grid gap-6 border border-white/10 p-8 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="mb-16 grid gap-6 rounded-ro border border-ro-charcoal/10 bg-ro-card p-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <dt className="luxury-label">Difficulty</dt>
+            <dt className="ro-label">Dificultad</dt>
             <dd className="mt-2 font-sans text-sm capitalize">{sheet.difficulty}</dd>
           </div>
           {sheet.lighting && (
             <div>
-              <dt className="luxury-label">Lighting</dt>
+              <dt className="ro-label">Luz</dt>
               <dd className="mt-2 font-sans text-sm capitalize">{sheet.lighting.replace('-', ' ')}</dd>
             </div>
           )}
           {sheet.humidity && (
             <div>
-              <dt className="luxury-label">Humidity</dt>
+              <dt className="ro-label">Humedad</dt>
               <dd className="mt-2 font-sans text-sm">{sheet.humidity}</dd>
             </div>
           )}
           {sheet.temperature && (
             <div>
-              <dt className="luxury-label">Temperature</dt>
+              <dt className="ro-label">Temperatura</dt>
               <dd className="mt-2 font-sans text-sm">{sheet.temperature}</dd>
             </div>
           )}
         </dl>
 
-        <RichTextContent
-          content={sheet.content}
-          className="font-sans text-sm font-light leading-relaxed text-luxury-mist"
-        />
+        <RichTextContent content={sheet.content} className="payload-richtext" />
 
-        <Link href="/care" className="luxury-link mt-16 inline-block">
-          ← All care guides
+        <Link href="/care" className="ro-link mt-16 inline-block text-ro-gold">
+          ← Todas las guías
         </Link>
       </div>
     </div>

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
 
   const post = docs[0] as BlogPost | undefined
-  if (!post) return { title: 'Article Not Found' }
+  if (!post) return { title: 'Artículo no encontrado' }
 
   const seo = getCollectionSeo(post, {
     title: post.title,
@@ -57,11 +57,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   const coverUrl = getMediaUrl(post.coverImage)
 
   return (
-    <article className="pt-32 pb-24">
-      <div className="luxury-container max-w-4xl">
-        <p className="luxury-label">
+    <article className="pb-24 pt-32 md:pt-36">
+      <div className="ro-container max-w-4xl">
+        <p className="ro-label">
           {post.publishedAt
-            ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+            ? new Date(post.publishedAt).toLocaleDateString('es-AR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -70,13 +70,13 @@ export default async function BlogPostPage({ params }: PageProps) {
           {post.author ? ` · ${post.author}` : null}
         </p>
 
-        <h1 className="luxury-heading mt-6 text-5xl md:text-6xl">{post.title}</h1>
-        <p className="mt-8 font-sans text-base font-light leading-relaxed text-luxury-silver">
+        <h1 className="ro-heading mt-6 text-5xl md:text-6xl">{post.title}</h1>
+        <p className="mt-8 font-sans text-base font-light leading-relaxed text-ro-muted">
           {post.excerpt}
         </p>
 
         {coverUrl && (
-          <div className="relative mt-12 aspect-[16/9] bg-luxury-charcoal">
+          <div className="relative mt-12 aspect-[16/9] overflow-hidden rounded-ro bg-ro-card">
             <MediaImage
               src={coverUrl}
               alt={getMediaAlt(post.coverImage, post.title)}
@@ -91,20 +91,20 @@ export default async function BlogPostPage({ params }: PageProps) {
         {post.tags && post.tags.length > 0 && (
           <ul className="mt-10 flex flex-wrap gap-3">
             {post.tags.map((tag) => (
-              <li key={tag.id ?? tag.label} className="luxury-label border border-white/20 px-3 py-1">
+              <li
+                key={tag.id ?? tag.label}
+                className="ro-label rounded-ro border border-ro-charcoal/15 px-3 py-1"
+              >
                 {tag.label}
               </li>
             ))}
           </ul>
         )}
 
-        <RichTextContent
-          content={post.content}
-          className="mt-12 font-sans text-sm font-light leading-relaxed text-luxury-mist"
-        />
+        <RichTextContent content={post.content} className="payload-richtext mt-12" />
 
-        <Link href="/blog" className="luxury-link mt-16 inline-block">
-          ← Back to journal
+        <Link href="/blog" className="ro-link mt-16 inline-block text-ro-gold">
+          ← Volver al diario
         </Link>
       </div>
     </article>

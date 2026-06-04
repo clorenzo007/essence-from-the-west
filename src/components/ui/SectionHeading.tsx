@@ -23,13 +23,14 @@ export function SectionHeading({
         className,
       )}
     >
-      {label && <p className="luxury-label mb-4">{label}</p>}
-      <h2 className="luxury-heading text-4xl md:text-5xl lg:text-6xl">{title}</h2>
+      {label && <p className="ro-label mb-4 text-ro-gold">{label}</p>}
+      <h2 className="ro-heading text-4xl md:text-5xl lg:text-6xl">{title}</h2>
       {description && (
-        <p className="mt-6 font-sans text-sm font-light leading-relaxed text-luxury-silver md:text-base">
+        <p className="mt-6 font-sans text-sm font-light leading-relaxed text-ro-muted md:text-base">
           {description}
         </p>
       )}
+      <div className="mt-6 h-px w-12 bg-ro-gold/40" aria-hidden />
     </div>
   )
 }

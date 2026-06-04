@@ -8,62 +8,66 @@
   }
 
   body {
-    @apply bg-luxury-black text-luxury-ivory;
+    @apply bg-ro-ivory text-ro-charcoal;
   }
 
   ::selection {
-    @apply bg-luxury-ivory text-luxury-black;
+    @apply bg-ro-gold/25 text-ro-charcoal;
   }
 }
 
 @layer components {
-  .luxury-container {
+  .ro-container {
     @apply mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-16;
   }
 
-  .luxury-heading {
-    @apply font-display font-light tracking-tight;
+  .ro-heading {
+    @apply font-display font-light tracking-tight text-ro-charcoal;
   }
 
-  .luxury-label {
-    @apply font-sans text-[10px] uppercase tracking-luxury text-luxury-silver;
+  .ro-label {
+    @apply font-sans text-[10px] uppercase tracking-ro text-ro-muted;
   }
 
-  .luxury-link {
-    @apply font-sans text-xs uppercase tracking-luxury text-luxury-ivory transition-opacity hover:opacity-60;
+  .ro-link {
+    @apply font-sans text-xs uppercase tracking-ro text-ro-charcoal transition-opacity hover:opacity-60;
   }
 
-  .luxury-button {
-    @apply inline-flex items-center justify-center border border-luxury-ivory px-8 py-3 font-sans text-xs uppercase tracking-luxury transition-all hover:bg-luxury-ivory hover:text-luxury-black;
+  .ro-button {
+    @apply inline-flex items-center justify-center rounded-ro bg-ro-gold px-8 py-3 font-sans text-xs uppercase tracking-ro text-ro-card transition-opacity hover:opacity-90;
   }
 
-  .luxury-button-ghost {
-    @apply inline-flex items-center justify-center border border-luxury-silver/40 px-8 py-3 font-sans text-xs uppercase tracking-luxury text-luxury-silver transition-all hover:border-luxury-ivory hover:text-luxury-ivory;
+  .ro-button-ghost {
+    @apply inline-flex items-center justify-center rounded-ro border border-ro-charcoal/20 bg-transparent px-8 py-3 font-sans text-xs uppercase tracking-ro text-ro-charcoal transition-colors hover:border-ro-gold hover:text-ro-gold;
+  }
+
+  .ro-divider {
+    @apply border-ro-gold/30;
   }
 
   .payload-richtext {
-    @apply space-y-6 text-luxury-mist;
+    @apply space-y-6 text-ro-charcoal/90;
   }
 
   .payload-richtext h2 {
-    @apply luxury-heading mt-12 text-3xl text-luxury-ivory;
+    @apply ro-heading mt-12 text-3xl;
   }
 
   .payload-richtext h3 {
-    @apply luxury-heading mt-8 text-2xl text-luxury-ivory;
+    @apply ro-heading mt-8 text-2xl;
   }
 
   .payload-richtext p {
-    @apply font-sans text-sm font-light leading-relaxed text-luxury-silver;
+    @apply font-sans text-sm font-light leading-relaxed text-ro-muted;
   }
 
   .payload-richtext a {
-    @apply text-luxury-ivory underline underline-offset-4 transition-opacity hover:opacity-70;
+    @apply text-ro-gold underline underline-offset-4 transition-opacity hover:opacity-70;
   }
 
   .payload-richtext ul,
   .payload-richtext ol {
-    @apply ml-6 list-outside space-y-2 font-sans text-sm text-luxury-silver;
+    @apply ml-6 list-outside space-y-2 font-sans text-sm text-ro-muted;
   }
 
   .payload-richtext ul {
@@ -75,10 +79,10 @@
   }
 
   .payload-richtext blockquote {
-    @apply border-l border-luxury-ivory/30 pl-6 italic text-luxury-mist;
+    @apply border-l-2 border-ro-gold/40 pl-6 italic text-ro-charcoal/80;
   }
 
   .payload-richtext img {
-    @apply my-8 w-full object-cover;
+    @apply my-8 w-full rounded-ro object-cover;
   }
 }

@@ -5,8 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrice(amount: number, currency = 'USD') {
-  return new Intl.NumberFormat('en-US', {
+export function formatPrice(amount: number, currency = 'ARS') {
+  return new Intl.NumberFormat('es-AR', {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
@@ -30,12 +30,13 @@ export function buildWhatsAppCheckoutUrl(params: {
   const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
   if (!number) return null
 
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || ''
   const message = [
-    `Hello, I'd like to inquire about:`,
+    `Hola, me interesa consultar por:`,
     ``,
     `*${params.productName}*`,
-    `Price: $${params.price.toLocaleString()}`,
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/products/${params.slug}`,
+    `Precio: ${formatPrice(params.price)}`,
+    `${baseUrl}/products/${params.slug}`,
   ].join('\n')
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`

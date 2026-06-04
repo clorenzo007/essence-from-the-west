@@ -1,52 +1,49 @@
 import Link from 'next/link'
 
-import { NAV_LINKS, SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
+import { Logo } from '@/components/layout/Logo'
+import { NAV_LINKS, SITE_SECONDARY, SITE_TAGLINE } from '@/lib/constants'
 
 export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-white/5 bg-luxury-charcoal">
-      <div className="luxury-container grid gap-12 py-20 md:grid-cols-3">
+    <footer className="border-t border-ro-charcoal/10 bg-ro-card">
+      <div className="ro-container grid gap-12 py-20 md:grid-cols-3">
         <div>
-          <p className="luxury-heading text-2xl">{SITE_NAME}</p>
-          <p className="mt-4 max-w-xs font-sans text-sm font-light text-luxury-silver">
+          <Logo size="footer" />
+          <p className="mt-6 max-w-xs font-sans text-sm font-light leading-relaxed text-ro-muted">
             {SITE_TAGLINE}
           </p>
+          <p className="mt-2 font-sans text-xs text-ro-gold">{SITE_SECONDARY}</p>
         </div>
 
         <div>
-          <p className="luxury-label mb-6">Explore</p>
+          <p className="ro-label mb-6">Explorar</p>
           <ul className="space-y-3">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="luxury-link">
+                <Link href={link.href} className="ro-link">
                   {link.label}
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href="/catalog" className="luxury-link">
-                Shop Collection
-              </Link>
-            </li>
           </ul>
         </div>
 
         <div>
-          <p className="luxury-label mb-6">Contact</p>
-          <p className="font-sans text-sm font-light text-luxury-silver">
-            Orders via WhatsApp
+          <p className="ro-label mb-6">Contacto</p>
+          <p className="font-sans text-sm font-light leading-relaxed text-ro-muted">
+            Consultas por WhatsApp
             <br />
-            Private viewings by appointment
+            Visitas con cita previa
           </p>
         </div>
       </div>
 
-      <div className="border-t border-white/5">
-        <div className="luxury-container flex flex-col items-center justify-between gap-4 py-8 md:flex-row">
-          <p className="luxury-label">© {year} {SITE_NAME}</p>
-          <Link href="/admin" className="luxury-label hover:text-luxury-ivory">
+      <div className="border-t border-ro-gold/20">
+        <div className="ro-container flex flex-col items-center justify-between gap-4 py-8 md:flex-row">
+          <p className="ro-label">© {year} RESERVA OESTE</p>
+          <Link href="/admin" className="ro-label hover:text-ro-gold">
             Admin
           </Link>
         </div>
