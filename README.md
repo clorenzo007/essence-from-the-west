@@ -22,6 +22,7 @@ Toda la guía del código está en **[docs/](./docs/)**:
 - [Marca y diseño](./docs/05-marca-y-diseno.md)
 - [Despliegue](./docs/06-despliegue.md)
 - [Referencia de archivos](./docs/07-referencia-archivos.md)
+- [Alta de productos](./docs/08-alta-de-productos.md)
 
 ## Inicio rápido
 

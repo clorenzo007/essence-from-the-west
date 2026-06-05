@@ -11,6 +11,7 @@ Guías para entender y mantener el proyecto **essence-from-the-west** (marca pú
 | [05-marca-y-diseno.md](./05-marca-y-diseno.md) | Colores, tipografías, copy |
 | [06-despliegue.md](./06-despliegue.md) | Vercel, variables, dominios |
 | [07-referencia-archivos.md](./07-referencia-archivos.md) | Mapa archivo por archivo |
+| [08-alta-de-productos.md](./08-alta-de-productos.md) | Cómo cargar orquídeas en el admin y publicarlas |
 
 ## Inicio rápido
 
