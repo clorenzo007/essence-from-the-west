@@ -23,6 +23,7 @@ Toda la guía del código está en **[docs/](./docs/)**:
 - [Despliegue](./docs/06-despliegue.md)
 - [Referencia de archivos](./docs/07-referencia-archivos.md)
 - [Alta de productos](./docs/08-alta-de-productos.md)
+- [Registro de ejemplares](./docs/09-registro-de-ejemplares.md)
 
 ## Inicio rápido
 
