@@ -12,6 +12,7 @@ Guías para entender y mantener el proyecto **essence-from-the-west** (marca pú
 | [06-despliegue.md](./06-despliegue.md) | Vercel, variables, dominios |
 | [07-referencia-archivos.md](./07-referencia-archivos.md) | Mapa archivo por archivo |
 | [08-alta-de-productos.md](./08-alta-de-productos.md) | Cómo cargar orquídeas en el admin y publicarlas |
+| [09-registro-de-ejemplares.md](./09-registro-de-ejemplares.md) | Bitácora interna de cultivo por planta (floraciones, cuidados, fotos) |
 
 ## Inicio rápido
 

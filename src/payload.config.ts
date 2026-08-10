@@ -18,6 +18,7 @@ import { Categories } from './collections/Categories'
 import { Customers } from './collections/Customers'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
+import { Specimens } from './collections/Specimens'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -67,7 +68,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products, BlogPosts, CareSheets, Customers],
+  collections: [Users, Media, Categories, Products, Specimens, BlogPosts, CareSheets, Customers],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

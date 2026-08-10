@@ -32,6 +32,7 @@ Definidas en `src/collections/` e importadas en `payload.config.ts`.
 | `media` | `Media.ts` | Imágenes (upload) |
 | `categories` | `Categories.ts` | Taxonomía de orquídeas |
 | `products` | `Products.ts` | Catálogo y fichas |
+| `specimens` | `Specimens.ts` | Bitácora interna de cultivo por planta (privada, no pública) |
 | `blog-posts` | `BlogPosts.ts` | Diario |
 | `care-sheets` | `CareSheets.ts` | Guías de cultivo |
 | `customers` | `Customers.ts` | Base de consultas (solo admin) |

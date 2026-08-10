@@ -64,6 +64,7 @@ Mapa del código fuente. Rutas relativas a la raíz del repo.
 | `Users.ts` | Auth, roles, cookies, hooks login |
 | `Media.ts` | Upload imágenes + alt |
 | `Products.ts` | Orquídeas (tabs, hooks, acceso) |
+| `Specimens.ts` | Registro interno de cultivo por planta (tabs, privada) |
 | `Categories.ts` | Categorías |
 | `BlogPosts.ts` | Blog |
 | `CareSheets.ts` | Guías cuidado |
@@ -73,6 +74,7 @@ Mapa del código fuente. Rutas relativas a la raíz del repo.
 | `shared/options.ts` | Enums compartidos |
 | `products/hooks.ts` | Validación publicación, slug |
 | `products/options.ts` | Opciones select producto |
+| `specimens/options.ts` | Opciones select registro de ejemplares |
 | `blog-posts/hooks.ts` | Validación blog |
 | `care-sheets/hooks.ts` | Validación care |
 | `categories/hooks.ts` | Validación categorías |
