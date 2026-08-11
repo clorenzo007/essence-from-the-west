@@ -55,6 +55,10 @@ export default buildConfig({
   cors: getTrustedOrigins(),
   admin: {
     user: Users.slug,
+    // Force light theme: custom.scss only overrides brand colors for light mode,
+    // so falling back to dark mode (OS/browser preference) leaves button text
+    // illegible against the overridden ivory background.
+    theme: 'light',
     meta: {
       titleSuffix: '— Reserva Oeste',
     },
@@ -63,6 +67,7 @@ export default buildConfig({
         Logo: '@/components/admin/AdminLogo#AdminLogo',
         Icon: '@/components/admin/AdminIcon#AdminIcon',
       },
+      beforeNavLinks: ['@/components/admin/StatusBar#StatusBar'],
     },
     importMap: {
       baseDir: path.resolve(dirname),

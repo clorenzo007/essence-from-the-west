@@ -257,6 +257,38 @@ export const Products: CollectionConfig = {
                 description: 'Optional note (e.g. "Ships in 3–5 days").',
               },
             },
+            {
+              name: 'instagram',
+              type: 'group',
+              label: 'Instagram',
+              admin: {
+                description:
+                  'Manual tracking only — does not post to Instagram automatically. Use this to flag which products still need to go up on the account.',
+              },
+              fields: [
+                {
+                  name: 'shouldPublish',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: {
+                    description: 'Mark if this product (photo + details) should also be posted to Instagram.',
+                  },
+                },
+                {
+                  name: 'publishStatus',
+                  type: 'select',
+                  defaultValue: 'pending',
+                  options: [
+                    { label: 'Pending', value: 'pending' },
+                    { label: 'Published', value: 'published' },
+                  ],
+                  admin: {
+                    condition: (_, siblingData) => Boolean(siblingData?.shouldPublish),
+                    description: 'Update once you have posted it manually on Instagram.',
+                  },
+                },
+              ],
+            },
           ],
         },
         {
