@@ -64,7 +64,11 @@ export const cloudinaryAdapter: Adapter = ({ prefix }) => {
 
       await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' })
     },
-    generateURL: ({ filename }) => {
+    generateURL: ({ data, filename }) => {
+      const publicId = (data as { cloudinaryPublicId?: string } | undefined)?.cloudinaryPublicId
+      if (publicId) {
+        return cloudinary.url(publicId, { secure: true })
+      }
       return cloudinary.url(`${folder}/${filename}`, { secure: true })
     },
     staticHandler: () => new Response(null, { status: 404 }),
