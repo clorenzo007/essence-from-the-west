@@ -28,6 +28,7 @@ export const cloudinaryAdapter: Adapter = ({ prefix }) => {
       const result = await new Promise<UploadApiResponse>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
+            filename_override: file.filename,
             folder,
             resource_type: 'auto',
             use_filename: true,
