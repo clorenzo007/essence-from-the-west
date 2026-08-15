@@ -87,3 +87,22 @@ a[href*='github.com/payloadcms'],
 .template-login .login {
   background-color: transparent;
 }
+
+/* Bulk Upload en celular: el panel a veces no entra en la altura visible
+   real del navegador (barra de direcciones, notch, etc.) y el contenedor
+   bloquea el scroll, dejando el boton "Save" inalcanzable. Habilitamos
+   scroll de respaldo y fijamos la barra de acciones al fondo. */
+@media (max-width: 768px) {
+    .bulk-upload--file-manager {
+          overflow-y: auto !important;
+          -webkit-overflow-scrolling: touch;
+  }
+
+    .file-selections__header__mobileDocActions {
+          position: sticky;
+          bottom: 0;
+          background-color: var(--theme-elevation-0);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+          z-index: 2;
+  }
+}
