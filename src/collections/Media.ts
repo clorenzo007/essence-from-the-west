@@ -31,6 +31,9 @@ export const Media: CollectionConfig = {
   },
   admin: {
     group: 'Content',
+    components: {
+      beforeList: ['@/components/admin/MobileUploadBanner#MobileUploadBanner'],
+    },
   },
   access: {
     read: isLoggedIn,
