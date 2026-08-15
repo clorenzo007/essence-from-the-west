@@ -106,3 +106,16 @@ a[href*='github.com/payloadcms'],
           z-index: 2;
   }
 }
+
+/* Menos scroll para llegar a los campos (Alt, Caption, etc.): la miniatura
+   y el encabezado del panel ocupan mucho espacio fijo en pantallas chicas. */
+@media (max-width: 768px) {
+    .bulk-upload--drawer-header {
+          padding: 12px 16px;
+  }
+
+    .file-field__thumbnail-wrap {
+          height: 64px !important;
+          width: 64px !important;
+  }
+}
