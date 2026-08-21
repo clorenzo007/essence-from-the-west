@@ -150,7 +150,8 @@ export const CareSheets: CollectionConfig = {
                   type: 'text',
                   admin: {
                     width: '50%',
-                    description: 'e.g. 65–75°F day / 55–62°F night',
+                    description:
+                      'e.g. 65–75°F day / 55–62°F night. The site adds °C automatically — no need to type it.',
                   },
                 },
               ],
