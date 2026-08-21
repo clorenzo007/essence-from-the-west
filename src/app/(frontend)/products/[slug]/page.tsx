@@ -10,6 +10,7 @@ import { formatPrice } from '@/lib/utils'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
+import { withCelsius } from '@/lib/temperature'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -167,7 +168,7 @@ export default async function ProductPage({ params }: PageProps) {
               {product.temperature && (
                 <>
                   <dt className="ro-label">Temperatura</dt>
-                  <dd className="font-sans text-sm">{product.temperature}</dd>
+                  <dd className="font-sans text-sm">{withCelsius(product.temperature)}</dd>
                 </>
               )}
               {product.lighting && (
