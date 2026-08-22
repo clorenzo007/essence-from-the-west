@@ -8,9 +8,9 @@ import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 
 export const metadata: Metadata = {
-  title: 'Colección',
+  title: 'Colección de Orquídeas',
   description:
-    'Orquídeas de colección — especies e híbridos seleccionados para coleccionistas y aficionados.',
+    'Orquídeas de colección disponibles en Ituzaingó, Zona Oeste del Gran Buenos Aires — especies e híbridos seleccionados para coleccionistas y aficionados.',
 }
 
 export const dynamic = 'force-dynamic'

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { Logo } from '@/components/layout/Logo'
-import { NAV_LINKS, SITE_SECONDARY, SITE_TAGLINE } from '@/lib/constants'
+import { NAV_LINKS, SITE_AREA_SERVED, SITE_LOCALITY, SITE_SECONDARY, SITE_TAGLINE } from '@/lib/constants'
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -33,6 +33,8 @@ export function Footer() {
         <div>
           <p className="ro-label mb-6">Contacto</p>
           <p className="font-sans text-sm font-light leading-relaxed text-ro-muted">
+            {SITE_LOCALITY}, {SITE_AREA_SERVED}
+            <br />
             Consultas por WhatsApp
             <br />
             Visitas con cita previa
