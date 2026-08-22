@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+
 import { CarePreview } from '@/components/home/CarePreview'
 import { EditorialStrip } from '@/components/home/EditorialStrip'
 import { FeaturedCollection } from '@/components/home/FeaturedCollection'
@@ -6,8 +8,14 @@ import { NewsletterCTA } from '@/components/home/NewsletterCTA'
 import type { Product } from '@/payload-types'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
+import { SITE_SEO_DESCRIPTION } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Orquídeas en Ituzaingó, Zona Oeste del Gran Buenos Aires',
+  description: SITE_SEO_DESCRIPTION,
+}
 
 export default async function HomePage() {
   let featuredProducts: ReturnType<typeof mapProductToCard>[] = []
