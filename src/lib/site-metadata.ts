@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { LOGO_SRC, SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
+import { LOGO_SRC, SITE_NAME, SITE_SEO_DESCRIPTION } from '@/lib/constants'
 import { getServerURL } from '@/lib/env'
 
 /** Favicon, pestaña del navegador, Apple touch icon y previews sociales */
@@ -32,5 +32,5 @@ export const defaultSiteMetadata: Metadata = {
     title: SITE_NAME,
   },
   applicationName: SITE_NAME,
-  description: SITE_TAGLINE,
+  description: SITE_SEO_DESCRIPTION,
 }
