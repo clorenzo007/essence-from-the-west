@@ -13,6 +13,7 @@ Guías para entender y mantener el proyecto **essence-from-the-west** (marca pú
 | [07-referencia-archivos.md](./07-referencia-archivos.md) | Mapa archivo por archivo |
 | [08-alta-de-productos.md](./08-alta-de-productos.md) | Cómo cargar orquídeas en el admin y publicarlas |
 | [09-registro-de-ejemplares.md](./09-registro-de-ejemplares.md) | Bitácora interna de cultivo por planta (floraciones, cuidados, fotos) |
+| [10-seo-local.md](./10-seo-local.md) | Checklist de SEO local: Perfil de Negocio de Google, reseñas, menciones externas |
 
 ## Inicio rápido
 
@@ -24,12 +25,12 @@ npm install
 npm run dev
 ```
 
-- Tienda: http://localhost:3000  
-- Admin: http://localhost:3000/admin  
-- Cerrar sesión forzada: http://localhost:3000/api/cerrar-sesion  
+- Tienda: http://localhost:3000
+- Admin: http://localhost:3000/admin
+- Cerrar sesión forzada: http://localhost:3000/api/cerrar-sesion
 
 ## Repositorio y producción
 
-- **GitHub:** https://github.com/clorenzo007/essence-from-the-west  
-- **Producción:** https://www.reservaoeste.com.ar  
-- **Admin:** https://www.reservaoeste.com.ar/admin  
+- **GitHub:** https://github.com/clorenzo007/essence-from-the-west
+- **Producción:** https://www.reservaoeste.com.ar
+- **Admin:** https://www.reservaoeste.com.ar/admin
