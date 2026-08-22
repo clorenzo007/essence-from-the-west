@@ -4,6 +4,35 @@ import { getPayload } from 'payload'
 export const dynamic = 'force-dynamic'
 
 /**
+ * Most mobile browsers name a camera-captured photo the same generic thing
+ * every time (commonly "image.jpg"), instead of a unique per-shot name like
+ * a gallery photo would have. Uploading two photos in the same session
+ * could then race Payload's own filename-dedup logic against our Cloudinary
+ * adapter (which echoes back whatever name it was given), so we build a
+ * name that's unique per request up front — sidesteps the collision
+ * entirely instead of depending on de-dup happening correctly downstream.
+ */
+const EXTENSION_BY_MIME: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/heic': 'heic',
+  'image/heif': 'heif',
+  'image/gif': 'gif',
+}
+
+function uniqueFileName(file: File): string {
+  const fromOriginalName = file.name?.split('.').pop()
+  const ext =
+    fromOriginalName && /^[a-z0-9]{2,5}$/i.test(fromOriginalName)
+      ? fromOriginalName.toLowerCase()
+      : (EXTENSION_BY_MIME[file.type] ?? 'jpg')
+
+  const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+  return `foto-${unique}.${ext}`
+}
+
+/**
    * Simple upload endpoint used by the mobile-friendly "Subir desde el celu"
    * page (/subir-fotos). Requires an existing Payload session (same cookie the
    * admin panel uses) and creates a plain Media doc, same as using the admin's
@@ -58,7 +87,7 @@ try {
     file: {
       data: buffer,
       mimetype: file.type || 'image/jpeg',
-      name: file.name || 'foto.jpg',
+      name: uniqueFileName(file),
       size: buffer.length,
     },
   })
