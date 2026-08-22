@@ -8,12 +8,19 @@ import { NewsletterCTA } from '@/components/home/NewsletterCTA'
 import type { Product } from '@/payload-types'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
-import { SITE_SEO_DESCRIPTION } from '@/lib/constants'
+import { SITE_NAME, SITE_SEO_DESCRIPTION } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Next.js only applies a layout's title.template to CHILD segments
+ * (e.g. /catalog) — not to a page.tsx that lives in the same folder as
+ * the layout.tsx defining the template. Since this homepage sits right
+ * next to `(frontend)/layout.tsx`, the "%s | RESERVA OESTE" template
+ * never gets applied here, so the suffix is spelled out directly.
+ */
 export const metadata: Metadata = {
-  title: 'Orquídeas en Ituzaingó, Zona Oeste del Gran Buenos Aires',
+  title: `Orquídeas en Ituzaingó, Zona Oeste del Gran Buenos Aires | ${SITE_NAME}`,
   description: SITE_SEO_DESCRIPTION,
 }
 
