@@ -41,3 +41,10 @@ export function buildWhatsAppCheckoutUrl(params: {
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
 }
+
+export function buildWhatsAppVisitUrl(message: string) {
+  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
+  if (!number) return null
+
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
+}
