@@ -1,13 +1,19 @@
 import Link from 'next/link'
 
+import { getDictionary } from '@/lib/i18n/dictionary'
+import type { Locale } from '@/lib/i18n/locales'
 import { SITE_DESCRIPTOR, SITE_TAGLINE } from '@/lib/constants'
 
 type HeroSectionProps = {
   imageUrl?: string | null
   imageAlt?: string
+  locale?: Locale
+  prefix?: string
 }
 
-export function HeroSection({ imageUrl, imageAlt }: HeroSectionProps) {
+export function HeroSection({ imageUrl, imageAlt, locale, prefix = '' }: HeroSectionProps) {
+  const t = getDictionary(locale)
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-transparent">
       {imageUrl && (
@@ -27,21 +33,21 @@ export function HeroSection({ imageUrl, imageAlt }: HeroSectionProps) {
 
       <div className="relative z-10 flex min-h-screen flex-col justify-end pb-24 pt-32 md:pb-32">
         <div className="ro-container animate-fade-in">
-          <p className="ro-label mb-6 text-ro-gold">{SITE_DESCRIPTOR}</p>
+          <p className="ro-label mb-6 text-ro-gold">{t?.hero.label ?? SITE_DESCRIPTOR}</p>
           <h1 className="ro-heading max-w-4xl text-5xl leading-[1.05] md:text-7xl lg:text-8xl">
-            Orquídeas
+            {t?.hero.title1 ?? 'Orquídeas'}
             <br />
-            <span className="italic">de Colección</span>
+            <span className="italic">{t?.hero.title2 ?? 'de Colección'}</span>
           </h1>
           <p className="mt-8 max-w-lg font-sans text-sm font-light leading-relaxed text-ro-muted md:text-base">
-            {SITE_TAGLINE}
+            {t?.hero.subtitle ?? SITE_TAGLINE}
           </p>
           <div className="mt-12 flex flex-wrap gap-4">
-            <Link href="/catalog" className="ro-button">
-              Ver Colección
+            <Link href={`${prefix}/catalog`} className="ro-button">
+              {t?.hero.primaryCta ?? 'Ver Colección'}
             </Link>
-            <Link href="/#reserva" className="ro-button-ghost">
-              Conocer Reserva Oeste
+            <Link href={`${prefix}/#reserva`} className="ro-button-ghost">
+              {t?.hero.secondaryCta ?? 'Conocer Reserva Oeste'}
             </Link>
           </div>
         </div>
