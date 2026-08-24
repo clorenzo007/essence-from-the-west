@@ -437,7 +437,8 @@ export async function GET(req: Request) {
         depth: 0,
       })
 
-      const data = {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data: any = {
         title: sheet.title,
         genus: sheet.genus,
         alliance: sheet.alliance,
