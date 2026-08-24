@@ -103,6 +103,36 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         <RichTextContent content={post.content} className="payload-richtext mt-12" />
 
+        {post.gallery && post.gallery.length > 0 && (
+          <div className="mt-16 grid gap-6 sm:grid-cols-2">
+            {post.gallery.map((item, i) => {
+              const url = getMediaUrl(item.image)
+              if (!url) return null
+              return (
+                <figure
+                  key={item.id ?? i}
+                  className="overflow-hidden rounded-ro border border-ro-charcoal/10 bg-ro-card"
+                >
+                  <div className="relative aspect-[4/3]">
+                    <MediaImage
+                      src={url}
+                      alt={getMediaAlt(item.image, item.caption || post.title)}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                    />
+                  </div>
+                  {item.caption && (
+                    <figcaption className="p-4 font-sans text-sm leading-relaxed text-ro-muted">
+                      {item.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              )
+            })}
+          </div>
+        )}
+
         <Link href="/blog" className="ro-link mt-16 inline-block text-ro-gold">
           ← Volver al diario
         </Link>
