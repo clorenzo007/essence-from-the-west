@@ -2,10 +2,11 @@
  * Tokens y utilidades — marca de agua Reserva Oeste.
  */
 :root {
-  --ro-watermark-image: url('/images/logo.png');
-  --ro-watermark-opacity: 0.09;
-  --ro-watermark-size: min(54vw, 520px);
-  --ro-watermark-position: center 40%;
+  --ro-watermark-image: url('/images/watermark-orchid.jpg');
+  --ro-watermark-opacity: 0.08;
+  --ro-watermark-size: min(80vw, 1100px);
+  --ro-watermark-position: center 38%;
+  --ro-watermark-filter: grayscale(1);
 }
 
 .ro-site-main {
@@ -23,6 +24,7 @@
   background-position: var(--ro-watermark-position);
   background-size: var(--ro-watermark-size);
   opacity: var(--ro-watermark-opacity);
+  filter: var(--ro-watermark-filter);
 }
 
 .ro-site-main > *:not(.ro-watermark-layer) {
