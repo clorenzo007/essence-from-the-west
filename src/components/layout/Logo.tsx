@@ -7,19 +7,20 @@ import { cn } from '@/lib/utils'
 type LogoProps = {
   className?: string
   size?: 'header' | 'footer'
+  href?: string
 }
 
 /**
  * Logo oficial de Reserva Oeste.
  * Sin sombras, filtros, rotación ni cambios de color.
  */
-export function Logo({ className = '', size = 'header' }: LogoProps) {
+export function Logo({ className = '', size = 'header', href = '/' }: LogoProps) {
   const sizeClass =
     size === 'footer' ? 'h-24 w-24 md:h-28 md:w-28' : 'h-14 w-14 md:h-[4.5rem] md:w-[4.5rem]'
 
   return (
     <Link
-      href="/"
+      href={href}
       className={cn('inline-block shrink-0 p-1', className)}
       aria-label={`${SITE_NAME} — inicio`}
     >
