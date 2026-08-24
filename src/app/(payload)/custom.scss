@@ -13,6 +13,7 @@ body::before {
   background-position: var(--ro-watermark-position);
   background-size: var(--ro-watermark-size);
   opacity: var(--ro-watermark-opacity);
+  filter: var(--ro-watermark-filter);
 }
 
 body > * {
