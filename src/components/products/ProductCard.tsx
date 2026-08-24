@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { MediaImage } from '@/components/ui/MediaImage'
+import { ProductImagePlaceholder } from '@/components/products/ProductImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 
 export type ProductCardData = {
@@ -33,9 +34,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           ) : (
-            <div className="flex h-full items-center justify-center bg-ro-card">
-              <span className="ro-label">Sin imagen</span>
-            </div>
+            <ProductImagePlaceholder />
           )}
         </div>
 
