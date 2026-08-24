@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 /**
  * Banner shown above the Media list pointing to /subir-fotos — a separate,
  * mobile-friendly page for uploading photos quickly from the phone camera
@@ -20,7 +22,7 @@ export function MobileUploadBanner() {
       }}
     >
       <span>¿Estás con el celu? Subir fotos es más simple desde acá.</span>
-      <a
+      <Link
         href="/subir-fotos"
         style={{
           padding: '8px 14px',
@@ -33,7 +35,7 @@ export function MobileUploadBanner() {
         }}
       >
         📱 Subir desde el celu
-      </a>
+      </Link>
     </div>
   )
 }
