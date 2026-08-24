@@ -2,9 +2,13 @@ import Link from 'next/link'
 
 import { getDictionary } from '@/lib/i18n/dictionary'
 import type { Locale } from '@/lib/i18n/locales'
+import { buildWhatsAppVisitUrl } from '@/lib/utils'
+
+const VISIT_MESSAGE = 'Hola! Me gustaría coordinar una visita a Reserva Oeste.'
 
 export function NewsletterCTA({ locale, prefix = '' }: { locale?: Locale; prefix?: string }) {
   const t = getDictionary(locale)
+  const visitUrl = buildWhatsAppVisitUrl(VISIT_MESSAGE)
 
   return (
     <section className="relative border-t border-ro-charcoal/8 bg-ro-ivory/75 py-24 backdrop-blur-[2px] md:py-32">
@@ -17,9 +21,16 @@ export function NewsletterCTA({ locale, prefix = '' }: { locale?: Locale; prefix
           {t?.newsletter.body ??
             'Cada orquídea se ofrece de forma individual. Elegí una pieza de la colección y consultanos — confirmamos disponibilidad y coordinamos el envío con el máximo cuidado.'}
         </p>
-        <Link href={`${prefix}/catalog`} className="ro-button mt-10">
-          {t?.newsletter.cta ?? 'Ver Colección'}
-        </Link>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <Link href={`${prefix}/catalog`} className="ro-button">
+            {t?.newsletter.cta ?? 'Ver Colección'}
+          </Link>
+          {visitUrl && (
+            <a href={visitUrl} target="_blank" rel="noopener noreferrer" className="ro-button-ghost">
+              {t?.newsletter.visitCta ?? 'Agendar visita'}
+            </a>
+          )}
+        </div>
       </div>
     </section>
   )
