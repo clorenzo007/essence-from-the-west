@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { Logo } from '@/components/layout/Logo'
-import { NAV_LINKS, SITE_AREA_SERVED, SITE_LOCALITY, SITE_SECONDARY, SITE_TAGLINE } from '@/lib/constants'
+import { NAV_LINKS, SITE_AREA_SERVED, SITE_LOCALITY, SITE_TAGLINE } from '@/lib/constants'
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -14,7 +14,6 @@ export function Footer() {
           <p className="mt-6 max-w-xs font-sans text-sm font-light leading-relaxed text-ro-muted">
             {SITE_TAGLINE}
           </p>
-          <p className="mt-2 font-sans text-xs text-ro-gold">{SITE_SECONDARY}</p>
         </div>
 
         <div>
