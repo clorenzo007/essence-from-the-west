@@ -137,6 +137,30 @@ export const BlogPosts: CollectionConfig = {
                 description: 'Cover image for journal cards and social sharing.',
               },
             },
+            {
+              name: 'gallery',
+              type: 'array',
+              labels: { singular: 'Foto', plural: 'Fotos' },
+              admin: {
+                description:
+                  'Fotos adicionales para ilustrar el artículo (por ejemplo, una por cada plaga o enfermedad descrita).',
+              },
+              fields: [
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: true,
+                },
+                {
+                  name: 'caption',
+                  type: 'text',
+                  admin: {
+                    description: 'Leyenda breve (por ejemplo, el nombre de la plaga y la fuente/crédito de la foto).',
+                  },
+                },
+              ],
+            },
           ],
         },
         createSeoTabFields(),
