@@ -15,7 +15,7 @@ export function NewsletterCTA({ locale, prefix = '' }: { locale?: Locale; prefix
       <div className="ro-container text-center">
         <p className="ro-label mb-6 text-ro-gold">{t?.newsletter.label ?? 'Consulta privada'}</p>
         <h2 className="ro-heading mx-auto max-w-2xl text-4xl md:text-5xl">
-          {t?.newsletter.title ?? 'Reservá tu ejemplar por mensaje'}
+          {t?.newsletter.title ?? 'Acordar una visita'}
         </h2>
         <p className="mx-auto mt-6 max-w-lg font-sans text-sm font-light leading-relaxed text-ro-muted">
           {t?.newsletter.body ??
