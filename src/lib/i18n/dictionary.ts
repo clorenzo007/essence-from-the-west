@@ -52,6 +52,7 @@ export type UiDictionary = {
     title: string
     body: string
     cta: string
+    visitCta: string
   }
   footer: {
     explore: string
@@ -159,6 +160,7 @@ const en: UiDictionary = {
     title: 'Reserve Your Specimen by Message',
     body: "Each orchid is offered individually. Choose a piece from the collection and message us — we'll confirm availability and arrange delivery with the utmost care.",
     cta: 'View Collection',
+    visitCta: 'Schedule a Visit',
   },
   footer: {
     explore: 'Explore',
@@ -288,6 +290,7 @@ const fr: UiDictionary = {
     title: 'Réservez votre spécimen par message',
     body: 'Chaque orchidée est proposée individuellement. Choisissez une pièce de la collection et contactez-nous — nous confirmons la disponibilité et organisons la livraison avec le plus grand soin.',
     cta: 'Voir la collection',
+    visitCta: 'Planifier une visite',
   },
   footer: {
     explore: 'Explorer',
@@ -411,6 +414,7 @@ const pt: UiDictionary = {
     title: 'Reserve seu exemplar por mensagem',
     body: 'Cada orquídea é oferecida individualmente. Escolha uma peça da coleção e fale conosco — confirmamos a disponibilidade e organizamos a entrega com o máximo cuidado.',
     cta: 'Ver Coleção',
+    visitCta: 'Agendar uma visita',
   },
   footer: {
     explore: 'Explorar',
