@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic'
  * never gets applied here, so the suffix is spelled out directly.
  */
 export const metadata: Metadata = {
-  title: `Orquídeas en Ituzaingó, Zona Oeste del Gran Buenos Aires | ${SITE_NAME}`,
+  title: `Venta de Orquídeas en Ituzaingó y Zona Oeste GBA | ${SITE_NAME}`,
   description: SITE_SEO_DESCRIPTION,
 }
 
