@@ -9,6 +9,9 @@ import { getPayloadClient } from '@/lib/payload'
 export const metadata: Metadata = {
   title: 'Diario',
   description: 'Notas botánicas, cultivo y editorial desde Reserva Oeste.',
+  alternates: {
+    languages: { es: '/blog', en: '/en/blog', fr: '/fr/blog', pt: '/pt/blog' },
+  },
 }
 
 export const dynamic = 'force-dynamic'
