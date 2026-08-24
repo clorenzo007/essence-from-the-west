@@ -1,3 +1,5 @@
+import { getDictionary } from '@/lib/i18n/dictionary'
+import type { Locale } from '@/lib/i18n/locales'
 import { buildWhatsAppCheckoutUrl } from '@/lib/utils'
 
 type WhatsAppCheckoutButtonProps = {
@@ -5,6 +7,7 @@ type WhatsAppCheckoutButtonProps = {
   price: number
   slug: string
   disabled?: boolean
+  locale?: Locale
 }
 
 export function WhatsAppCheckoutButton({
@@ -12,7 +15,9 @@ export function WhatsAppCheckoutButton({
   price,
   slug,
   disabled,
+  locale,
 }: WhatsAppCheckoutButtonProps) {
+  const t = getDictionary(locale)
   const url = buildWhatsAppCheckoutUrl({ productName, price, slug })
 
   if (!url) {
@@ -32,7 +37,7 @@ export function WhatsAppCheckoutButton({
       className={`ro-button ${disabled ? 'pointer-events-none opacity-40' : ''}`}
       aria-disabled={disabled}
     >
-      Consultar por WhatsApp
+      {t?.productDetail.whatsappCta ?? 'Consultar por WhatsApp'}
     </a>
   )
 }

@@ -2,6 +2,8 @@ import Link from 'next/link'
 
 import { MediaImage } from '@/components/ui/MediaImage'
 import { ProductImagePlaceholder } from '@/components/products/ProductImagePlaceholder'
+import { getDictionary } from '@/lib/i18n/dictionary'
+import type { Locale } from '@/lib/i18n/locales'
 import { formatPrice } from '@/lib/utils'
 
 export type ProductCardData = {
@@ -18,12 +20,21 @@ export type ProductCardData = {
   difficulty?: string | null
 }
 
-export function ProductCard({ product }: { product: ProductCardData }) {
+export function ProductCard({
+  product,
+  locale,
+  prefix = '',
+}: {
+  product: ProductCardData
+  locale?: Locale
+  prefix?: string
+}) {
+  const t = getDictionary(locale)
   const inStock = product.stock > 0
 
   return (
     <article className="group">
-      <Link href={`/products/${product.slug}`} className="block">
+      <Link href={`${prefix}/products/${product.slug}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-ro bg-ro-card shadow-sm ring-1 ring-ro-charcoal/5">
           {product.imageUrl ? (
             <MediaImage
@@ -46,7 +57,9 @@ export function ProductCard({ product }: { product: ProductCardData }) {
               inStock ? 'text-ro-botanical' : 'text-ro-muted'
             }`}
           >
-            {inStock ? 'Disponible' : 'Agotado'}
+            {inStock
+              ? (t?.productDetail.available ?? 'Disponible')
+              : (t?.productDetail.soldOut ?? 'Agotado')}
           </p>
         </div>
       </Link>
