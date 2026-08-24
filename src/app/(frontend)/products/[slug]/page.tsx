@@ -5,6 +5,7 @@ import { MediaImage } from '@/components/ui/MediaImage'
 import { RichTextContent } from '@/components/ui/RichTextContent'
 
 import type { Product } from '@/payload-types'
+import { ProductImagePlaceholder } from '@/components/products/ProductImagePlaceholder'
 import { WhatsAppCheckoutButton } from '@/components/products/WhatsAppCheckoutButton'
 import { formatPrice } from '@/lib/utils'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
@@ -72,7 +73,7 @@ export default async function ProductPage({ params }: PageProps) {
         <div className="grid gap-16 lg:grid-cols-2">
           <div className="space-y-4">
             <div className="relative aspect-[4/5] overflow-hidden rounded-ro bg-ro-card ring-1 ring-ro-charcoal/5">
-              {getMediaUrl(heroImage) && (
+              {getMediaUrl(heroImage) ? (
                 <MediaImage
                   src={getMediaUrl(heroImage)!}
                   alt={getMediaAlt(heroImage, product.name)}
@@ -81,6 +82,8 @@ export default async function ProductPage({ params }: PageProps) {
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
+              ) : (
+                <ProductImagePlaceholder />
               )}
             </div>
             {gallery.length > 1 && (
