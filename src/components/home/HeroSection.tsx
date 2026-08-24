@@ -2,10 +2,24 @@ import Link from 'next/link'
 
 import { SITE_DESCRIPTOR, SITE_TAGLINE } from '@/lib/constants'
 
-export function HeroSection() {
+type HeroSectionProps = {
+  imageUrl?: string | null
+  imageAlt?: string
+}
+
+export function HeroSection({ imageUrl, imageAlt }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen overflow-hidden bg-transparent">
-      {/* Velo muy suave marfil — deja ver la marca de agua del layout */}
+      {imageUrl && (
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ backgroundImage: `url("${imageUrl}")` }}
+          role="img"
+          aria-label={imageAlt || 'Orquídea de la colección'}
+        />
+      )}
+
+      {/* Velo muy suave marfil — deja ver la foto de fondo y la marca de agua del layout */}
       <div
         className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-ro-ivory/30 via-ro-ivory/55 to-ro-ivory"
         aria-hidden

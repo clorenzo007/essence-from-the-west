@@ -3,11 +3,15 @@ import Link from 'next/link'
 import { SITE_SECONDARY } from '@/lib/constants'
 import { getSiteImageUrl } from '@/lib/site-images'
 
-export function EditorialStrip() {
-  const editorialImage = getSiteImageUrl(
-    'images/editorial-nursery.svg',
-    '/images/editorial-nursery.svg',
-  )
+type EditorialStripProps = {
+  imageUrl?: string | null
+  imageAlt?: string
+}
+
+export function EditorialStrip({ imageUrl, imageAlt }: EditorialStripProps) {
+  const editorialImage =
+    imageUrl ||
+    getSiteImageUrl('images/editorial-nursery.svg', '/images/editorial-nursery.svg')
 
   return (
     <section id="reserva" className="border-t border-ro-charcoal/8">
@@ -16,7 +20,7 @@ export function EditorialStrip() {
           className="relative aspect-square min-h-[400px] bg-cover bg-center md:aspect-auto md:min-h-[600px]"
           style={{ backgroundImage: `url("${editorialImage}")` }}
           role="img"
-          aria-label="Orquídea en composición de colección"
+          aria-label={imageAlt || 'Orquídea en composición de colección'}
         />
 
         <div className="flex flex-col justify-center bg-ro-card/88 px-6 py-20 backdrop-blur-sm md:px-16 lg:px-24">
