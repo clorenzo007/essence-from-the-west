@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Venta de Orquídeas en Ituzaingó y Zona Oeste GBA',
   description:
     'Venta de orquídeas de colección en Ituzaingó y toda la Zona Oeste del Gran Buenos Aires (GBA) — especies e híbridos seleccionados para coleccionistas y aficionados.',
+  alternates: {
+    languages: { es: '/catalog', en: '/en/catalog', fr: '/fr/catalog', pt: '/pt/catalog' },
+  },
 }
 
 export const dynamic = 'force-dynamic'
