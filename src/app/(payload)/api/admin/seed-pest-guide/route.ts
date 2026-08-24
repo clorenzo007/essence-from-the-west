@@ -2,6 +2,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 300
 
 /**
  * One-time (idempotent) endpoint that publishes the "Plagas y enfermedades"
@@ -200,17 +201,42 @@ export async function GET(req: Request) {
       postId = created.id
     }
 
-    // Only fetch + attach gallery photos once — skip if already populated.
+    // Fetch + attach only the gallery photos that aren't there yet (matched by
+    // caption/credit text), so a re-run after a partial failure (Wikimedia
+    // thumbnail generation can be slow/flaky) fills in just what's missing
+    // instead of being skipped entirely.
     const current = await payload.findByID({ collection: 'blog-posts', id: postId, depth: 0 })
-    let galleryAttached = false
-    if (!current.gallery || current.gallery.length === 0) {
-      const galleryItems: Array<{ image: string | number; caption: string }> = []
-      for (const photo of GALLERY) {
+    const existingCaptions = new Set(
+      (current.gallery ?? []).map((item) => item.caption).filter(Boolean),
+    )
+    const missingPhotos = GALLERY.filter((photo) => !existingCaptions.has(photo.credit))
+
+    const galleryItems: Array<{ image: string | number; caption: string }> = []
+    const photoErrors: Array<{ file: string; error: string }> = []
+
+    async function fetchWithRetry(url: string, attempts = 3): Promise<Response> {
+      let lastErr: unknown
+      for (let i = 0; i < attempts; i++) {
+        try {
+          const res = await fetch(url, {
+            headers: { 'User-Agent': 'ReservaOeste-PestGuideSeed/1.0 (contacto: reservaoeste.com.ar)' },
+          })
+          if (res.ok) return res
+          lastErr = new Error(`HTTP ${res.status}`)
+        } catch (err) {
+          lastErr = err
+        }
+        // brief backoff before retrying — Wikimedia's thumbnail scaler can be
+        // slow to generate a size it hasn't cached yet.
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+      }
+      throw lastErr instanceof Error ? lastErr : new Error('No se pudo descargar la imagen.')
+    }
+
+    for (const photo of missingPhotos) {
+      try {
         const sourceUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(photo.commonsFile).replace(/%2F/g, '/')}?width=1600`
-        const res = await fetch(sourceUrl, {
-          headers: { 'User-Agent': 'ReservaOeste-PestGuideSeed/1.0 (contacto: reservaoeste.com.ar)' },
-        })
-        if (!res.ok) continue
+        const res = await fetchWithRetry(sourceUrl)
         const buffer = Buffer.from(await res.arrayBuffer())
         const contentType = res.headers.get('content-type') || 'image/jpeg'
         const mediaDoc = await payload.create({
@@ -224,17 +250,28 @@ export async function GET(req: Request) {
           },
         })
         galleryItems.push({ image: mediaDoc.id, caption: photo.credit })
-      }
-      if (galleryItems.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const galleryData: any = { gallery: galleryItems }
-        await payload.update({
-          collection: 'blog-posts',
-          id: postId,
-          data: galleryData,
+      } catch (err) {
+        photoErrors.push({
+          file: photo.commonsFile,
+          error: err instanceof Error ? err.message : 'Error desconocido',
         })
-        galleryAttached = true
       }
+    }
+
+    let galleryAttached = false
+    if (galleryItems.length > 0) {
+      const combined = [
+        ...(current.gallery ?? []).map((item) => ({ image: item.image, caption: item.caption ?? '' })),
+        ...galleryItems,
+      ]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const galleryData: any = { gallery: combined }
+      await payload.update({
+        collection: 'blog-posts',
+        id: postId,
+        data: galleryData,
+      })
+      galleryAttached = true
     }
 
     return Response.json({
@@ -242,6 +279,9 @@ export async function GET(req: Request) {
       slug: POST.slug,
       created: !existing,
       galleryAttached,
+      photosAddedThisRun: galleryItems.length,
+      photosAlreadyPresent: existingCaptions.size,
+      photoErrors,
     })
   } catch (err) {
     return Response.json(
