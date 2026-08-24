@@ -8,12 +8,43 @@ import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 
 export const metadata: Metadata = {
-  title: 'Colección de Orquídeas',
+  title: 'Venta de Orquídeas en Ituzaingó y Zona Oeste GBA',
   description:
-    'Orquídeas de colección disponibles en Ituzaingó, Zona Oeste del Gran Buenos Aires — especies e híbridos seleccionados para coleccionistas y aficionados.',
+    'Venta de orquídeas de colección en Ituzaingó y toda la Zona Oeste del Gran Buenos Aires (GBA) — especies e híbridos seleccionados para coleccionistas y aficionados.',
 }
 
 export const dynamic = 'force-dynamic'
+
+const CATALOG_FAQS = [
+  {
+    question: '¿Dónde compro orquídeas en Ituzaingó y la Zona Oeste del GBA?',
+    answer:
+      'En Reserva Oeste, con base en Ituzaingó. Vendemos orquídeas de colección a coleccionistas y aficionados de toda la Zona Oeste del Gran Buenos Aires (GBA) — Ituzaingó, Morón, Hurlingham, Merlo y alrededores.',
+  },
+  {
+    question: '¿Cómo se compra una orquídea?',
+    answer:
+      'Elegís el ejemplar en la colección y nos escribís por WhatsApp para confirmar disponibilidad. Coordinamos el pago y la entrega o el retiro con cita previa.',
+  },
+  {
+    question: '¿Hacen envíos o entregas en la Zona Oeste?',
+    answer:
+      'Sí, coordinamos entrega o retiro con cita previa dentro de Ituzaingó y la Zona Oeste del Gran Buenos Aires. Escribinos por WhatsApp para ver opciones según la localidad.',
+  },
+] as const
+
+const catalogFaqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: CATALOG_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+}
 
 type SearchParams = Promise<{
   q?: string
@@ -61,9 +92,9 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
     <div className="pb-24 pt-32 md:pt-36">
       <div className="ro-container">
         <SectionHeading
-          label="Colección"
+          label="Venta de orquídeas · Ituzaingó, Zona Oeste GBA"
           title="La colección"
-          description="Explorá ejemplares disponibles. Cada pieza es única dentro de nuestra selección."
+          description="Explorá ejemplares disponibles para coleccionistas de Ituzaingó y toda la Zona Oeste del Gran Buenos Aires (GBA). Cada pieza es única dentro de nuestra selección."
           className="mb-12"
         />
 
@@ -108,7 +139,30 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
         ) : (
           <p className="font-sans text-sm text-ro-muted">No hay ejemplares que coincidan con tu búsqueda.</p>
         )}
+
+        <div className="mt-24 max-w-2xl border-t border-ro-charcoal/10 pt-16">
+          <p className="ro-label mb-4 text-ro-gold">Preguntas frecuentes</p>
+          <h2 className="ro-heading text-3xl md:text-4xl">Venta de orquídeas en la Zona Oeste</h2>
+          <dl className="mt-10 space-y-8">
+            {CATALOG_FAQS.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-sans text-sm font-medium text-ro-charcoal md:text-base">
+                  {faq.question}
+                </dt>
+                <dd className="mt-2 font-sans text-sm font-light leading-relaxed text-ro-muted">
+                  {faq.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
+
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(catalogFaqJsonLd) }}
+      />
     </div>
   )
 }
