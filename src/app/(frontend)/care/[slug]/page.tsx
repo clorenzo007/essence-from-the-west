@@ -109,6 +109,27 @@ export default async function CareSheetPage({ params }: PageProps) {
 
         <RichTextContent content={sheet.content} className="payload-richtext" />
 
+        {(sheet.wateringNotes || sheet.fertilizerNotes) && (
+          <div className="mt-16 grid gap-6 sm:grid-cols-2">
+            {sheet.wateringNotes && (
+              <div className="rounded-ro border border-ro-charcoal/10 bg-ro-card p-8">
+                <p className="ro-label text-ro-gold">💧 Tips de riego</p>
+                <p className="mt-3 font-sans text-sm leading-relaxed text-ro-muted">
+                  {sheet.wateringNotes}
+                </p>
+              </div>
+            )}
+            {sheet.fertilizerNotes && (
+              <div className="rounded-ro border border-ro-charcoal/10 bg-ro-card p-8">
+                <p className="ro-label text-ro-gold">🌿 Tips de fertilización</p>
+                <p className="mt-3 font-sans text-sm leading-relaxed text-ro-muted">
+                  {sheet.fertilizerNotes}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
         <Link href="/care" className="ro-link mt-16 inline-block text-ro-gold">
           ← Todas las guías
         </Link>
