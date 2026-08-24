@@ -9,7 +9,12 @@ import type { CareSheet, Product } from '@/payload-types'
 import { mapCareSheetToCard } from '@/lib/content'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
-import { SITE_NAME, SITE_SEO_DESCRIPTION } from '@/lib/constants'
+import {
+  PRODUCT_PLACEHOLDER_SRC,
+  SITE_NAME,
+  SITE_SEO_DESCRIPTION,
+  SITE_WATERMARK_SRC,
+} from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 
@@ -64,20 +69,17 @@ export default async function HomePage() {
     careSheets = []
   }
 
-  // Fotos reales de la colección para el hero y la franja editorial — antes
-  // esas secciones no tenían ninguna imagen de planta/flor.
-  const heroSheet =
-    careSheets.find((sheet) => sheet.slug === 'cattleya') ?? careSheets[0]
-  const editorialSheet =
-    careSheets.find((sheet) => sheet.slug === 'vanda' && sheet.id !== heroSheet?.id) ??
-    careSheets.find((sheet) => sheet.id !== heroSheet?.id) ??
-    careSheets[0]
-
   return (
     <>
-      <HeroSection imageUrl={heroSheet?.heroImageUrl} imageAlt={heroSheet?.heroImageAlt} />
+      <HeroSection
+        imageUrl={SITE_WATERMARK_SRC}
+        imageAlt="Cattleya de la colección Reserva Oeste"
+      />
       <FeaturedCollection products={featuredProducts} genusHighlights={careSheets} />
-      <EditorialStrip imageUrl={editorialSheet?.heroImageUrl} imageAlt={editorialSheet?.heroImageAlt} />
+      <EditorialStrip
+        imageUrl={PRODUCT_PLACEHOLDER_SRC}
+        imageAlt="Orquídeas de la colección en el vivero"
+      />
       <CarePreview />
       <NewsletterCTA />
     </>
