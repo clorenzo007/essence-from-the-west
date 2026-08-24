@@ -6,6 +6,10 @@ export const SITE_TAGLINE =
   'Especies e híbridos seleccionados para coleccionistas y aficionados.'
 /** Logo oficial — no deformar, recolorear ni agregar efectos */
 export const LOGO_SRC = '/images/logo.png'
+/** Foto real de la colección usada como marca de agua de fondo en todo el sitio */
+export const SITE_WATERMARK_SRC = '/images/watermark-orchid.jpg'
+/** Foto real de la colección usada de fondo sutil cuando un producto no tiene imagen cargada */
+export const PRODUCT_PLACEHOLDER_SRC = '/images/card-placeholder-orchid.jpg'
 export const SERVER_URL = getServerURL()
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ''
 
