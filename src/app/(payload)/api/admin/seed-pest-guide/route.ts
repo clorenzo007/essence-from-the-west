@@ -185,6 +185,10 @@ export async function GET(req: Request) {
       tags: POST.tags.map((label) => ({ label })),
       status: 'published' as const,
       slug: POST.slug,
+      meta: {
+        title: 'Plagas y enfermedades de las orquídeas: guía',
+        description: POST.excerpt.slice(0, 160),
+      },
     }
 
     let postId: string | number
