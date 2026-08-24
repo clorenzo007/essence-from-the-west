@@ -157,7 +157,7 @@ const en: UiDictionary = {
   },
   newsletter: {
     label: 'Private Inquiry',
-    title: 'Reserve Your Specimen by Message',
+    title: 'Arrange a Visit',
     body: "Each orchid is offered individually. Choose a piece from the collection and message us — we'll confirm availability and arrange delivery with the utmost care.",
     cta: 'View Collection',
     visitCta: 'Schedule a Visit',
@@ -287,7 +287,7 @@ const fr: UiDictionary = {
   },
   newsletter: {
     label: 'Consultation privée',
-    title: 'Réservez votre spécimen par message',
+    title: 'Convenir d\'une visite',
     body: 'Chaque orchidée est proposée individuellement. Choisissez une pièce de la collection et contactez-nous — nous confirmons la disponibilité et organisons la livraison avec le plus grand soin.',
     cta: 'Voir la collection',
     visitCta: 'Planifier une visite',
@@ -411,7 +411,7 @@ const pt: UiDictionary = {
   },
   newsletter: {
     label: 'Consulta privada',
-    title: 'Reserve seu exemplar por mensagem',
+    title: 'Combinar uma visita',
     body: 'Cada orquídea é oferecida individualmente. Escolha uma peça da coleção e fale conosco — confirmamos a disponibilidade e organizamos a entrega com o máximo cuidado.',
     cta: 'Ver Coleção',
     visitCta: 'Agendar uma visita',
