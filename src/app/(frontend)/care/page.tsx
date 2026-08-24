@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { MediaImage } from '@/components/ui/MediaImage'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { CareSheet } from '@/payload-types'
 import { mapCareSheetToCard } from '@/lib/content'
@@ -39,12 +40,25 @@ export default async function CareIndexPage() {
             <li key={sheet.id}>
               <Link
                 href={`/care/${sheet.slug}`}
-                className="flex flex-col gap-2 px-8 py-10 transition-colors hover:bg-ro-ivory md:flex-row md:items-center md:justify-between"
+                className="flex flex-col gap-6 px-8 py-10 transition-colors hover:bg-ro-ivory md:flex-row md:items-center md:justify-between"
               >
-                <div>
-                  <p className="ro-label text-ro-gold">{sheet.genus}</p>
-                  <h2 className="ro-heading text-3xl">{sheet.title}</h2>
-                  <p className="mt-2 max-w-xl font-sans text-sm text-ro-muted">{sheet.summary}</p>
+                <div className="flex flex-col gap-6 md:flex-row md:items-center">
+                  {sheet.heroImageUrl && (
+                    <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-ro bg-ro-ivory md:w-40">
+                      <MediaImage
+                        src={sheet.heroImageUrl}
+                        alt={sheet.heroImageAlt || sheet.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 160px"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <p className="ro-label text-ro-gold">{sheet.genus}</p>
+                    <h2 className="ro-heading text-3xl">{sheet.title}</h2>
+                    <p className="mt-2 max-w-xl font-sans text-sm text-ro-muted">{sheet.summary}</p>
+                  </div>
                 </div>
                 <span className="ro-label capitalize">{sheet.difficulty}</span>
               </Link>
