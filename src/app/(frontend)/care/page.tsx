@@ -10,6 +10,9 @@ import { getPayloadClient } from '@/lib/payload'
 export const metadata: Metadata = {
   title: 'Cuidado',
   description: 'Guías de cultivo de orquídeas para coleccionistas y cultivadores serios.',
+  alternates: {
+    languages: { es: '/care', en: '/en/care', fr: '/fr/care', pt: '/pt/care' },
+  },
 }
 
 export const dynamic = 'force-dynamic'
