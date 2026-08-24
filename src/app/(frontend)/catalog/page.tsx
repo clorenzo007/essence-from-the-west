@@ -86,7 +86,10 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
     sort: 'name',
   })
 
-  const products = (docs as Product[]).map(mapProductToCard)
+  // Nunca mostrar en la vidriera pública un producto sin foto cargada
+  // (evita el recuadro "Sin imagen" vacío para ejemplares de prueba u
+  // olvidados sin galería).
+  const products = (docs as Product[]).map(mapProductToCard).filter((product) => product.imageUrl)
 
   return (
     <div className="pb-24 pt-32 md:pt-36">
