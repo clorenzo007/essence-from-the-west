@@ -17,10 +17,10 @@ export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ''
  */
 export const SITE_LOCALITY = 'Ituzaingó'
 export const SITE_REGION = 'Buenos Aires'
-export const SITE_AREA_SERVED = 'Zona Oeste del Gran Buenos Aires'
+export const SITE_AREA_SERVED = 'Zona Oeste del Gran Buenos Aires (GBA)'
 export const SITE_COUNTRY = 'AR'
 export const SITE_SEO_DESCRIPTION =
-  'Orquídeas de colección en Ituzaingó, Zona Oeste del Gran Buenos Aires. Especies e híbridos seleccionados para coleccionistas y aficionados, con guías de cultivo y consultas por WhatsApp.'
+  'Venta de orquídeas de colección en Ituzaingó y Zona Oeste del Gran Buenos Aires (GBA). Guías de cultivo y consultas por WhatsApp.'
 
 export { DIFFICULTY_OPTIONS } from '@/collections/shared/options'
 
