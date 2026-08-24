@@ -220,10 +220,12 @@ export async function GET(req: Request) {
         galleryItems.push({ image: mediaDoc.id, caption: photo.credit })
       }
       if (galleryItems.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const galleryData: any = { gallery: galleryItems }
         await payload.update({
           collection: 'blog-posts',
           id: postId,
-          data: { gallery: galleryItems },
+          data: galleryData,
         })
         galleryAttached = true
       }
