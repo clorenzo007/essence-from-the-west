@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { SITE_SECONDARY } from '@/lib/constants'
 import { getSiteImageUrl } from '@/lib/site-images'
 
 type EditorialStripProps = {
@@ -34,9 +33,6 @@ export function EditorialStrip({ imageUrl, imageAlt }: EditorialStripProps) {
             Cada ejemplar se selecciona por su carácter, su flor y su mérito dentro de una
             colección privada. No vendemos plantas en serie: ofrecemos piezas para quienes cultivan
             con pasión y contemplación.
-          </p>
-          <p className="mt-4 font-sans text-xs uppercase tracking-ro text-ro-orchid">
-            {SITE_SECONDARY}
           </p>
           <Link href="/blog" className="ro-link mt-10 inline-block text-ro-gold">
             Leer el diario →
