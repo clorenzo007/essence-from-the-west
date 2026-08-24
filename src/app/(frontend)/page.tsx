@@ -28,6 +28,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: `Venta de Orquídeas en Ituzaingó y Zona Oeste GBA | ${SITE_NAME}`,
   description: SITE_SEO_DESCRIPTION,
+  alternates: {
+    languages: { es: '/', en: '/en', fr: '/fr', pt: '/pt' },
+  },
 }
 
 export default async function HomePage() {
