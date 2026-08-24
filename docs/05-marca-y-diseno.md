@@ -7,7 +7,6 @@
 | Nombre | RESERVA OESTE |
 | Descriptor | Orquídeas de Colección |
 | Tagline | Especies e híbridos seleccionados para coleccionistas y aficionados. |
-| Secundaria | Esencia del Oeste |
 | Dominio | https://www.reservaoeste.com.ar |
 
 Constantes en `src/lib/constants.ts`.  
