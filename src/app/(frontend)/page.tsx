@@ -53,7 +53,10 @@ export default async function HomePage() {
       }),
     ])
 
-    featuredProducts = (productsResult.docs as Product[]).map(mapProductToCard)
+    // Nunca destacar en la home un producto sin foto cargada.
+    featuredProducts = (productsResult.docs as Product[])
+      .map(mapProductToCard)
+      .filter((product) => product.imageUrl)
     careSheets = (careSheetsResult.docs as CareSheet[]).map(mapCareSheetToCard)
   } catch {
     // MongoDB may be unavailable during initial setup
