@@ -57,10 +57,7 @@ type GalleryPhotoSeed = {
   credit: string
 }
 
-// 8 of 9 plagas/enfermedades have a confirmed-license photo. Caracoles y
-// babosas is still pending — Wikimedia Commons was unreachable from the
-// network this was written on, so that photo will be added in a follow-up
-// pass. The article text below covers all 9 regardless.
+// All 9 plagas/enfermedades have a confirmed-license photo.
 const GALLERY: GalleryPhotoSeed[] = [
   {
     commonsFile: 'Cocciniglia_-_Mealybug_-_Gianni_Del_Bufalo_bygdb.jpg',
@@ -102,6 +99,11 @@ const GALLERY: GalleryPhotoSeed[] = [
     commonsFile: 'Spinach-_Cercospora_leaf_spot_-_7.jpg',
     alt: 'Manchas foliares fúngicas de tipo Cercospora',
     credit: 'Manchas foliares fúngicas — Foto: Scot Nelson — Dominio público (CC0), Wikimedia Commons',
+  },
+  {
+    commonsFile: 'Baby_Garden_Snail_(Cornu_aspersum).jpg',
+    alt: 'Caracol (Cornu aspersum) sobre una hoja',
+    credit: 'Caracoles y babosas — Foto: Matthew T Rader (matthewtrader.com) — CC BY-SA 4.0, Wikimedia Commons',
   },
 ]
 
@@ -236,7 +238,6 @@ export async function GET(req: Request) {
       slug: POST.slug,
       created: !existing,
       galleryAttached,
-      note: 'Falta la foto de caracoles/babosas — se agrega en un paso posterior.',
     })
   } catch (err) {
     return Response.json(
