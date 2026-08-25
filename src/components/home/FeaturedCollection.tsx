@@ -58,7 +58,7 @@ export function FeaturedCollection({
               }
             />
           )}
-          <Link href={`${prefix}/catalog`} className="ro-link shrink-0 text-ro-gold">
+          <Link href={`${prefix}/tienda`} className="ro-link shrink-0 text-ro-gold">
             {t?.featured.viewAll ?? 'Ver todo →'}
           </Link>
         </div>

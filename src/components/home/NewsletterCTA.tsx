@@ -22,8 +22,8 @@ export function NewsletterCTA({ locale, prefix = '' }: { locale?: Locale; prefix
             'Cada orquídea se ofrece de forma individual. Elegí una pieza de la colección y consultanos — confirmamos disponibilidad y coordinamos el envío con el máximo cuidado.'}
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link href={`${prefix}/catalog`} className="ro-button">
-            {t?.newsletter.cta ?? 'Ver Colección'}
+          <Link href={`${prefix}/tienda`} className="ro-button">
+            {t?.newsletter.cta ?? 'Ver Tienda'}
           </Link>
           {visitUrl && (
             <a href={visitUrl} target="_blank" rel="noopener noreferrer" className="ro-button-ghost">

@@ -43,8 +43,8 @@ export function HeroSection({ imageUrl, imageAlt, locale, prefix = '' }: HeroSec
             {t?.hero.subtitle ?? SITE_TAGLINE}
           </p>
           <div className="mt-12 flex flex-wrap gap-4">
-            <Link href={`${prefix}/catalog`} className="ro-button">
-              {t?.hero.primaryCta ?? 'Ver Colección'}
+            <Link href={`${prefix}/tienda`} className="ro-button">
+              {t?.hero.primaryCta ?? 'Ver Tienda'}
             </Link>
             <Link href={`${prefix}/#reserva`} className="ro-button-ghost">
               {t?.hero.secondaryCta ?? 'Conocer Reserva Oeste'}
