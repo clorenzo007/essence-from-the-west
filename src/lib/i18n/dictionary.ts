@@ -112,14 +112,28 @@ export type UiDictionary = {
     fragrance: string
     whatsappCta: string
   }
+  tienda: {
+    badge: string
+    title: string
+    desc: string
+    categories: {
+      orchids: string
+      substrates: string
+      fertilizers: string
+      pesticides: string
+      pots: string
+      baskets: string
+    }
+    noResults: string
+  }
 }
 
 const en: UiDictionary = {
   nav: {
-    catalog: 'Collection',
+    catalog: 'Store',
     care: 'Care',
     journal: 'Journal',
-    viewCollection: 'View Collection',
+    viewCollection: 'Shop Now',
     menu: 'Menu',
     close: 'Close',
   },
@@ -128,7 +142,7 @@ const en: UiDictionary = {
     title1: 'Orchids',
     title2: 'Worth Collecting',
     subtitle: 'Species and hybrids selected for collectors and enthusiasts.',
-    primaryCta: 'View Collection',
+    primaryCta: 'Shop Now',
     secondaryCta: 'About Reserva Oeste',
   },
   editorial: {
@@ -159,7 +173,7 @@ const en: UiDictionary = {
     label: 'Private Inquiry',
     title: 'Arrange a Visit',
     body: "Each orchid is offered individually. Choose a piece from the collection and message us — we'll confirm availability and arrange delivery with the utmost care.",
-    cta: 'View Collection',
+    cta: 'Shop Now',
     visitCta: 'Schedule a Visit',
   },
   footer: {
@@ -236,14 +250,28 @@ const en: UiDictionary = {
     fragrance: 'Fragrance',
     whatsappCta: 'Inquire via WhatsApp',
   },
+  tienda: {
+    badge: 'Store · Ituzaingó, West Buenos Aires',
+    title: 'The Store',
+    desc: 'Collector orchids, substrates, fertilizers, pesticides, pots and wooden baskets — everything to grow with confidence.',
+    categories: {
+      orchids: 'Orchids',
+      substrates: 'Substrates',
+      fertilizers: 'Fertilizers',
+      pesticides: 'Pesticides',
+      pots: 'Pots',
+      baskets: 'Wooden Baskets',
+    },
+    noResults: 'No items in this category yet.',
+  },
 }
 
 const fr: UiDictionary = {
   nav: {
-    catalog: 'Collection',
+    catalog: 'Boutique',
     care: 'Entretien',
     journal: 'Journal',
-    viewCollection: 'Voir la collection',
+    viewCollection: 'Voir la boutique',
     menu: 'Menu',
     close: 'Fermer',
   },
@@ -253,7 +281,7 @@ const fr: UiDictionary = {
     title2: 'de Collection',
     subtitle:
       'Espèces et hybrides sélectionnés pour les collectionneurs et les passionnés.',
-    primaryCta: 'Voir la collection',
+    primaryCta: 'Voir la boutique',
     secondaryCta: 'Découvrir Reserva Oeste',
   },
   editorial: {
@@ -289,7 +317,7 @@ const fr: UiDictionary = {
     label: 'Consultation privée',
     title: 'Convenir d\'une visite',
     body: 'Chaque orchidée est proposée individuellement. Choisissez une pièce de la collection et contactez-nous — nous confirmons la disponibilité et organisons la livraison avec le plus grand soin.',
-    cta: 'Voir la collection',
+    cta: 'Voir la boutique',
     visitCta: 'Planifier une visite',
   },
   footer: {
@@ -366,14 +394,28 @@ const fr: UiDictionary = {
     fragrance: 'Parfum',
     whatsappCta: 'Contacter via WhatsApp',
   },
+  tienda: {
+    badge: 'Boutique · Ituzaingó, Ouest de Buenos Aires',
+    title: 'La boutique',
+    desc: 'Orchidées de collection, substrats, engrais, pesticides, pots et paniers en bois — tout pour cultiver en toute confiance.',
+    categories: {
+      orchids: 'Orchidées',
+      substrates: 'Substrats',
+      fertilizers: 'Engrais',
+      pesticides: 'Pesticides',
+      pots: 'Pots',
+      baskets: 'Paniers en bois',
+    },
+    noResults: 'Pas encore d\'articles dans cette catégorie.',
+  },
 }
 
 const pt: UiDictionary = {
   nav: {
-    catalog: 'Coleção',
+    catalog: 'Loja',
     care: 'Cuidados',
     journal: 'Diário',
-    viewCollection: 'Ver Coleção',
+    viewCollection: 'Ver Loja',
     menu: 'Menu',
     close: 'Fechar',
   },
@@ -382,7 +424,7 @@ const pt: UiDictionary = {
     title1: 'Orquídeas',
     title2: 'de Coleção',
     subtitle: 'Espécies e híbridos selecionados para colecionadores e entusiastas.',
-    primaryCta: 'Ver Coleção',
+    primaryCta: 'Ver Loja',
     secondaryCta: 'Conheça a Reserva Oeste',
   },
   editorial: {
@@ -413,7 +455,7 @@ const pt: UiDictionary = {
     label: 'Consulta privada',
     title: 'Combinar uma visita',
     body: 'Cada orquídea é oferecida individualmente. Escolha uma peça da coleção e fale conosco — confirmamos a disponibilidade e organizamos a entrega com o máximo cuidado.',
-    cta: 'Ver Coleção',
+    cta: 'Ver Loja',
     visitCta: 'Agendar uma visita',
   },
   footer: {
@@ -489,6 +531,20 @@ const pt: UiDictionary = {
     flowering: 'Floração',
     fragrance: 'Fragrância',
     whatsappCta: 'Consultar via WhatsApp',
+  },
+  tienda: {
+    badge: 'Loja · Ituzaingó, Zona Oeste de Buenos Aires',
+    title: 'A loja',
+    desc: 'Orquídeas de coleção, substratos, fertilizantes, pesticidas, vasos e cestos de madeira — tudo para cultivar com confiança.',
+    categories: {
+      orchids: 'Orquídeas',
+      substrates: 'Substratos',
+      fertilizers: 'Fertilizantes',
+      pesticides: 'Pesticidas',
+      pots: 'Vasos',
+      baskets: 'Cestos de madeira',
+    },
+    noResults: 'Ainda não há itens nesta categoria.',
   },
 }
 
