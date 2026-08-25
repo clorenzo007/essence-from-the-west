@@ -26,11 +26,11 @@ export function Header() {
   const t = getDictionary(locale)
 
   const navLinks = [
-    { href: `${prefix}/catalog`, label: t?.nav.catalog ?? NAV_LINKS[0].label },
+    { href: `${prefix}/tienda`, label: t?.nav.catalog ?? NAV_LINKS[0].label },
     { href: `${prefix}/care`, label: t?.nav.care ?? NAV_LINKS[1].label },
     { href: `${prefix}/blog`, label: t?.nav.journal ?? NAV_LINKS[2].label },
   ]
-  const viewCollectionLabel = t?.nav.viewCollection ?? 'Ver Colección'
+  const viewCollectionLabel = t?.nav.viewCollection ?? 'Ver Tienda'
   const menuLabel = t?.nav.menu ?? 'Menú'
   const closeLabel = t?.nav.close ?? 'Cerrar'
 
@@ -45,7 +45,7 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <Link href={`${prefix}/catalog`} className="ro-button">
+          <Link href={`${prefix}/tienda`} className="ro-button">
             {viewCollectionLabel}
           </Link>
           <LanguageSwitcher />
@@ -80,7 +80,7 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href={`${prefix}/catalog`}
+            href={`${prefix}/tienda`}
             className="ro-button w-fit"
             onClick={() => setOpen(false)}
           >

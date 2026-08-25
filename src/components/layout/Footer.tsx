@@ -23,7 +23,7 @@ export function Footer() {
   const t = getDictionary(locale)
 
   const navLinks = [
-    { href: `${prefix}/catalog`, label: t?.nav.catalog ?? NAV_LINKS[0].label },
+    { href: `${prefix}/tienda`, label: t?.nav.catalog ?? NAV_LINKS[0].label },
     { href: `${prefix}/care`, label: t?.nav.care ?? NAV_LINKS[1].label },
     { href: `${prefix}/blog`, label: t?.nav.journal ?? NAV_LINKS[2].label },
   ]
