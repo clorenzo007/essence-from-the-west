@@ -48,3 +48,17 @@ export function buildWhatsAppVisitUrl(message: string) {
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
 }
+
+export function buildWhatsAppSupplyInquiryUrl(params: { name: string; price: number; currency?: string }) {
+  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
+  if (!number) return null
+
+  const message = [
+    `Hola, me interesa consultar por:`,
+    ``,
+    `*${params.name}*`,
+    `Precio: ${formatPrice(params.price, params.currency)}`,
+  ].join('\n')
+
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
+}

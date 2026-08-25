@@ -28,7 +28,20 @@ export const SITE_SEO_DESCRIPTION =
 export { DIFFICULTY_OPTIONS } from '@/collections/shared/options'
 
 export const NAV_LINKS = [
-  { href: '/catalog', label: 'Colección' },
+  { href: '/tienda', label: 'Tienda' },
   { href: '/care', label: 'Cuidado' },
   { href: '/blog', label: 'Diario' },
+] as const
+
+/**
+ * Categorías del menú Tienda. "orquideas" reutiliza el catálogo de
+ * productos existente (orquídeas); el resto lee de la colección Supplies.
+ */
+export const TIENDA_CATEGORIES = [
+  { value: 'orquideas', label: 'Orquídeas' },
+  { value: 'sustratos', label: 'Sustratos' },
+  { value: 'fertilizantes', label: 'Fertilizantes' },
+  { value: 'pesticidas', label: 'Pesticidas' },
+  { value: 'macetas', label: 'Macetas' },
+  { value: 'canastas', label: 'Canastas de madera' },
 ] as const
