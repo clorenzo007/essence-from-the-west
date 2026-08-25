@@ -5,7 +5,37 @@ type AuthUser = {
   role?: 'admin' | 'editor'
 }
 
-export const isLoggedIn: Access = ({ req }) => Boolean(req.user)
+/**
+ * Requiere sesión Y (si el 2FA por email está activo) el código de acceso
+ * ya verificado en ESTA sesión. Se hace una consulta directa a la base de
+ * datos en cada chequeo — deliberado: preferimos esto a confiar en datos
+ * potencialmente desactualizados guardados en el JWT/sesión.
+ *
+ * Solo se usa para crear/editar/borrar contenido (ver editorCollectionAccess
+ * y Media más abajo). A propósito NO se usa en `canAccessAdminPanel` ni en
+ * `publishedReadAccess.read`, así el panel de administración y la pantalla
+ * para ingresar el código siempre son alcanzables — en el peor caso alguien
+ * queda en "solo lectura" hasta verificar el código, nunca bloqueado afuera.
+ *
+ * DISABLE_2FA=true en las variables de entorno desactiva este chequeo por
+ * completo (llave de emergencia).
+ */
+export const isLoggedIn: Access = async ({ req }) => {
+  if (!req.user) return false
+
+  if (process.env.DISABLE_2FA === 'true') return true
+
+  try {
+    const fresh = await req.payload.findByID({
+      collection: 'users',
+      id: req.user.id,
+      req,
+    })
+    return Boolean(fresh?.otpVerifiedAt)
+  } catch {
+    return false
+  }
+}
 
 export const isAdmin: Access = ({ req }) => {
   const user = req.user as AuthUser | undefined
