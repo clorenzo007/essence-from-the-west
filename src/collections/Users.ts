@@ -146,7 +146,8 @@ export const Users: CollectionConfig = {
     forgotPassword: {
       expiration: INVITE_LINK_EXPIRATION_MS,
       generateEmailSubject: () => inviteUserEmailSubject(),
-      generateEmailHTML: ({ token }) => {
+      generateEmailHTML: (args) => {
+        const token = args?.token ?? ''
         const setPasswordUrl = `${getServerURL()}/admin/reset/${token}`
         return inviteUserEmailHTML({ setPasswordUrl })
       },
