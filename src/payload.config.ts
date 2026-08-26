@@ -1,7 +1,6 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { resendAdapter } from '@payloadcms/email-resend'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -51,29 +50,14 @@ const storagePlugins = useCloudinary
       ]
     : []
 
-// El adapter de Resend solo se registra si hay API key configurada en el
-// entorno. Sin esto, `resendAdapter` podía romper el build/arranque en
-// Vercel mientras RESEND_API_KEY todavía no está configurada ahí — con esta
-// guarda, el sitio funciona igual (los emails de invitación/2FA simplemente
-// no se envían hasta que se configure la variable de entorno).
-const resendApiKey = process.env.RESEND_API_KEY
-
+// DIAGNOSTIC BUILD: resendAdapter/email temporarily removed to isolate
+// whether it is the cause of the current Vercel build failure.
 export default buildConfig({
   serverURL: getServerURL(),
   csrf: getTrustedOrigins(),
   cors: getTrustedOrigins(),
-  email: resendApiKey
-    ? resendAdapter({
-        defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-        defaultFromName: 'Reserva Oeste',
-        apiKey: resendApiKey,
-      })
-    : undefined,
   admin: {
     user: Users.slug,
-    // Force light theme: custom.scss only overrides brand colors for light mode,
-    // so falling back to dark mode (OS/browser preference) leaves button text
-    // illegible against the overridden ivory background.
     theme: 'light',
     meta: {
       titleSuffix: '— Reserva Oeste',
