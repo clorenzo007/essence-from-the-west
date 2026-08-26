@@ -61,20 +61,22 @@ const verifyOtpEndpoint: Endpoint = {
     }
 
     const fresh = await req.payload.findByID({ collection: 'users', id: req.user.id, req })
+    const storedHash: string | null | undefined = fresh?.otpCodeHash
+    const storedExpiresAt: string | null | undefined = fresh?.otpExpiresAt
 
-    if (!fresh?.otpCodeHash || !fresh?.otpExpiresAt) {
+    if (!storedHash || !storedExpiresAt) {
       return Response.json(
         { error: 'No hay un código pendiente. Pedí uno nuevo.' },
         { status: 400 },
       )
     }
 
-    if (new Date(fresh.otpExpiresAt).getTime() < Date.now()) {
+    if (new Date(storedExpiresAt).getTime() < Date.now()) {
       return Response.json({ error: 'El código venció. Pedí uno nuevo.' }, { status: 400 })
     }
 
     const expectedHash = hashOtpCode(code, String(req.user.id))
-    if (expectedHash !== fresh.otpCodeHash) {
+    if (expectedHash !== storedHash) {
       return Response.json({ error: 'Código incorrecto.' }, { status: 400 })
     }
 
