@@ -1,22 +1,147 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Endpoint, PayloadRequest } from 'payload'
 
 import { getAuthCookieDomain } from '@/lib/auth-cookies'
 import { getServerURL } from '@/lib/env'
-import { inviteUserEmailHTML, inviteUserEmailSubject } from '@/lib/email-templates'
+import { inviteUserEmailHTML, inviteUserEmailSubject, otpEmailHTML, otpEmailSubject } from '@/lib/email-templates'
+import { generateOtpCode, hashOtpCode, is2FADisabled, otpExpiryDate } from '@/lib/otp'
 
 import { canAccessAdminPanel, isAdmin } from './shared/access'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
+/** 7 días — pensado para invitaciones que pueden tardar en abrirse, no solo "olvidé mi clave". */
 const INVITE_LINK_EXPIRATION_MS = 1000 * 60 * 60 * 24 * 7
 
-// DIAGNOSTIC: 2FA/OTP subsystem entirely removed (endpoints, hooks, fields,
-// afterLogin OTP send) to isolate whether the OTP code is what's breaking
-// the Vercel build. Only the invite-by-email password-setup flow remains.
+async function sendOtpForUser(req: PayloadRequest, userId: string, email: string) {
+  const code = generateOtpCode()
+  const codeHash = hashOtpCode(code, userId)
+  const expiresAt = otpExpiryDate().toISOString()
+
+  await req.payload.update({
+    collection: 'users',
+    id: userId,
+    data: { otpCodeHash: codeHash, otpExpiresAt: expiresAt, otpVerifiedAt: null },
+    req,
+  })
+
+  try {
+    await req.payload.sendEmail({
+      to: email,
+      subject: otpEmailSubject(),
+      html: otpEmailHTML({ code }),
+    })
+  } catch (err) {
+    req.payload.logger.error(`No se pudo enviar el código 2FA a ${email}: ${String(err)}`)
+    throw err
+  }
+}
+
+const verifyOtpEndpoint: Endpoint = {
+  path: '/verify-otp',
+  method: 'post',
+  handler: async (req) => {
+    if (!req.user) {
+      return Response.json({ error: 'No autenticado.' }, { status: 401 })
+    }
+
+    if (is2FADisabled()) {
+      return Response.json({ ok: true })
+    }
+
+    let body: { code?: unknown } = {}
+    try {
+      body = (await req.json?.()) ?? {}
+    } catch {
+      body = {}
+    }
+    const code = typeof body.code === 'string' ? body.code.trim() : ''
+
+    if (!code) {
+      return Response.json({ error: 'Ingresá el código que te enviamos por email.' }, { status: 400 })
+    }
+
+    const fresh = await req.payload.findByID({ collection: 'users', id: req.user.id, req })
+    const storedHash: string | null | undefined = fresh?.otpCodeHash
+    const storedExpiresAt: string | null | undefined = fresh?.otpExpiresAt
+
+    if (!storedHash || !storedExpiresAt) {
+      return Response.json(
+        { error: 'No hay un código pendiente. Pedí uno nuevo.' },
+        { status: 400 },
+      )
+    }
+
+    if (new Date(storedExpiresAt).getTime() < Date.now()) {
+      return Response.json({ error: 'El código venció. Pedí uno nuevo.' }, { status: 400 })
+    }
+
+    const expectedHash = hashOtpCode(code, String(req.user.id))
+    if (expectedHash !== storedHash) {
+      return Response.json({ error: 'Código incorrecto.' }, { status: 400 })
+    }
+
+    await req.payload.update({
+      collection: 'users',
+      id: req.user.id,
+      data: { otpVerifiedAt: new Date().toISOString(), otpCodeHash: null, otpExpiresAt: null },
+      req,
+    })
+
+    return Response.json({ ok: true })
+  },
+}
+
+const otpStatusEndpoint: Endpoint = {
+  path: '/otp-status',
+  method: 'get',
+  handler: async (req) => {
+    if (!req.user) {
+      return Response.json({ error: 'No autenticado.' }, { status: 401 })
+    }
+
+    if (is2FADisabled()) {
+      return Response.json({ required: false, verified: true })
+    }
+
+    const fresh = await req.payload.findByID({ collection: 'users', id: req.user.id, req })
+
+    return Response.json({ required: true, verified: Boolean(fresh?.otpVerifiedAt) })
+  },
+}
+
+const resendOtpEndpoint: Endpoint = {
+  path: '/resend-otp',
+  method: 'post',
+  handler: async (req) => {
+    if (!req.user) {
+      return Response.json({ error: 'No autenticado.' }, { status: 401 })
+    }
+
+    if (is2FADisabled()) {
+      return Response.json({ ok: true })
+    }
+
+    try {
+      await sendOtpForUser(req, String(req.user.id), String(req.user.email))
+    } catch {
+      return Response.json(
+        { error: 'No se pudo enviar el email. Probá de nuevo en un momento.' },
+        { status: 500 },
+      )
+    }
+
+    return Response.json({ ok: true })
+  },
+}
+
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
-    cookies: { domain: getAuthCookieDomain(), sameSite: 'Lax', secure: isProduction },
+    cookies: {
+      domain: getAuthCookieDomain(),
+      sameSite: 'Lax',
+      secure: isProduction,
+    },
     useSessions: true,
     forgotPassword: {
       expiration: INVITE_LINK_EXPIRATION_MS,
@@ -50,31 +175,46 @@ export const Users: CollectionConfig = {
     },
     delete: isAdmin,
   },
+  endpoints: [otpStatusEndpoint, verifyOtpEndpoint, resendOtpEndpoint],
   hooks: {
     afterLogin: [
       async ({ req, user }) => {
+        let current = user
+
         const { totalDocs } = await req.payload.count({
           collection: 'users',
           where: { role: { equals: 'admin' } },
         })
 
-        if (totalDocs === 0 && user.role !== 'admin') {
+        if (totalDocs === 0 && current.role !== 'admin') {
           await req.payload.update({
             collection: 'users',
-            id: user.id,
+            id: current.id,
             data: { role: 'admin' },
             req,
           })
-          return { ...user, role: 'admin' as const }
+          current = { ...current, role: 'admin' as const }
         }
 
-        return user
+        if (is2FADisabled()) {
+          return current
+        }
+
+        try {
+          await sendOtpForUser(req, current.id, current.email)
+        } catch {
+          // El login igual continúa — verify-otp/resend-otp le permiten reintentar.
+        }
+
+        return { ...current, otpVerifiedAt: null }
       },
     ],
     afterChange: [
       async ({ doc, operation, req }) => {
         if (operation !== 'create') return
 
+        // No invitar al primer usuario (bootstrap del sitio): esa persona ya
+        // eligió su propia contraseña en la pantalla de creación de cuenta.
         const { totalDocs } = await req.payload.count({ collection: 'users' })
         if (totalDocs <= 1) return
 
@@ -112,7 +252,10 @@ export const Users: CollectionConfig = {
     ],
   },
   fields: [
-    { name: 'name', type: 'text' },
+    {
+      name: 'name',
+      type: 'text',
+    },
     {
       name: 'role',
       type: 'select',
@@ -138,6 +281,24 @@ export const Users: CollectionConfig = {
       admin: {
         description: 'Solo administradores pueden asignar roles. Cerrá sesión y volvé a entrar tras cambiar el tuyo.',
       },
+    },
+    {
+      name: 'otpCodeHash',
+      type: 'text',
+      admin: { hidden: true },
+      access: { read: () => false, create: () => false, update: () => false },
+    },
+    {
+      name: 'otpExpiresAt',
+      type: 'date',
+      admin: { hidden: true },
+      access: { read: () => false, create: () => false, update: () => false },
+    },
+    {
+      name: 'otpVerifiedAt',
+      type: 'date',
+      admin: { hidden: true },
+      access: { read: () => false, create: () => false, update: () => false },
     },
   ],
 }
