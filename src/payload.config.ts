@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -50,17 +51,29 @@ const storagePlugins = useCloudinary
       ]
     : []
 
-// DIAGNOSTIC 4: Supplies collection stays registered (so payload-types.ts
-// still generates a Supply type and /tienda pages keep compiling) but
-// OtpGate is removed from beforeNavLinks, to isolate whether OtpGate.tsx
-// itself is what's breaking the build. Users.ts/access.ts are back to their
-// FULL real (non-diagnostic) versions in this test.
+// El adapter de Resend solo se registra si hay API key configurada en el
+// entorno. Sin esto, `resendAdapter` podía romper el build/arranque en
+// Vercel mientras RESEND_API_KEY todavía no está configurada ahí — con esta
+// guarda, el sitio funciona igual (los emails de invitación/2FA simplemente
+// no se envían hasta que se configure la variable de entorno).
+const resendApiKey = process.env.RESEND_API_KEY
+
 export default buildConfig({
   serverURL: getServerURL(),
   csrf: getTrustedOrigins(),
   cors: getTrustedOrigins(),
+  email: resendApiKey
+    ? resendAdapter({
+        defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+        defaultFromName: 'Reserva Oeste',
+        apiKey: resendApiKey,
+      })
+    : undefined,
   admin: {
     user: Users.slug,
+    // Force light theme: custom.scss only overrides brand colors for light mode,
+    // so falling back to dark mode (OS/browser preference) leaves button text
+    // illegible against the overridden ivory background.
     theme: 'light',
     meta: {
       titleSuffix: '— Reserva Oeste',
@@ -70,7 +83,10 @@ export default buildConfig({
         Logo: '@/components/admin/AdminLogo#AdminLogo',
         Icon: '@/components/admin/AdminIcon#AdminIcon',
       },
-      beforeNavLinks: ['@/components/admin/StatusBar#StatusBar'],
+      beforeNavLinks: [
+        '@/components/admin/OtpGate#OtpGate',
+        '@/components/admin/StatusBar#StatusBar',
+      ],
     },
     importMap: {
       baseDir: path.resolve(dirname),
