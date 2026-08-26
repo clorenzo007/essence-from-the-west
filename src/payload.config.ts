@@ -19,6 +19,7 @@ import { Customers } from './collections/Customers'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
 import { Specimens } from './collections/Specimens'
+import { Supplies } from './collections/Supplies'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -49,9 +50,11 @@ const storagePlugins = useCloudinary
       ]
     : []
 
-// DIAGNOSTIC BUILD 2: reverted to baseline collections/components (no
-// Supplies, no OtpGate) to isolate whether the build failure originates in
-// payload.config.ts's registration of those, or elsewhere in the tree.
+// DIAGNOSTIC 4: Supplies collection stays registered (so payload-types.ts
+// still generates a Supply type and /tienda pages keep compiling) but
+// OtpGate is removed from beforeNavLinks, to isolate whether OtpGate.tsx
+// itself is what's breaking the build. Users.ts/access.ts are back to their
+// FULL real (non-diagnostic) versions in this test.
 export default buildConfig({
   serverURL: getServerURL(),
   csrf: getTrustedOrigins(),
@@ -73,7 +76,17 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products, Specimens, BlogPosts, CareSheets, Customers],
+  collections: [
+    Users,
+    Media,
+    Categories,
+    Products,
+    Supplies,
+    Specimens,
+    BlogPosts,
+    CareSheets,
+    Customers,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
