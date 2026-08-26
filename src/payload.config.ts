@@ -19,7 +19,6 @@ import { Customers } from './collections/Customers'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
 import { Specimens } from './collections/Specimens'
-import { Supplies } from './collections/Supplies'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -50,8 +49,9 @@ const storagePlugins = useCloudinary
       ]
     : []
 
-// DIAGNOSTIC BUILD: resendAdapter/email temporarily removed to isolate
-// whether it is the cause of the current Vercel build failure.
+// DIAGNOSTIC BUILD 2: reverted to baseline collections/components (no
+// Supplies, no OtpGate) to isolate whether the build failure originates in
+// payload.config.ts's registration of those, or elsewhere in the tree.
 export default buildConfig({
   serverURL: getServerURL(),
   csrf: getTrustedOrigins(),
@@ -67,26 +67,13 @@ export default buildConfig({
         Logo: '@/components/admin/AdminLogo#AdminLogo',
         Icon: '@/components/admin/AdminIcon#AdminIcon',
       },
-      beforeNavLinks: [
-        '@/components/admin/OtpGate#OtpGate',
-        '@/components/admin/StatusBar#StatusBar',
-      ],
+      beforeNavLinks: ['@/components/admin/StatusBar#StatusBar'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [
-    Users,
-    Media,
-    Categories,
-    Products,
-    Supplies,
-    Specimens,
-    BlogPosts,
-    CareSheets,
-    Customers,
-  ],
+  collections: [Users, Media, Categories, Products, Specimens, BlogPosts, CareSheets, Customers],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
