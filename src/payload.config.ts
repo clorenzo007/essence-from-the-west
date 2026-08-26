@@ -51,15 +51,24 @@ const storagePlugins = useCloudinary
       ]
     : []
 
+// El adapter de Resend solo se registra si hay API key configurada en el
+// entorno. Sin esto, `resendAdapter` podía romper el build/arranque en
+// Vercel mientras RESEND_API_KEY todavía no está configurada ahí — con esta
+// guarda, el sitio funciona igual (los emails de invitación/2FA simplemente
+// no se envían hasta que se configure la variable de entorno).
+const resendApiKey = process.env.RESEND_API_KEY
+
 export default buildConfig({
   serverURL: getServerURL(),
   csrf: getTrustedOrigins(),
   cors: getTrustedOrigins(),
-  email: resendAdapter({
-    defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-    defaultFromName: 'Reserva Oeste',
-    apiKey: process.env.RESEND_API_KEY || '',
-  }),
+  email: resendApiKey
+    ? resendAdapter({
+        defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+        defaultFromName: 'Reserva Oeste',
+        apiKey: resendApiKey,
+      })
+    : undefined,
   admin: {
     user: Users.slug,
     // Force light theme: custom.scss only overrides brand colors for light mode,
