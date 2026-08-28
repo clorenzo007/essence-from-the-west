@@ -18,9 +18,17 @@ export const maxDuration = 300
  *   https://www.reservaoeste.com.ar/api/admin/seed-pest-guide
  */
 
-type ParagraphLine = string
+type ContentBlock = { type: 'heading'; text: string } | { type: 'paragraph'; text: string }
 
-function toContent(lines: ParagraphLine[]) {
+function h(text: string): ContentBlock {
+  return { type: 'heading', text }
+}
+
+function p(text: string): ContentBlock {
+  return { type: 'paragraph', text }
+}
+
+function toContent(blocks: ContentBlock[]) {
   return {
     root: {
       type: 'root',
@@ -28,26 +36,40 @@ function toContent(lines: ParagraphLine[]) {
       format: '',
       indent: 0,
       version: 1,
-      children: lines.map((text) => ({
-        type: 'paragraph',
-        direction: null,
-        format: '',
-        indent: 0,
-        version: 1,
-        textFormat: 0,
-        textStyle: '',
-        children: [
-          {
-            type: 'text',
-            detail: 0,
-            format: 0,
-            mode: 'normal',
-            style: '',
-            text,
+      children: blocks.map((block) => {
+        const textNode = {
+          type: 'text',
+          detail: 0,
+          format: 0,
+          mode: 'normal',
+          style: '',
+          text: block.text,
+          version: 1,
+        }
+
+        if (block.type === 'heading') {
+          return {
+            type: 'heading',
+            tag: 'h3',
+            direction: null,
+            format: '',
+            indent: 0,
             version: 1,
-          },
-        ],
-      })),
+            children: [textNode],
+          }
+        }
+
+        return {
+          type: 'paragraph',
+          direction: null,
+          format: '',
+          indent: 0,
+          version: 1,
+          textFormat: 0,
+          textStyle: '',
+          children: [textNode],
+        }
+      }),
     },
   }
 }
@@ -125,36 +147,49 @@ const POST = {
     'Caracoles y babosas',
   ],
   content: [
-    'El clima de Buenos Aires es, en general, bastante generoso con las orquídeas — pero sus veranos húmedos favorecen hongos y bacterias, y el aire seco de la calefacción en invierno favorece a los ácaros. Revisar las plantas una vez por semana (hojas, axilas, raíces y la base de los pseudobulbos) es el hábito que más problemas evita, porque casi todo lo de acá abajo se trata fácil si se agarra a tiempo y se complica si se deja pasar.',
-    '🐛 Cochinillas algodonosas',
-    'Identificación: masas blancas y algodonosas en las axilas de las hojas, en la unión de los pseudobulbos o escondidas entre las raíces. Suelen dejar una secreción pegajosa (melaza) que después se cubre de un hongo negruzco (fumagina).',
-    'Tratamiento: aislá la planta de las demás apenas la detectes. Quitá las cochinillas visibles con un hisopo embebido en alcohol isopropílico al 70%, revisando bien axilas y raíces. Después, rociá con aceite de neem o jabón potásico una vez por semana durante 3–4 semanas, porque de los huevos siguen naciendo nuevas.',
-    '🛡️ Cochinilla de escama',
-    'Identificación: discos chatos, marrones o color hueso, pegados a hojas y tallos, que no se mueven — a diferencia de otros insectos, cuesta notar que son un bicho y no una mancha. También dejan melaza pegajosa y fumagina.',
-    'Tratamiento: raspalas suavemente con la uña o un cepillo suave humedecido en alcohol, y después aplicá aceite de neem o aceite mineral cada 7–10 días hasta que no aparezcan más. Poné la planta en cuarentena mientras dure el tratamiento.',
-    '🕷️ Ácaros (arañuela roja)',
-    'Identificación: puntitos apenas visibles a simple vista, con una telaraña fina en el envés de las hojas y un moteado plateado o amarillento en el follaje. Es la plaga típica del invierno porteño, cuando la calefacción seca mucho el ambiente.',
-    'Tratamiento: subí la humedad ambiente (los ácaros odian la humedad) y lavá el envés de las hojas con un chorro de agua cada pocos días. En casos avanzados, un acaricida específico es más efectivo que el aceite de neem. Aislá la planta afectada.',
-    '🐜 Pulgones',
-    'Identificación: insectos chiquitos, verdes, negros o rosados, agrupados en brotes nuevos, varas florales y botones. A veces vienen acompañados de hormigas, que los "cultivan" por la melaza que producen.',
-    'Tratamiento: un chorro de agua a presión moderada saca buena parte de la colonia. Después, jabón potásico o aceite de neem cada 5–7 días. Si tenés otras plantas cerca, revisalas también — los pulgones se mueven rápido de una a otra.',
-    '🦟 Trips',
-    'Identificación: insectos alargados y diminutos, difíciles de ver a simple vista. Dejan estrías plateadas o rayones en hojas y, sobre todo, en los pétalos de las flores, que pueden quedar deformes o manchados.',
-    'Trampas azules o amarillas pegajosas ayudan a detectarlos y bajar la población. Aceite de neem cada 7 días, aislando la planta en flor de las demás, es el tratamiento más práctico en el cultivo hogareño.',
-    '⚫ Podredumbre negra / de raíz',
-    'Identificación: tejido ennegrecido, blando y con olor desagradable en la base de la planta o en las raíces, que puede avanzar rápido. Suele aparecer después de un riego excesivo combinado con frío — algo frecuente en el invierno bonaerense si se sigue regando como en verano.',
-    'Tratamiento: es una urgencia. Sacá la planta de la maceta, cortá todo el tejido afectado con una hoja bien desinfectada hasta llegar a tejido sano, y espolvoreá canela en polvo o un fungicida a base de cobre sobre los cortes. Repotá en sustrato nuevo y seco, y reducí el riego varias semanas.',
-    '💧 Podredumbre blanda bacteriana',
-    'Identificación: manchas translúcidas y "empapadas" (aspecto hidrósico) que se expanden muy rápido — a veces en cuestión de días — y suelen tener olor fuerte. Es especialmente común en Phalaenopsis durante el verano húmedo, cuando queda agua acumulada en el cogollo.',
-    'Tratamiento: cortá bien adentro del tejido sano con una herramienta desinfectada, tratá el corte con un bactericida a base de cobre (o canela como alternativa casera) y mantené la planta bien seca varios días. Para prevenirla, regá de mañana y evitá que quede agua estancada en el centro de la planta.',
-    '🍂 Manchas foliares fúngicas',
-    'Identificación: manchas circulares o irregulares, marrones o negras, a veces con un halo amarillento alrededor, causadas por distintos hongos que se favorecen con la humedad alta y la poca circulación de aire.',
-    'Tratamiento: quitá las hojas muy afectadas y, si la mancha recién empieza, cortá el sector dañado. Mejorá la ventilación alrededor de la planta y evitá mojar el follaje de noche. Si sigue avanzando, un fungicida a base de cobre corta el problema.',
-    '🐌 Caracoles y babosas',
-    'Identificación: mordeduras irregulares en hojas y, sobre todo, en botones florales, que suelen aparecer de la noche a la mañana. El rastro brillante de baba en el sustrato o la maceta confirma el sospechoso. Son comunes en balcones y patios del Gran Buenos Aires después de un día de lluvia.',
-    'Tratamiento: la revisión nocturna con linterna y remoción manual es lo más efectivo. Como barrera, una franja de cáscara de huevo molida o tierra de diatomeas alrededor de la maceta funciona bien y no es tóxica. Evitá que la superficie del sustrato quede húmeda por las noches.',
-    '🔍 Prevención general',
-    'La mayoría de estos problemas se evitan con hábitos simples: poné en cuarentena 2–3 semanas a toda planta nueva antes de acercarla a tu colección, asegurá buena circulación de aire, evitá mojar hojas y cogollos de noche, y desinfectá con alcohol (o al fuego) las tijeras o cuchillas entre una planta y otra para no pasar bacterias o virus de una a otra.',
+    p(
+      'El clima de Buenos Aires es, en general, bastante generoso con las orquídeas — pero sus veranos húmedos favorecen hongos y bacterias, y el aire seco de la calefacción en invierno favorece a los ácaros. El hábito que más problemas evita es revisar las plantas una vez por semana: hojas, axilas, raíces y la base de los pseudobulbos. Casi todo lo que sigue se trata fácil si se agarra a tiempo, y se complica bastante si se deja pasar.',
+    ),
+    h('Cochinillas algodonosas'),
+    p(
+      'Se las reconoce por esas masas blancas y algodonosas que aparecen en las axilas de las hojas, en la unión de los pseudobulbos o escondidas entre las raíces, y que suelen dejar una secreción pegajosa (melaza) que después se cubre de un hongo negruzco (fumagina). Apenas las detectes, aislá la planta de las demás. Quitá las que veas con un hisopo embebido en alcohol isopropílico al 70%, revisando bien axilas y raíces, y después rociá con aceite de neem o jabón potásico una vez por semana durante 3 a 4 semanas — de los huevos que quedan siguen naciendo cochinillas nuevas, así que un solo tratamiento no alcanza.',
+    ),
+    h('Cochinilla de escama'),
+    p(
+      'Son discos chatos, marrones o color hueso, pegados a hojas y tallos, que no se mueven — a diferencia de otros insectos, cuesta notar a simple vista que se trata de un bicho y no de una mancha. También dejan melaza pegajosa y fumagina. Se sacan raspando suavemente con la uña o un cepillo suave humedecido en alcohol, y después conviene aplicar aceite de neem o aceite mineral cada 7 a 10 días hasta que dejen de aparecer, con la planta en cuarentena mientras dure el tratamiento.',
+    ),
+    h('Ácaros o arañuela roja'),
+    p(
+      'Son puntitos apenas visibles a simple vista, con una telaraña fina en el envés de las hojas y un moteado plateado o amarillento en el follaje. Es la plaga típica del invierno porteño, cuando la calefacción reseca mucho el ambiente. Subir la humedad ayuda bastante, porque los ácaros la odian; lavar el envés de las hojas con un chorro de agua cada pocos días también controla la población, y en casos ya avanzados un acaricida específico funciona mejor que el aceite de neem. Conviene aislar la planta afectada mientras se trata.',
+    ),
+    h('Pulgones'),
+    p(
+      'Son insectos chiquitos, verdes, negros o rosados, agrupados en brotes nuevos, varas florales y botones — a veces acompañados de hormigas, que los "cultivan" por la melaza que producen. Un chorro de agua a presión moderada saca buena parte de la colonia; después conviene seguir con jabón potásico o aceite de neem cada 5 a 7 días. Si hay otras plantas cerca vale la pena revisarlas también, porque los pulgones se mueven rápido de una a otra.',
+    ),
+    h('Trips'),
+    p(
+      'Son insectos alargados y diminutos, difíciles de ver a simple vista, que dejan estrías plateadas o rayones en las hojas y, sobre todo, en los pétalos de las flores, que pueden quedar deformes o manchados. Las trampas azules o amarillas pegajosas ayudan a detectarlos y bajar la población, y el aceite de neem aplicado cada 7 días — aislando la planta en flor de las demás — es el tratamiento más práctico en el cultivo hogareño.',
+    ),
+    h('Podredumbre negra o de raíz'),
+    p(
+      'Se manifiesta como tejido ennegrecido, blando y con olor desagradable en la base de la planta o en las raíces, que puede avanzar rápido. Suele aparecer después de un riego excesivo combinado con frío, algo frecuente en el invierno bonaerense si se sigue regando como en verano. Es una urgencia: hay que sacar la planta de la maceta, cortar todo el tejido afectado con una hoja bien desinfectada hasta llegar a tejido sano, y espolvorear canela en polvo o un fungicida a base de cobre sobre los cortes. Después, repotar en sustrato nuevo y seco, y reducir el riego durante varias semanas.',
+    ),
+    h('Podredumbre blanda bacteriana'),
+    p(
+      'Aparece como manchas translúcidas y "empapadas" que se expanden muy rápido — a veces en cuestión de días — y suelen tener un olor fuerte. Es especialmente común en Phalaenopsis durante el verano húmedo, cuando queda agua acumulada en el cogollo. Conviene cortar bien adentro del tejido sano con una herramienta desinfectada, tratar el corte con un bactericida a base de cobre (o canela como alternativa casera) y mantener la planta bien seca varios días. Para prevenirla, lo mejor es regar de mañana y evitar que quede agua estancada en el centro de la planta.',
+    ),
+    h('Manchas foliares fúngicas'),
+    p(
+      'Son manchas circulares o irregulares, marrones o negras, a veces con un halo amarillento alrededor, causadas por distintos hongos que se ven favorecidos por la humedad alta y la poca circulación de aire. Conviene quitar las hojas muy afectadas y, si la mancha recién empieza, cortar el sector dañado. Mejorar la ventilación alrededor de la planta y evitar mojar el follaje de noche frena bastante el problema; si sigue avanzando, un fungicida a base de cobre lo corta.',
+    ),
+    h('Caracoles y babosas'),
+    p(
+      'Dejan mordeduras irregulares en hojas y, sobre todo, en botones florales, que suelen aparecer de la noche a la mañana — el rastro brillante de baba en el sustrato o la maceta confirma al sospechoso. Son comunes en balcones y patios del Gran Buenos Aires después de un día de lluvia. La revisión nocturna con linterna y remoción manual es lo más efectivo; como barrera, una franja de cáscara de huevo molida o tierra de diatomeas alrededor de la maceta funciona bien y no es tóxica. También ayuda evitar que la superficie del sustrato quede húmeda por las noches.',
+    ),
+    h('Prevención general'),
+    p(
+      'La mayoría de estos problemas se evitan con hábitos simples: poné en cuarentena 2 a 3 semanas a toda planta nueva antes de acercarla a tu colección, asegurá buena circulación de aire, evitá mojar hojas y cogollos de noche, y desinfectá con alcohol (o al fuego) las tijeras o cuchillas entre una planta y otra, para no pasar bacterias o virus de una a la siguiente.',
+    ),
   ],
 }
 
