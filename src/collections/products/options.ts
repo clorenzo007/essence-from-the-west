@@ -3,32 +3,32 @@ export { CONTENT_STATUS_OPTIONS as PRODUCT_STATUS_OPTIONS } from '@/collections/
 export { DIFFICULTY_OPTIONS, LIGHTING_OPTIONS } from '@/collections/shared/options'
 
 export const FRAGRANCE_OPTIONS = [
-  { label: 'None', value: 'none' },
-  { label: 'Light', value: 'light' },
-  { label: 'Moderate', value: 'moderate' },
-  { label: 'Strong', value: 'strong' },
+  { label: 'Sin fragancia', value: 'none' },
+  { label: 'Leve', value: 'light' },
+  { label: 'Moderada', value: 'moderate' },
+  { label: 'Intensa', value: 'strong' },
 ] as const
 
 export const PLANT_SIZE_OPTIONS = [
-  { label: 'Seedling', value: 'seedling' },
-  { label: 'Near blooming size (NBS)', value: 'nbs' },
-  { label: 'Blooming size (BS)', value: 'bs' },
-  { label: 'Multi-growth / specimen', value: 'specimen' },
+  { label: 'Plántula', value: 'seedling' },
+  { label: 'Cerca de floración (NBS)', value: 'nbs' },
+  { label: 'Tamaño de floración (BS)', value: 'bs' },
+  { label: 'Multi-brote / ejemplar', value: 'specimen' },
 ] as const
 
 export const MOUNTING_OPTIONS = [
-  { label: 'Potted', value: 'potted' },
-  { label: 'Mounted', value: 'mounted' },
-  { label: 'Basket', value: 'basket' },
-  { label: 'Either', value: 'either' },
+  { label: 'En maceta', value: 'potted' },
+  { label: 'Montada', value: 'mounted' },
+  { label: 'En canasto', value: 'basket' },
+  { label: 'Cualquiera', value: 'either' },
 ] as const
 
 export const FLOWERING_SEASON_OPTIONS = [
-  { label: 'Winter', value: 'winter' },
-  { label: 'Spring', value: 'spring' },
-  { label: 'Summer', value: 'summer' },
-  { label: 'Fall', value: 'fall' },
-  { label: 'Year-round', value: 'year-round' },
+  { label: 'Invierno', value: 'winter' },
+  { label: 'Primavera', value: 'spring' },
+  { label: 'Verano', value: 'summer' },
+  { label: 'Otoño', value: 'fall' },
+  { label: 'Todo el año', value: 'year-round' },
   { label: 'Variable', value: 'variable' },
 ] as const
 
