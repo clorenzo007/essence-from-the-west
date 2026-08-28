@@ -9,6 +9,7 @@ import { mapCareSheetToCard } from '@/lib/content'
 import { getPayloadClient } from '@/lib/payload'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { isSupportedLocale, type Locale } from '@/lib/i18n/locales'
+import { difficultyLabel } from '@/lib/i18n/careLabels'
 
 export const dynamic = 'force-dynamic'
 
@@ -79,7 +80,7 @@ export default async function LocaleCareIndexPage({ params }: PageProps) {
                     <p className="mt-2 max-w-xl font-sans text-sm text-ro-muted">{sheet.summary}</p>
                   </div>
                 </div>
-                <span className="ro-label capitalize">{sheet.difficulty}</span>
+                <span className="ro-label">{difficultyLabel(sheet.difficulty, locale as Locale)}</span>
               </Link>
             </li>
           ))}
