@@ -4,8 +4,10 @@ import type { Locale } from '@/lib/i18n/locales'
  * Human-readable labels for the `difficulty` and `lighting` enum values
  * stored on products / care sheets (see collections/shared/options.ts).
  * The stored values themselves are English (`beginner`, `very-bright`,
- * etc.) so the Payload admin UI stays in English, but the public site
- * needs to show a translated label instead of the raw value.
+ * etc.) — the Payload admin UI now shows the same Spanish labels defined
+ * here (kept in sync with collections/shared/options.ts), and the public
+ * site uses this map to show a translated label per locale instead of the
+ * raw value.
  */
 
 type DifficultyValue = 'beginner' | 'intermediate' | 'advanced' | 'expert'
