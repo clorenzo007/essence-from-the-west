@@ -226,8 +226,8 @@ const en: UiDictionary = {
     light: 'Light',
     humidity: 'Humidity',
     temperature: 'Temperature',
-    wateringTips: '💧 Watering tips',
-    fertilizerTips: '🌿 Fertilizing tips',
+    wateringTips: 'Watering tips',
+    fertilizerTips: 'Fertilizing tips',
     backLink: '← All guides',
   },
   blogList: {
@@ -370,8 +370,8 @@ const fr: UiDictionary = {
     light: 'Lumière',
     humidity: 'Humidité',
     temperature: 'Température',
-    wateringTips: "💧 Conseils d'arrosage",
-    fertilizerTips: '🌿 Conseils de fertilisation',
+    wateringTips: "Conseils d'arrosage",
+    fertilizerTips: 'Conseils de fertilisation',
     backLink: '← Tous les guides',
   },
   blogList: {
@@ -508,8 +508,8 @@ const pt: UiDictionary = {
     light: 'Luz',
     humidity: 'Umidade',
     temperature: 'Temperatura',
-    wateringTips: '💧 Dicas de rega',
-    fertilizerTips: '🌿 Dicas de adubação',
+    wateringTips: 'Dicas de rega',
+    fertilizerTips: 'Dicas de adubação',
     backLink: '← Todos os guias',
   },
   blogList: {
