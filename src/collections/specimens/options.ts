@@ -2,19 +2,19 @@ export { DIFFICULTY_OPTIONS, LIGHTING_OPTIONS } from '@/collections/shared/optio
 export { CURRENCY_OPTIONS, MOUNTING_OPTIONS } from '@/collections/products/options'
 
 export const LIFECYCLE_STATUS_OPTIONS = [
-  { label: 'Active in collection', value: 'active' },
-  { label: 'Sold', value: 'sold' },
-  { label: 'Gifted', value: 'gifted' },
-  { label: 'Deceased', value: 'deceased' },
-  { label: 'Archived', value: 'archived' },
+  { label: 'Activo en la colección', value: 'active' },
+  { label: 'Vendido', value: 'sold' },
+  { label: 'Regalado', value: 'gifted' },
+  { label: 'Muerto', value: 'deceased' },
+  { label: 'Archivado', value: 'archived' },
 ] as const
 
 export const CARE_LOG_TYPE_OPTIONS = [
-  { label: 'Watering', value: 'watering' },
-  { label: 'Fertilizing', value: 'fertilizing' },
-  { label: 'Pest / disease control (spraying)', value: 'pest-control' },
-  { label: 'Repotting', value: 'repotting' },
-  { label: 'Pruning', value: 'pruning' },
-  { label: 'Division', value: 'division' },
-  { label: 'Other', value: 'other' },
+  { label: 'Riego', value: 'watering' },
+  { label: 'Fertilización', value: 'fertilizing' },
+  { label: 'Control de plagas / enfermedades (fumigación)', value: 'pest-control' },
+  { label: 'Repique', value: 'repotting' },
+  { label: 'Poda', value: 'pruning' },
+  { label: 'División', value: 'division' },
+  { label: 'Otro', value: 'other' },
 ] as const
