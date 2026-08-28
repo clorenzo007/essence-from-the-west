@@ -11,6 +11,7 @@ import { getCollectionSeo } from '@/lib/content'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { withCelsius } from '@/lib/temperature'
+import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
@@ -85,12 +86,12 @@ export default async function CareSheetPage({ params }: PageProps) {
         <dl className="mb-16 grid gap-6 rounded-ro border border-ro-charcoal/10 bg-ro-card p-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <dt className="ro-label">Dificultad</dt>
-            <dd className="mt-2 font-sans text-sm capitalize">{sheet.difficulty}</dd>
+            <dd className="mt-2 font-sans text-sm">{difficultyLabel(sheet.difficulty)}</dd>
           </div>
           {sheet.lighting && (
             <div>
               <dt className="ro-label">Luz</dt>
-              <dd className="mt-2 font-sans text-sm capitalize">{sheet.lighting.replace('-', ' ')}</dd>
+              <dd className="mt-2 font-sans text-sm">{lightingLabel(sheet.lighting)}</dd>
             </div>
           )}
           {sheet.humidity && (
@@ -113,7 +114,7 @@ export default async function CareSheetPage({ params }: PageProps) {
           <div className="mt-16 grid gap-6 sm:grid-cols-2">
             {sheet.wateringNotes && (
               <div className="rounded-ro border border-ro-charcoal/10 bg-ro-card p-8">
-                <p className="ro-label text-ro-gold">💧 Tips de riego</p>
+                <p className="ro-label text-ro-gold">Tips de riego</p>
                 <p className="mt-3 font-sans text-sm leading-relaxed text-ro-muted">
                   {sheet.wateringNotes}
                 </p>
@@ -121,7 +122,7 @@ export default async function CareSheetPage({ params }: PageProps) {
             )}
             {sheet.fertilizerNotes && (
               <div className="rounded-ro border border-ro-charcoal/10 bg-ro-card p-8">
-                <p className="ro-label text-ro-gold">🌿 Tips de fertilización</p>
+                <p className="ro-label text-ro-gold">Tips de fertilización</p>
                 <p className="mt-3 font-sans text-sm leading-relaxed text-ro-muted">
                   {sheet.fertilizerNotes}
                 </p>
