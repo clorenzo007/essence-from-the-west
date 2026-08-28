@@ -6,6 +6,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { CareSheet } from '@/payload-types'
 import { mapCareSheetToCard } from '@/lib/content'
 import { getPayloadClient } from '@/lib/payload'
+import { difficultyLabel } from '@/lib/i18n/careLabels'
 
 export const metadata: Metadata = {
   title: 'Cuidado',
@@ -63,7 +64,7 @@ export default async function CareIndexPage() {
                     <p className="mt-2 max-w-xl font-sans text-sm text-ro-muted">{sheet.summary}</p>
                   </div>
                 </div>
-                <span className="ro-label capitalize">{sheet.difficulty}</span>
+                <span className="ro-label">{difficultyLabel(sheet.difficulty)}</span>
               </Link>
             </li>
           ))}
