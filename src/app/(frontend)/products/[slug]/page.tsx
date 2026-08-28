@@ -12,6 +12,7 @@ import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
 import { withCelsius } from '@/lib/temperature'
+import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -177,15 +178,13 @@ export default async function ProductPage({ params }: PageProps) {
               {product.lighting && (
                 <>
                   <dt className="ro-label">Luz</dt>
-                  <dd className="font-sans text-sm capitalize">
-                    {product.lighting.replace('-', ' ')}
-                  </dd>
+                  <dd className="font-sans text-sm">{lightingLabel(product.lighting)}</dd>
                 </>
               )}
               {product.difficulty && (
                 <>
                   <dt className="ro-label">Dificultad</dt>
-                  <dd className="font-sans text-sm capitalize">{product.difficulty}</dd>
+                  <dd className="font-sans text-sm">{difficultyLabel(product.difficulty)}</dd>
                 </>
               )}
             </dl>
