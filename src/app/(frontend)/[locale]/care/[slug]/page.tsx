@@ -12,6 +12,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { withCelsius } from '@/lib/temperature'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { isSupportedLocale, type Locale } from '@/lib/i18n/locales'
+import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> }
 
@@ -100,12 +101,16 @@ export default async function LocaleCareSheetPage({ params }: PageProps) {
         <dl className="mb-16 grid gap-6 rounded-ro border border-ro-charcoal/10 bg-ro-card p-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <dt className="ro-label">{t.careDetail.difficulty}</dt>
-            <dd className="mt-2 font-sans text-sm capitalize">{sheet.difficulty}</dd>
+            <dd className="mt-2 font-sans text-sm">
+              {difficultyLabel(sheet.difficulty, locale as Locale)}
+            </dd>
           </div>
           {sheet.lighting && (
             <div>
               <dt className="ro-label">{t.careDetail.light}</dt>
-              <dd className="mt-2 font-sans text-sm capitalize">{sheet.lighting.replace('-', ' ')}</dd>
+              <dd className="mt-2 font-sans text-sm">
+                {lightingLabel(sheet.lighting, locale as Locale)}
+              </dd>
             </div>
           )}
           {sheet.humidity && (
