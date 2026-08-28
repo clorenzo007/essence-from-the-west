@@ -79,7 +79,7 @@ export const Supplies: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Catalog',
+    group: 'Catálogo',
     defaultColumns: ['name', 'category', 'price', 'stock', 'status', 'featured', 'updatedAt'],
     description: 'Stock de sustratos, fertilizantes, pesticidas, macetas, canastas y otros insumos.',
     listSearchableFields: ['name', 'sku', 'slug'],

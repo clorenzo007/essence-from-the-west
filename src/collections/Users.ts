@@ -153,9 +153,13 @@ export const Users: CollectionConfig = {
       },
     },
   },
+  labels: {
+    singular: 'Usuario',
+    plural: 'Usuarios',
+  },
   admin: {
     useAsTitle: 'email',
-    group: 'Admin',
+    group: 'Administración',
     description:
       'Al crear un usuario se le envía un email para que configure su propia contraseña — la contraseña que ingreses acá es solo temporal y se descarta.',
   },
@@ -264,7 +268,7 @@ export const Users: CollectionConfig = {
       required: true,
       saveToJWT: true,
       options: [
-        { label: 'Admin', value: 'admin' },
+        { label: 'Administrador', value: 'admin' },
         { label: 'Editor', value: 'editor' },
       ],
       access: {

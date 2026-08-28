@@ -65,12 +65,12 @@ const sidebarFields: Field[] = [
 export const Specimens: CollectionConfig = {
   slug: 'specimens',
   labels: {
-    singular: 'Specimen',
-    plural: 'Specimens',
+    singular: 'Ejemplar',
+    plural: 'Ejemplares',
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Cultivation',
+    group: 'Cultivo',
     defaultColumns: [
       'name',
       'genus',
@@ -98,7 +98,7 @@ export const Specimens: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Identity',
+          label: 'Identidad',
           description: 'Taxonomy and identification.',
           fields: [
             {
@@ -149,7 +149,7 @@ export const Specimens: CollectionConfig = {
           ],
         },
         {
-          label: 'Acquisition',
+          label: 'Adquisición',
           description: 'Where and when you got this plant.',
           fields: [
             {
@@ -196,7 +196,7 @@ export const Specimens: CollectionConfig = {
           ],
         },
         {
-          label: 'Growing Conditions',
+          label: 'Condiciones de cultivo',
           description: 'Where and how this specimen is kept.',
           fields: [
             {
@@ -244,13 +244,13 @@ export const Specimens: CollectionConfig = {
           ],
         },
         {
-          label: 'Bloom History',
+          label: 'Historial de floración',
           description: 'Log every bloom cycle for this plant over time.',
           fields: [
             {
               name: 'bloomEvents',
               type: 'array',
-              labels: { singular: 'Bloom Event', plural: 'Bloom Events' },
+              labels: { singular: 'Floración', plural: 'Floraciones' },
               admin: {
                 initCollapsed: true,
                 description: 'One entry per flowering — add a new one each time this plant blooms again.',
@@ -290,7 +290,7 @@ export const Specimens: CollectionConfig = {
                 {
                   name: 'photos',
                   type: 'array',
-                  labels: { singular: 'Photo', plural: 'Photos' },
+                  labels: { singular: 'Foto', plural: 'Fotos' },
                   admin: { description: 'Flower photos for this bloom.' },
                   fields: [
                     { name: 'image', type: 'upload', relationTo: 'media', required: true },
@@ -302,13 +302,13 @@ export const Specimens: CollectionConfig = {
           ],
         },
         {
-          label: 'Care Log',
+          label: 'Bitácora de cuidados',
           description: 'Watering, fertilizing, pest control, repotting — a running diary.',
           fields: [
             {
               name: 'careLog',
               type: 'array',
-              labels: { singular: 'Log Entry', plural: 'Log Entries' },
+              labels: { singular: 'Entrada', plural: 'Entradas' },
               admin: {
                 initCollapsed: true,
                 description: 'Add an entry every time you fertilize, spray, repot, or otherwise tend to this plant.',
@@ -359,7 +359,7 @@ export const Specimens: CollectionConfig = {
           ],
         },
         {
-          label: 'Gallery',
+          label: 'Galería',
           description: 'Whole-plant photos over time (not tied to a specific bloom).',
           fields: [
             {
@@ -371,7 +371,7 @@ export const Specimens: CollectionConfig = {
             {
               name: 'photos',
               type: 'array',
-              labels: { singular: 'Photo', plural: 'Photos' },
+              labels: { singular: 'Foto', plural: 'Fotos' },
               fields: [
                 { name: 'image', type: 'upload', relationTo: 'media', required: true },
                 {

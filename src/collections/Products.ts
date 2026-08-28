@@ -68,12 +68,12 @@ const sidebarFields: Field[] = [
 export const Products: CollectionConfig = {
   slug: 'products',
   labels: {
-    singular: 'Orchid',
-    plural: 'Orchids',
+    singular: 'Orquídea',
+    plural: 'Orquídeas',
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Catalog',
+    group: 'Catálogo',
     defaultColumns: ['name', 'species', 'price', 'stock', 'status', 'featured', 'updatedAt'],
     description: 'Premium orchid inventory — culture, commerce, and SEO.',
     listSearchableFields: ['name', 'species', 'hybrid', 'genus', 'sku', 'slug'],
@@ -91,7 +91,7 @@ export const Products: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Overview',
+          label: 'Resumen',
           description: 'Identity, taxonomy, and customer-facing copy.',
           fields: [
             {
@@ -184,7 +184,7 @@ export const Products: CollectionConfig = {
           ],
         },
         {
-          label: 'Commerce',
+          label: 'Comercio',
           description: 'Pricing, inventory, and availability.',
           fields: [
             {
@@ -279,8 +279,8 @@ export const Products: CollectionConfig = {
                   type: 'select',
                   defaultValue: 'pending',
                   options: [
-                    { label: 'Pending', value: 'pending' },
-                    { label: 'Published', value: 'published' },
+                    { label: 'Pendiente', value: 'pending' },
+                    { label: 'Publicado', value: 'published' },
                   ],
                   admin: {
                     condition: (_, siblingData) => Boolean(siblingData?.shouldPublish),
@@ -292,7 +292,7 @@ export const Products: CollectionConfig = {
           ],
         },
         {
-          label: 'Culture',
+          label: 'Cultivo',
           description: 'Growing requirements for serious collectors.',
           fields: [
             {
@@ -408,7 +408,7 @@ export const Products: CollectionConfig = {
           ],
         },
         {
-          label: 'Media',
+          label: 'Multimedia',
           description: 'Product photography for catalog and product pages.',
           fields: [
             {
@@ -416,8 +416,8 @@ export const Products: CollectionConfig = {
               type: 'array',
               minRows: 1,
               labels: {
-                singular: 'Image',
-                plural: 'Gallery Images',
+                singular: 'Imagen',
+                plural: 'Imágenes de galería',
               },
               admin: {
                 initCollapsed: false,

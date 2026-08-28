@@ -4,6 +4,10 @@ import { isLoggedIn } from './shared/access'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Archivo multimedia',
+    plural: 'Archivos multimedia',
+  },
   upload: {
     staticDir: 'media',
     imageSizes: [
@@ -30,7 +34,7 @@ export const Media: CollectionConfig = {
     mimeTypes: ['image/*'],
   },
   admin: {
-    group: 'Content',
+    group: 'Contenido',
     components: {
       beforeList: ['@/components/admin/MobileUploadBanner#MobileUploadBanner'],
     },

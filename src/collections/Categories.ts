@@ -46,12 +46,12 @@ const sidebarFields: Field[] = [
 export const Categories: CollectionConfig = {
   slug: 'categories',
   labels: {
-    singular: 'Category',
-    plural: 'Categories',
+    singular: 'Categoría',
+    plural: 'Categorías',
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Catalog',
+    group: 'Catálogo',
     defaultColumns: ['name', 'slug', 'status', 'sortOrder', 'featured', 'updatedAt'],
     description: 'Orchid taxonomy for catalog organization and filtering.',
     listSearchableFields: ['name', 'slug', 'description', 'shortDescription'],
@@ -70,7 +70,7 @@ export const Categories: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Overview',
+          label: 'Resumen',
           description: 'Category identity and customer-facing copy.',
           fields: [
             {
@@ -102,7 +102,7 @@ export const Categories: CollectionConfig = {
           ],
         },
         {
-          label: 'Media',
+          label: 'Multimedia',
           description: 'Visual identity for category pages.',
           fields: [
             {

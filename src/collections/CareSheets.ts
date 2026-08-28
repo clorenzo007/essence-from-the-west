@@ -37,12 +37,12 @@ const sidebarFields: Field[] = [
 export const CareSheets: CollectionConfig = {
   slug: 'care-sheets',
   labels: {
-    singular: 'Care Sheet',
-    plural: 'Care Sheets',
+    singular: 'Guía de cuidados',
+    plural: 'Guías de cuidados',
   },
   admin: {
     useAsTitle: 'title',
-    group: 'Content',
+    group: 'Contenido',
     defaultColumns: ['title', 'genus', 'difficulty', 'status', 'featured', 'updatedAt'],
     description: 'Species-specific orchid culture guides for collectors.',
     listSearchableFields: ['title', 'slug', 'genus', 'alliance', 'summary'],
@@ -61,7 +61,7 @@ export const CareSheets: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Overview',
+          label: 'Resumen',
           description: 'Guide identity and introduction.',
           fields: [
             {
@@ -113,7 +113,7 @@ export const CareSheets: CollectionConfig = {
           ],
         },
         {
-          label: 'Culture',
+          label: 'Cultivo',
           description: 'Quick-reference growing requirements.',
           fields: [
             {
@@ -169,7 +169,7 @@ export const CareSheets: CollectionConfig = {
           ],
         },
         {
-          label: 'Related',
+          label: 'Relacionado',
           description: 'Cross-link products and related guides.',
           fields: [
             {
@@ -184,7 +184,7 @@ export const CareSheets: CollectionConfig = {
           ],
         },
         {
-          label: 'Media',
+          label: 'Multimedia',
           fields: [
             {
               name: 'heroImage',

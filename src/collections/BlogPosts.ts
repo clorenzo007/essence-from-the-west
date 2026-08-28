@@ -54,12 +54,12 @@ const sidebarFields: Field[] = [
 export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
   labels: {
-    singular: 'Journal Post',
-    plural: 'Journal Posts',
+    singular: 'Publicación',
+    plural: 'Publicaciones',
   },
   admin: {
     useAsTitle: 'title',
-    group: 'Content',
+    group: 'Contenido',
     defaultColumns: ['title', 'author', 'publishedAt', 'status', 'featured', 'updatedAt'],
     description: 'SEO blog and botanical editorial for the nursery journal.',
     listSearchableFields: ['title', 'slug', 'excerpt', 'author'],
@@ -79,7 +79,7 @@ export const BlogPosts: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Content',
+          label: 'Contenido',
           description: 'Article body and summary.',
           fields: [
             {
@@ -112,7 +112,7 @@ export const BlogPosts: CollectionConfig = {
             {
               name: 'tags',
               type: 'array',
-              labels: { singular: 'Tag', plural: 'Tags' },
+              labels: { singular: 'Etiqueta', plural: 'Etiquetas' },
               admin: {
                 description: 'Optional topical tags (e.g. repotting, fragrance, winter care).',
               },
@@ -127,7 +127,7 @@ export const BlogPosts: CollectionConfig = {
           ],
         },
         {
-          label: 'Media',
+          label: 'Multimedia',
           fields: [
             {
               name: 'coverImage',

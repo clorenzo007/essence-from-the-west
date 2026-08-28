@@ -4,11 +4,15 @@ import { isLoggedIn } from './shared/access'
 
 export const Customers: CollectionConfig = {
   slug: 'customers',
+  labels: {
+    singular: 'Cliente',
+    plural: 'Clientes',
+  },
   admin: {
     useAsTitle: 'email',
-    group: 'Commerce',
+    group: 'Comercio',
     defaultColumns: ['firstName', 'lastName', 'email', 'phone', 'updatedAt'],
-    description: 'Customer database for inquiries and WhatsApp orders',
+    description: 'Base de datos de clientes para consultas y pedidos por WhatsApp',
   },
   access: {
     read: isLoggedIn,
