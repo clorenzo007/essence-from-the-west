@@ -86,7 +86,9 @@ export default buildConfig({
       beforeNavLinks: [
         '@/components/admin/OtpGate#OtpGate',
         '@/components/admin/StatusBar#StatusBar',
+        '@/components/admin/PublishPreviewPrompt#PublishPreviewPrompt',
       ],
+      beforeDashboard: ['@/components/admin/GettingStartedHub#GettingStartedHub'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
