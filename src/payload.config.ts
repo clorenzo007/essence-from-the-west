@@ -9,6 +9,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { getTrustedOrigins } from './lib/auth-cookies'
+import { backfillMissingSkus } from './lib/backfill-skus'
 import { getCloudinaryConfig, isCloudinaryEnabled } from './lib/cloudinary'
 import { getServerURL } from './lib/env'
 import { cloudinaryAdapter } from './storage/cloudinaryAdapter'
@@ -134,4 +135,11 @@ export default buildConfig({
   }),
   plugins: storagePlugins,
   sharp,
+  onInit: async (payload) => {
+    try {
+      await backfillMissingSkus(payload)
+    } catch (err) {
+      payload.logger.error(`[backfill-sku] No se pudo completar: ${String(err)}`)
+    }
+  },
 })
