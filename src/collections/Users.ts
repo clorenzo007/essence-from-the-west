@@ -205,6 +205,18 @@ export const Users: CollectionConfig = {
           return current
         }
 
+        // El código de acceso (2FA) se pide una única vez por usuario — la
+        // primera vez que inicia sesión — no en cada login. Una vez
+        // verificado, `otpVerifiedAt` queda guardado para siempre (hasta que
+        // se resetee a mano en la base), así que logins posteriores no
+        // reenvían ni vuelven a pedir el código. Se consulta el valor fresco
+        // en la base (no el JWT/sesión) por la misma razón que `isLoggedIn`
+        // en shared/access.ts.
+        const fresh = await req.payload.findByID({ collection: 'users', id: current.id, req })
+        if (fresh?.otpVerifiedAt) {
+          return current
+        }
+
         try {
           await sendOtpForUser(req, current.id, current.email)
         } catch {

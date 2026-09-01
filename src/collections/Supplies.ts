@@ -2,6 +2,7 @@ import type { CollectionConfig, Field } from 'payload'
 
 import { editorCollectionAccess } from './shared/access'
 import { createSeoTabFields } from './shared/fields'
+import { createAutoGenerateSkuHook, resolveSupplySkuPrefix } from './shared/sku'
 import { autoGenerateSupplySlug, syncMetaFromSupply, validatePublishedSupply, validateSlugFormat } from './supplies/hooks'
 import { SUPPLY_CATEGORY_OPTIONS } from './supplies/options'
 
@@ -64,9 +65,16 @@ const sidebarFields: Field[] = [
     name: 'sku',
     type: 'text',
     unique: true,
+    required: true,
     admin: {
       position: 'sidebar',
-      description: 'Código interno de inventario (opcional).',
+      description:
+        'Código interno de inventario. Se genera solo según la categoría (SUS-0001, FERT-0002, MAC-0003…); escribí uno propio si preferís otro.',
+    },
+    hooks: {
+      beforeValidate: [
+        createAutoGenerateSkuHook('supplies', (data) => resolveSupplySkuPrefix(data?.category)),
+      ],
     },
   },
 ]
