@@ -1,6 +1,7 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { editorCollectionAccess } from './shared/access'
+import { createAutoGenerateSkuHook, resolveProductSkuPrefix } from './shared/sku'
 import {
   autoGenerateSlug,
   syncMetaFromProduct,
@@ -58,9 +59,16 @@ const sidebarFields: Field[] = [
     name: 'sku',
     type: 'text',
     unique: true,
+    required: true,
     admin: {
       position: 'sidebar',
-      description: 'Internal inventory code (optional).',
+      description:
+        'Código interno de inventario. Se genera solo según el género (CYM-0001, PHAL-0002, CATT-0003…); escribí uno propio si preferís otro.',
+    },
+    hooks: {
+      beforeValidate: [
+        createAutoGenerateSkuHook('products', (data) => resolveProductSkuPrefix(data?.genus)),
+      ],
     },
   },
 ]
