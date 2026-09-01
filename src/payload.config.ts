@@ -88,7 +88,26 @@ export default buildConfig({
         '@/components/admin/StatusBar#StatusBar',
         '@/components/admin/PublishPreviewPrompt#PublishPreviewPrompt',
       ],
-      beforeDashboard: ['@/components/admin/GettingStartedHub#GettingStartedHub'],
+    },
+    // A partir de Payload 3.78 el Dashboard usa un sistema de "widgets"
+    // reordenables por el usuario (con layout guardado en sus preferencias)
+    // en lugar del viejo slot `components.beforeDashboard` — ese slot ya no
+    // se renderiza en la vista por defecto del Dashboard, así que la guía de
+    // inicio se registra acá como un widget más, junto al widget incorporado
+    // "collections" (la grilla de colecciones que ya se veía antes).
+    dashboard: {
+      widgets: [
+        {
+          slug: 'getting-started',
+          Component: '@/components/admin/GettingStartedHub#GettingStartedHub',
+          minWidth: 'full',
+          maxWidth: 'full',
+        },
+      ],
+      defaultLayout: () => [
+        { widgetSlug: 'getting-started', width: 'full' },
+        { widgetSlug: 'collections', width: 'full' },
+      ],
     },
     importMap: {
       baseDir: path.resolve(dirname),
