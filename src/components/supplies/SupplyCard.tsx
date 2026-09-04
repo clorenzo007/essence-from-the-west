@@ -1,6 +1,6 @@
 import { MediaImage } from '@/components/ui/MediaImage'
 import { ProductImagePlaceholder } from '@/components/products/ProductImagePlaceholder'
-import { buildWhatsAppSupplyInquiryUrl, formatPrice } from '@/lib/utils'
+import { buildWhatsAppSupplyInquiryUrl, formatDisplayPrice, type DisplayCurrency } from '@/lib/utils'
 
 export type SupplyCardData = {
   id: string
@@ -20,11 +20,15 @@ export function SupplyCard({
   whatsappCtaLabel = 'Consultar por WhatsApp',
   availableLabel = 'Disponible',
   soldOutLabel = 'Agotado',
+  displayCurrency,
+  usdRate,
 }: {
   supply: SupplyCardData
   whatsappCtaLabel?: string
   availableLabel?: string
   soldOutLabel?: string
+  displayCurrency: DisplayCurrency
+  usdRate: number
 }) {
   const inStock = supply.stock > 0
   const whatsappUrl = buildWhatsAppSupplyInquiryUrl({
@@ -57,7 +61,7 @@ export function SupplyCard({
           </p>
         )}
         <p className="font-sans text-sm text-ro-charcoal">
-          {formatPrice(supply.price, supply.currency ?? undefined)}
+          {formatDisplayPrice(supply.price, supply.currency, displayCurrency, usdRate)}
         </p>
         <p
           className={`font-sans text-xs uppercase tracking-ro ${
