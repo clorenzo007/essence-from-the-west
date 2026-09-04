@@ -1,16 +1,17 @@
 'use client'
 
 import { useAllFormFields, useFormFields } from '@payloadcms/ui'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
- * "Identificar planta" — botón en el formulario de Orquídeas que manda una
- * foto al backend (src/app/(payload)/api/admin/identify-plant/route.ts,
- * que a su vez llama a la API de Pl@ntNet) y ofrece los géneros/especies
- * candidatos para completar los campos Género y Especie con un clic.
+ * "Identificar planta" — vive en la pestaña Multimedia, justo debajo de la
+ * galería. Usa la primera foto ya subida a la galería (sin volver a
+ * subirla) y la manda a src/app/(payload)/api/admin/identify-plant/route.ts,
+ * que a su vez llama a la API de Pl@ntNet. Si todavía no hay ninguna foto
+ * en la galería, permite subir una aparte solo para identificar.
  *
  * Es un campo `type: 'ui'` — no se guarda nada acá, solo ayuda a completar
- * otros campos del mismo formulario. Funciona en creación y edición.
+ * Género y Especie (y Nombre, si está vacío) en la pestaña Resumen.
  */
 
 type Candidate = {
@@ -28,10 +29,13 @@ type IdentifyResponse = {
   remainingIdentificationRequests?: number
 }
 
+type GalleryImage = { id: string; url?: string; filename?: string }
+
 export const IdentifyPlantField = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [file, setFile] = useState<File | null>(null)
+  const [manualFile, setManualFile] = useState<File | null>(null)
+  const [manualPreviewUrl, setManualPreviewUrl] = useState<string | null>(null)
+  const [galleryImage, setGalleryImage] = useState<GalleryImage | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [candidates, setCandidates] = useState<Candidate[] | null>(null)
@@ -39,7 +43,36 @@ export const IdentifyPlantField = () => {
   const [remaining, setRemaining] = useState<number | null>(null)
 
   const nameValue = useFormFields(([fields]) => fields.name)
-  const [, dispatchFields] = useAllFormFields()
+  const [allFields, dispatchFields] = useAllFormFields()
+
+  // Primera imagen ya cargada en la galería del producto (gallery.0.image).
+  const firstGalleryImageId = (() => {
+    const field = allFields?.['gallery.0.image']
+    const value = field?.value
+    return typeof value === 'string' && value ? value : null
+  })()
+
+  useEffect(() => {
+    if (!firstGalleryImageId) {
+      setGalleryImage(null)
+      return
+    }
+
+    let cancelled = false
+    fetch(`/api/media/${firstGalleryImageId}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((doc) => {
+        if (cancelled || !doc) return
+        setGalleryImage({ id: firstGalleryImageId, url: doc.url, filename: doc.filename })
+      })
+      .catch(() => {
+        if (!cancelled) setGalleryImage({ id: firstGalleryImageId })
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [firstGalleryImageId])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0]
@@ -48,26 +81,22 @@ export const IdentifyPlantField = () => {
     setAppliedIndex(null)
 
     if (!selected) {
-      setFile(null)
-      setPreviewUrl(null)
+      setManualFile(null)
+      setManualPreviewUrl(null)
       return
     }
 
-    setFile(selected)
-    setPreviewUrl(URL.createObjectURL(selected))
+    setManualFile(selected)
+    setManualPreviewUrl(URL.createObjectURL(selected))
   }
 
-  const handleIdentify = async () => {
-    if (!file) return
+  const runIdentify = async (body: FormData) => {
     setLoading(true)
     setError(null)
     setCandidates(null)
     setAppliedIndex(null)
 
     try {
-      const body = new FormData()
-      body.append('image', file, file.name)
-
       const res = await fetch('/api/admin/identify-plant', {
         method: 'POST',
         body,
@@ -80,7 +109,9 @@ export const IdentifyPlantField = () => {
       }
 
       if (!data.candidates || data.candidates.length === 0) {
-        setError('No se encontraron coincidencias para esta foto. Probá con otra imagen (flor o flor + hoja suelen dar mejor resultado).')
+        setError(
+          'No se encontraron coincidencias para esta foto. Probá con otra imagen (flor o flor + hoja suelen dar mejor resultado).',
+        )
         return
       }
 
@@ -91,6 +122,20 @@ export const IdentifyPlantField = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const identifyFromGallery = () => {
+    if (!firstGalleryImageId) return
+    const body = new FormData()
+    body.append('mediaId', firstGalleryImageId)
+    runIdentify(body)
+  }
+
+  const identifyFromManualFile = () => {
+    if (!manualFile) return
+    const body = new FormData()
+    body.append('image', manualFile, manualFile.name)
+    runIdentify(body)
   }
 
   const applyCandidate = (candidate: Candidate, index: number) => {
@@ -118,38 +163,67 @@ export const IdentifyPlantField = () => {
       <p style={{ fontWeight: 600, marginTop: 0, marginBottom: '0.25rem' }}>
         Identificar planta por foto
       </p>
-      <p style={{ marginTop: 0, marginBottom: '0.75rem', fontSize: '0.85rem', color: 'var(--theme-elevation-600)' }}>
-        Subí una foto (idealmente de la flor) y buscamos el género y la especie automáticamente.
-        Esto no reemplaza tu criterio — revisá los resultados antes de usarlos.
+      <p
+        style={{
+          marginTop: 0,
+          marginBottom: '0.75rem',
+          fontSize: '0.85rem',
+          color: 'var(--theme-elevation-600)',
+        }}
+      >
+        Sugiere género y especie a partir de una foto (idealmente de la flor). Revisá el resultado
+        antes de usarlo — esto no reemplaza tu criterio.
       </p>
 
-      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          style={{ maxWidth: 260 }}
-        />
-
-        <button
-          type="button"
-          className="btn btn--style-primary"
-          disabled={!file || loading}
-          onClick={handleIdentify}
-        >
-          {loading ? 'Identificando…' : 'Identificar'}
-        </button>
-
-        {previewUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={previewUrl}
-            alt="Vista previa"
-            style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 4 }}
-          />
-        )}
-      </div>
+      {firstGalleryImageId ? (
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          {galleryImage?.url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={galleryImage.url}
+              alt="Primera imagen de la galería"
+              style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 4 }}
+            />
+          )}
+          <button
+            type="button"
+            className="btn btn--style-primary"
+            disabled={loading}
+            onClick={identifyFromGallery}
+          >
+            {loading ? 'Identificando…' : 'Identificar con esta foto'}
+          </button>
+          <span style={{ fontSize: '0.8rem', color: 'var(--theme-elevation-500)' }}>
+            (primera imagen de la galería, arriba)
+          </span>
+        </div>
+      ) : (
+        <div>
+          <p style={{ fontSize: '0.85rem', marginBottom: '0.5rem' }}>
+            Todavía no hay ninguna foto en la galería. Subí una arriba, o elegí una acá solo para
+            identificar:
+          </p>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} style={{ maxWidth: 260 }} />
+            <button
+              type="button"
+              className="btn btn--style-primary"
+              disabled={!manualFile || loading}
+              onClick={identifyFromManualFile}
+            >
+              {loading ? 'Identificando…' : 'Identificar'}
+            </button>
+            {manualPreviewUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={manualPreviewUrl}
+                alt="Vista previa"
+                style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 4 }}
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       {error && (
         <p style={{ color: 'var(--theme-error-500)', marginTop: '0.75rem', marginBottom: 0 }}>
@@ -196,7 +270,14 @@ export const IdentifyPlantField = () => {
             </div>
           ))}
           {remaining !== null && (
-            <p style={{ fontSize: '0.75rem', color: 'var(--theme-elevation-400)', marginTop: '0.5rem', marginBottom: 0 }}>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                color: 'var(--theme-elevation-400)',
+                marginTop: '0.5rem',
+                marginBottom: 0,
+              }}
+            >
               Identificaciones gratuitas restantes hoy: {remaining}
             </p>
           )}

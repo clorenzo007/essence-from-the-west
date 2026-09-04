@@ -103,15 +103,6 @@ export const Products: CollectionConfig = {
           description: 'Identity, taxonomy, and customer-facing copy.',
           fields: [
             {
-              name: 'identifyPlantHelper',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: '@/components/admin/IdentifyPlantField#IdentifyPlantField',
-                },
-              },
-            },
-            {
               type: 'row',
               fields: [
                 {
@@ -464,6 +455,15 @@ export const Products: CollectionConfig = {
                   },
                 },
               ],
+            },
+            {
+              name: 'identifyPlantHelper',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/components/admin/IdentifyPlantField#IdentifyPlantField',
+                },
+              },
             },
           ],
         },
