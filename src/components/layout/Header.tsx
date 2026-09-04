@@ -4,12 +4,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
+import { CurrencySwitcher } from '@/components/layout/CurrencySwitcher'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { Logo } from '@/components/layout/Logo'
 import { NAV_LINKS } from '@/lib/constants'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { SUPPORTED_LOCALES, type Locale } from '@/lib/i18n/locales'
-import { cn } from '@/lib/utils'
+import { cn, type DisplayCurrency } from '@/lib/utils'
 
 function useLocalePrefix(): { locale?: Locale; prefix: string } {
   const pathname = usePathname() || '/'
@@ -20,7 +21,7 @@ function useLocalePrefix(): { locale?: Locale; prefix: string } {
   return { locale: undefined, prefix: '' }
 }
 
-export function Header() {
+export function Header({ initialCurrency = 'ARS' }: { initialCurrency?: DisplayCurrency } = {}) {
   const [open, setOpen] = useState(false)
   const { locale, prefix } = useLocalePrefix()
   const t = getDictionary(locale)
@@ -48,6 +49,7 @@ export function Header() {
           <Link href={`${prefix}/tienda`} className="ro-button">
             {viewCollectionLabel}
           </Link>
+          <CurrencySwitcher initialCurrency={initialCurrency} />
           <LanguageSwitcher />
         </nav>
 
@@ -86,6 +88,7 @@ export function Header() {
           >
             {viewCollectionLabel}
           </Link>
+          <CurrencySwitcher initialCurrency={initialCurrency} variant="mobile" />
           <LanguageSwitcher variant="mobile" />
         </nav>
       </div>
