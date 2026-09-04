@@ -222,10 +222,11 @@ export const Products: CollectionConfig = {
                 {
                   name: 'currency',
                   type: 'select',
-                  defaultValue: 'USD',
+                  defaultValue: 'ARS',
                   options: [...CURRENCY_OPTIONS],
                   admin: {
                     width: '33%',
+                    description: 'Moneda en la que se carga el precio. El sitio convierte a la otra moneda automáticamente.',
                   },
                 },
               ],
