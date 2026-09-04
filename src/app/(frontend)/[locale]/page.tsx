@@ -8,6 +8,8 @@ import { HeroSection } from '@/components/home/HeroSection'
 import { NewsletterCTA } from '@/components/home/NewsletterCTA'
 import type { CareSheet, Product } from '@/payload-types'
 import { mapCareSheetToCard } from '@/lib/content'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 import { getDictionary } from '@/lib/i18n/dictionary'
@@ -49,6 +51,10 @@ export default async function LocaleHomePage({ params }: PageProps) {
 
   let featuredProducts: ReturnType<typeof mapProductToCard>[] = []
   let careSheets: ReturnType<typeof mapCareSheetToCard>[] = []
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   try {
     const payload = await getPayloadClient()
@@ -93,6 +99,8 @@ export default async function LocaleHomePage({ params }: PageProps) {
         genusHighlights={careSheets}
         locale={locale as Locale}
         prefix={prefix}
+        displayCurrency={displayCurrency}
+        usdRate={usdRate}
       />
       <EditorialStrip
         imageUrl={PRODUCT_PLACEHOLDER_SRC}
