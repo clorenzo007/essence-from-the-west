@@ -32,4 +32,7 @@ export const FLOWERING_SEASON_OPTIONS = [
   { label: 'Variable', value: 'variable' },
 ] as const
 
-export const CURRENCY_OPTIONS = [{ label: 'USD ($)', value: 'USD' }] as const
+export const CURRENCY_OPTIONS = [
+  { label: 'ARS ($)', value: 'ARS' },
+  { label: 'USD (US$)', value: 'USD' },
+] as const
