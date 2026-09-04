@@ -10,8 +10,15 @@ export const dynamic = 'force-dynamic'
  *
  * Used by the "Identificar" button on the Products create/edit form
  * (see src/components/admin/IdentifyPlantField.tsx) to suggest a
- * genus/species from an uploaded photo. Requires a logged-in Payload
- * admin session, same gating as the other /api/admin/* endpoints.
+ * genus/species from a photo. Requires a logged-in Payload admin
+ * session, same gating as the other /api/admin/* endpoints.
+ *
+ * Accepts multipart/form-data with either:
+ *  - `image`: a raw file (manual upload), or
+ *  - `mediaId`: the id of a doc already in the `media` collection (e.g.
+ *    a photo already added to the product's gallery) — the file is
+ *    fetched server-side from its stored URL, so nothing needs to be
+ *    uploaded twice.
  */
 
 const PLANTNET_ENDPOINT = 'https://my-api.plantnet.org/v2/identify/all'
@@ -67,24 +74,73 @@ export async function POST(req: Request) {
     return Response.json({ error: 'No se pudo leer la imagen enviada.' }, { status: 400 })
   }
 
-  const image = incomingForm.get('image')
-  if (!(image instanceof File) || image.size === 0) {
+  const directImage = incomingForm.get('image')
+  const mediaId = incomingForm.get('mediaId')
+
+  let imageBlob: Blob | File
+  let imageFilename = 'photo.jpg'
+
+  if (directImage instanceof File && directImage.size > 0) {
+    if (!directImage.type.startsWith('image/')) {
+      return Response.json({ error: 'El archivo tiene que ser una imagen.' }, { status: 400 })
+    }
+    if (directImage.size > MAX_IMAGE_BYTES) {
+      return Response.json(
+        { error: 'La foto pesa demasiado (máximo 4MB). Probá con una versión más liviana.' },
+        { status: 413 },
+      )
+    }
+    imageBlob = directImage
+    imageFilename = directImage.name || imageFilename
+  } else if (typeof mediaId === 'string' && mediaId.trim()) {
+    let mediaDoc: { url?: string | null; filename?: string | null } | null = null
+    try {
+      mediaDoc = await payload.findByID({ collection: 'media', id: mediaId })
+    } catch {
+      return Response.json({ error: 'No se encontró la foto seleccionada.' }, { status: 404 })
+    }
+
+    if (!mediaDoc?.url) {
+      return Response.json({ error: 'La foto seleccionada no tiene una URL válida.' }, { status: 404 })
+    }
+
+    const mediaUrl = mediaDoc.url.startsWith('http')
+      ? mediaDoc.url
+      : new URL(mediaDoc.url, req.url).toString()
+
+    let mediaRes: Response
+    try {
+      mediaRes = await fetch(mediaUrl)
+    } catch {
+      return Response.json({ error: 'No se pudo descargar la foto seleccionada.' }, { status: 502 })
+    }
+
+    if (!mediaRes.ok) {
+      return Response.json({ error: 'No se pudo descargar la foto seleccionada.' }, { status: 502 })
+    }
+
+    const contentLength = Number(mediaRes.headers.get('content-length') || 0)
+    if (contentLength > MAX_IMAGE_BYTES) {
+      return Response.json(
+        { error: 'La foto pesa demasiado (máximo 4MB). Probá con una versión más liviana.' },
+        { status: 413 },
+      )
+    }
+
+    imageBlob = await mediaRes.blob()
+    if (imageBlob.size > MAX_IMAGE_BYTES) {
+      return Response.json(
+        { error: 'La foto pesa demasiado (máximo 4MB). Probá con una versión más liviana.' },
+        { status: 413 },
+      )
+    }
+    imageFilename = mediaDoc.filename || imageFilename
+  } else {
     return Response.json({ error: 'Falta la foto a identificar.' }, { status: 400 })
   }
 
-  if (!image.type.startsWith('image/')) {
-    return Response.json({ error: 'El archivo tiene que ser una imagen.' }, { status: 400 })
-  }
-
-  if (image.size > MAX_IMAGE_BYTES) {
-    return Response.json(
-      { error: 'La foto pesa demasiado (máximo 4MB). Probá con una versión más liviana.' },
-      { status: 413 },
-    )
-  }
-
   const outgoingForm = new FormData()
-  outgoingForm.append('images', image, image.name || 'photo.jpg')
+  outgoingForm.append('images', imageBlob, imageFilename)
   outgoingForm.append('organs', 'auto')
 
   const url = new URL(PLANTNET_ENDPOINT)
