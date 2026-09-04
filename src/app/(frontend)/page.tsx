@@ -7,6 +7,8 @@ import { HeroSection } from '@/components/home/HeroSection'
 import { NewsletterCTA } from '@/components/home/NewsletterCTA'
 import type { CareSheet, Product } from '@/payload-types'
 import { mapCareSheetToCard } from '@/lib/content'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 import {
@@ -36,6 +38,10 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   let featuredProducts: ReturnType<typeof mapProductToCard>[] = []
   let careSheets: ReturnType<typeof mapCareSheetToCard>[] = []
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   try {
     const payload = await getPayloadClient()
@@ -78,7 +84,12 @@ export default async function HomePage() {
         imageUrl={SITE_WATERMARK_SRC}
         imageAlt="Cattleya de la colección Reserva Oeste"
       />
-      <FeaturedCollection products={featuredProducts} genusHighlights={careSheets} />
+      <FeaturedCollection
+        products={featuredProducts}
+        genusHighlights={careSheets}
+        displayCurrency={displayCurrency}
+        usdRate={usdRate}
+      />
       <EditorialStrip
         imageUrl={PRODUCT_PLACEHOLDER_SRC}
         imageAlt="Orquídeas de la colección en el vivero"
