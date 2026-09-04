@@ -16,7 +16,17 @@ body::before {
   filter: var(--ro-watermark-filter);
 }
 
-body > * {
+/* :not([class*='popup']) — Payload posiciona los menús flotantes (Per Page,
+   Filters, el selector de ordenamiento, etc.) como hijos directos de <body>
+   usando su propio position/top calculado en JS. Si los forzamos acá a
+   position:relative, Payload sigue interpretando ese "top" como si fuera
+   fixed/absolute, y el menú termina renderizado cientos de píxeles más abajo
+   de lo que corresponde (a veces fuera de la pantalla) — eso es lo que hacía
+   que "Per Page" pareciera roto: el menú SÍ se abría, solo que invisible más
+   abajo del todo. Excluir estos elementos deja que Payload los posicione con
+   su propio CSS, y no afecta la marca de agua (el resto del contenido real
+   sigue recibiendo z-index:1 para quedar por encima de ella). */
+body > *:not([class*='popup']) {
   position: relative;
   z-index: 1;
 }
@@ -119,4 +129,11 @@ a[href*='github.com/payloadcms'],
           height: 64px !important;
           width: 64px !important;
   }
+}
+
+/* Miniaturas más grandes en las listas (Archivos multimedia, etc.) — las de
+   40x40px por defecto son difíciles de distinguir entre sí a simple vista. */
+table .thumbnail--size-small.file__thumbnail {
+  width: 72px;
+  height: 72px;
 }
