@@ -5,6 +5,7 @@ import { buildWhatsAppCheckoutUrl } from '@/lib/utils'
 type WhatsAppCheckoutButtonProps = {
   productName: string
   price: number
+  currency?: string
   slug: string
   disabled?: boolean
   locale?: Locale
@@ -13,12 +14,13 @@ type WhatsAppCheckoutButtonProps = {
 export function WhatsAppCheckoutButton({
   productName,
   price,
+  currency,
   slug,
   disabled,
   locale,
 }: WhatsAppCheckoutButtonProps) {
   const t = getDictionary(locale)
-  const url = buildWhatsAppCheckoutUrl({ productName, price, slug })
+  const url = buildWhatsAppCheckoutUrl({ productName, price, currency, slug })
 
   if (!url) {
     return (

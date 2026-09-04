@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { LocalBusinessJsonLd } from '@/components/seo/LocalBusinessJsonLd'
 import { BrandWatermark } from '@/components/ui/BrandWatermark'
+import { getDisplayCurrency } from '@/lib/currency'
 import { SITE_DESCRIPTOR, SITE_NAME } from '@/lib/constants'
 import { defaultSiteMetadata } from '@/lib/site-metadata'
 
@@ -32,16 +33,18 @@ export const metadata: Metadata = {
   },
 }
 
-export default function FrontendLayout({
+export default async function FrontendLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const initialCurrency = await getDisplayCurrency()
+
   return (
     <html lang="es" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-ro-ivory font-sans">
         <LocalBusinessJsonLd />
-        <Header />
+        <Header initialCurrency={initialCurrency} />
         <main className="ro-site-main">
           <BrandWatermark className="ro-watermark-layer" />
           {children}

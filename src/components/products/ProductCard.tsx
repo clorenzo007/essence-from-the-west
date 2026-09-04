@@ -4,7 +4,7 @@ import { MediaImage } from '@/components/ui/MediaImage'
 import { ProductImagePlaceholder } from '@/components/products/ProductImagePlaceholder'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import type { Locale } from '@/lib/i18n/locales'
-import { formatPrice } from '@/lib/utils'
+import { formatDisplayPrice, type DisplayCurrency } from '@/lib/utils'
 
 export type ProductCardData = {
   id: string
@@ -12,6 +12,7 @@ export type ProductCardData = {
   slug: string
   species: string
   price: number
+  currency?: string | null
   stock: number
   imageUrl?: string | null
   imageAlt?: string
@@ -24,10 +25,14 @@ export function ProductCard({
   product,
   locale,
   prefix = '',
+  displayCurrency,
+  usdRate,
 }: {
   product: ProductCardData
   locale?: Locale
   prefix?: string
+  displayCurrency: DisplayCurrency
+  usdRate: number
 }) {
   const t = getDictionary(locale)
   const inStock = product.stock > 0
@@ -51,7 +56,9 @@ export function ProductCard({
 
         <div className="mt-8 space-y-2 text-center md:text-left">
           <h3 className="ro-heading text-2xl">{product.name}</h3>
-          <p className="font-sans text-sm text-ro-charcoal">{formatPrice(product.price)}</p>
+          <p className="font-sans text-sm text-ro-charcoal">
+            {formatDisplayPrice(product.price, product.currency, displayCurrency, usdRate)}
+          </p>
           <p
             className={`font-sans text-xs uppercase tracking-ro ${
               inStock ? 'text-ro-botanical' : 'text-ro-muted'

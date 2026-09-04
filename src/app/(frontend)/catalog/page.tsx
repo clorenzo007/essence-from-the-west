@@ -4,6 +4,8 @@ import type { Where } from 'payload'
 import { ProductCard } from '@/components/products/ProductCard'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Product } from '@/payload-types'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 
@@ -58,6 +60,10 @@ type SearchParams = Promise<{
 export default async function CatalogPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams
   const payload = await getPayloadClient()
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   const and: Where[] = [{ status: { equals: 'published' } }]
 
@@ -139,7 +145,12 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
         {products.length > 0 ? (
           <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                displayCurrency={displayCurrency}
+                usdRate={usdRate}
+              />
             ))}
           </div>
         ) : (

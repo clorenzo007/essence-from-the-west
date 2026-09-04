@@ -5,6 +5,8 @@ import type { Where } from 'payload'
 import { ProductCard } from '@/components/products/ProductCard'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Product } from '@/payload-types'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { mapProductToCard } from '@/lib/products'
 import { getPayloadClient } from '@/lib/payload'
 import { getDictionary } from '@/lib/i18n/dictionary'
@@ -39,6 +41,10 @@ export default async function LocaleCatalogPage({ params, searchParams }: PagePr
 
   const sp = await searchParams
   const payload = await getPayloadClient()
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   const and: Where[] = [{ status: { equals: 'published' } }]
   if (sp.q) {
@@ -123,6 +129,8 @@ export default async function LocaleCatalogPage({ params, searchParams }: PagePr
                 product={product}
                 locale={locale as Locale}
                 prefix={prefix}
+                displayCurrency={displayCurrency}
+                usdRate={usdRate}
               />
             ))}
           </div>

@@ -7,7 +7,9 @@ import { RichTextContent } from '@/components/ui/RichTextContent'
 import type { Product } from '@/payload-types'
 import { ProductImagePlaceholder } from '@/components/products/ProductImagePlaceholder'
 import { WhatsAppCheckoutButton } from '@/components/products/WhatsAppCheckoutButton'
-import { formatPrice } from '@/lib/utils'
+import { formatDisplayPrice } from '@/lib/utils'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
@@ -59,6 +61,11 @@ export default async function ProductPage({ params }: PageProps) {
 
   const product = docs[0] as Product | undefined
   if (!product) notFound()
+
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   const gallery = product.gallery ?? []
   const heroImage = getPrimaryGalleryImage(product)
@@ -118,7 +125,9 @@ export default async function ProductPage({ params }: PageProps) {
                 {product.shortDescription}
               </p>
             )}
-            <p className="mt-8 font-sans text-2xl text-ro-charcoal">{formatPrice(product.price)}</p>
+            <p className="mt-8 font-sans text-2xl text-ro-charcoal">
+              {formatDisplayPrice(product.price, product.currency, displayCurrency, usdRate)}
+            </p>
             <p
               className={`mt-2 font-sans text-xs uppercase tracking-ro ${
                 inStock ? 'text-ro-botanical' : 'text-ro-muted'
@@ -133,6 +142,7 @@ export default async function ProductPage({ params }: PageProps) {
               <WhatsAppCheckoutButton
                 productName={product.name}
                 price={product.price}
+                currency={product.currency ?? undefined}
                 slug={product.slug}
                 disabled={!inStock}
               />

@@ -7,6 +7,8 @@ import { SupplyCard } from '@/components/supplies/SupplyCard'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Product, Supply } from '@/payload-types'
 import { TIENDA_CATEGORIES } from '@/lib/constants'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { isSupportedLocale, type Locale } from '@/lib/i18n/locales'
 import { mapProductToCard } from '@/lib/products'
@@ -44,6 +46,10 @@ export default async function LocaleTiendaPage({ params, searchParams }: PagePro
   const { category: rawCategory } = await searchParams
   const category = TIENDA_CATEGORIES.some((c) => c.value === rawCategory) ? rawCategory! : 'orquideas'
   const payload = await getPayloadClient()
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   const categoryLabels: Record<string, string> = {
     orquideas: t.tienda.categories.orchids,
@@ -109,7 +115,14 @@ export default async function LocaleTiendaPage({ params, searchParams }: PagePro
             {products.length > 0 ? (
               <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
                 {products.map((product) => (
-                  <ProductCard key={product.id} product={product} locale={locale as Locale} prefix={prefix} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    locale={locale as Locale}
+                    prefix={prefix}
+                    displayCurrency={displayCurrency}
+                    usdRate={usdRate}
+                  />
                 ))}
               </div>
             ) : (
@@ -130,6 +143,8 @@ export default async function LocaleTiendaPage({ params, searchParams }: PagePro
                 whatsappCtaLabel={t.productDetail.whatsappCta}
                 availableLabel={t.productDetail.available}
                 soldOutLabel={t.productDetail.soldOut}
+                displayCurrency={displayCurrency}
+                usdRate={usdRate}
               />
             ))}
           </div>
