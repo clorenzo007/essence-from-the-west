@@ -18,6 +18,7 @@ export function mapProductToCard(product: Product): ProductCardData {
     slug: product.slug,
     species: product.species,
     price: product.price,
+    currency: product.currency ?? 'ARS',
     stock: product.stock,
     imageUrl: getMediaUrl(image),
     imageAlt: getMediaAlt(image, product.name),
