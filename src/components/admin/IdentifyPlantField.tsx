@@ -1,14 +1,20 @@
 'use client'
 
-import { useAllFormFields, useFormFields } from '@payloadcms/ui'
+import { useAllFormFields, useFormFields, useListDrawer } from '@payloadcms/ui'
 import { useEffect, useRef, useState } from 'react'
 
 /**
  * "Identificar planta" — vive en la pestaña Multimedia, justo debajo de la
  * galería. Usa la primera foto ya subida a la galería (sin volver a
  * subirla) y la manda a src/app/(payload)/api/admin/identify-plant/route.ts,
- * que a su vez llama a la API de Pl@ntNet. Si todavía no hay ninguna foto
- * en la galería, permite subir una aparte solo para identificar.
+ * que a su vez llama a la API de Pl@ntNet.
+ *
+ * Si todavía no hay ninguna foto en la galería, ofrece dos formas de
+ * conseguir una foto para identificar:
+ *  - Elegir una ya subida antes (biblioteca de medios — Cloudinary), sin
+ *    tener que volver a subirla desde la computadora.
+ *  - Subir una foto nueva desde la computadora, solo para identificar (no
+ *    se guarda en la galería).
  *
  * Es un campo `type: 'ui'` — no se guarda nada acá, solo ayuda a completar
  * Género y Especie (y Nombre, si está vacío) en la pestaña Resumen.
@@ -29,13 +35,14 @@ type IdentifyResponse = {
   remainingIdentificationRequests?: number
 }
 
-type GalleryImage = { id: string; url?: string; filename?: string }
+type MediaPreview = { id: string; url?: string; filename?: string }
 
 export const IdentifyPlantField = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [manualFile, setManualFile] = useState<File | null>(null)
   const [manualPreviewUrl, setManualPreviewUrl] = useState<string | null>(null)
-  const [galleryImage, setGalleryImage] = useState<GalleryImage | null>(null)
+  const [galleryImage, setGalleryImage] = useState<MediaPreview | null>(null)
+  const [pickedExisting, setPickedExisting] = useState<MediaPreview | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [candidates, setCandidates] = useState<Candidate[] | null>(null)
@@ -44,6 +51,10 @@ export const IdentifyPlantField = () => {
 
   const nameValue = useFormFields(([fields]) => fields.name)
   const [allFields, dispatchFields] = useAllFormFields()
+
+  const [MediaListDrawer, MediaListToggler, { closeDrawer: closeMediaDrawer }] = useListDrawer({
+    collectionSlugs: ['media'],
+  })
 
   // Primera imagen ya cargada en la galería del producto (gallery.0.image).
   const firstGalleryImageId = (() => {
@@ -86,8 +97,29 @@ export const IdentifyPlantField = () => {
       return
     }
 
+    setPickedExisting(null)
     setManualFile(selected)
     setManualPreviewUrl(URL.createObjectURL(selected))
+  }
+
+  const handleExistingSelect = ({ docID }: { docID: string }) => {
+    closeMediaDrawer()
+    setError(null)
+    setCandidates(null)
+    setAppliedIndex(null)
+    setManualFile(null)
+    setManualPreviewUrl(null)
+    setPickedExisting({ id: docID })
+
+    fetch(`/api/media/${docID}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((doc) => {
+        if (!doc) return
+        setPickedExisting({ id: docID, url: doc.url, filename: doc.filename })
+      })
+      .catch(() => {
+        // La foto igual se puede identificar aunque falle la vista previa.
+      })
   }
 
   const runIdentify = async (body: FormData) => {
@@ -124,10 +156,9 @@ export const IdentifyPlantField = () => {
     }
   }
 
-  const identifyFromGallery = () => {
-    if (!firstGalleryImageId) return
+  const identifyFromMediaId = (mediaId: string) => {
     const body = new FormData()
-    body.append('mediaId', firstGalleryImageId)
+    body.append('mediaId', mediaId)
     runIdentify(body)
   }
 
@@ -189,7 +220,7 @@ export const IdentifyPlantField = () => {
             type="button"
             className="btn btn--style-primary"
             disabled={loading}
-            onClick={identifyFromGallery}
+            onClick={() => identifyFromMediaId(firstGalleryImageId)}
           >
             {loading ? 'Identificando…' : 'Identificar con esta foto'}
           </button>
@@ -200,11 +231,52 @@ export const IdentifyPlantField = () => {
       ) : (
         <div>
           <p style={{ fontSize: '0.85rem', marginBottom: '0.5rem' }}>
-            Todavía no hay ninguna foto en la galería. Subí una arriba, o elegí una acá solo para
-            identificar:
+            Todavía no hay ninguna foto en la galería. Elegí una que ya subiste antes (Cloudinary),
+            o subí una nueva desde tu computadora solo para identificar:
           </p>
+
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} style={{ maxWidth: 260 }} />
+            {pickedExisting?.url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={pickedExisting.url}
+                alt="Foto elegida de la biblioteca"
+                style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 4 }}
+              />
+            )}
+            <MediaListToggler className="btn btn--style-secondary btn--size-small" disabled={loading}>
+              {pickedExisting ? 'Elegir otra foto ya subida' : 'Elegir una foto ya subida'}
+            </MediaListToggler>
+            {pickedExisting && (
+              <button
+                type="button"
+                className="btn btn--style-primary"
+                disabled={loading}
+                onClick={() => identifyFromMediaId(pickedExisting.id)}
+              >
+                {loading ? 'Identificando…' : 'Identificar con esta foto'}
+              </button>
+            )}
+          </div>
+
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--theme-elevation-500)',
+              margin: '0.75rem 0 0.5rem',
+            }}
+          >
+            — o —
+          </p>
+
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ maxWidth: 260 }}
+            />
             <button
               type="button"
               className="btn btn--style-primary"
@@ -222,6 +294,8 @@ export const IdentifyPlantField = () => {
               />
             )}
           </div>
+
+          <MediaListDrawer onSelect={handleExistingSelect} />
         </div>
       )}
 
