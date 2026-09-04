@@ -6,6 +6,8 @@ import { SupplyCard } from '@/components/supplies/SupplyCard'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Product, Supply } from '@/payload-types'
 import { TIENDA_CATEGORIES } from '@/lib/constants'
+import { getDisplayCurrency } from '@/lib/currency'
+import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { mapProductToCard } from '@/lib/products'
 import { mapSupplyToCard } from '@/lib/supplies'
 import { getPayloadClient } from '@/lib/payload'
@@ -28,6 +30,10 @@ export default async function TiendaPage({ searchParams }: { searchParams: Searc
   const { category: rawCategory } = await searchParams
   const category = TIENDA_CATEGORIES.some((c) => c.value === rawCategory) ? rawCategory! : 'orquideas'
   const payload = await getPayloadClient()
+  const [displayCurrency, { venta: usdRate }] = await Promise.all([
+    getDisplayCurrency(),
+    getBnaUsdRate(),
+  ])
 
   let products: ReturnType<typeof mapProductToCard>[] = []
   let supplies: ReturnType<typeof mapSupplyToCard>[] = []
@@ -84,7 +90,12 @@ export default async function TiendaPage({ searchParams }: { searchParams: Searc
             {products.length > 0 ? (
               <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
                 {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    displayCurrency={displayCurrency}
+                    usdRate={usdRate}
+                  />
                 ))}
               </div>
             ) : (
@@ -99,7 +110,12 @@ export default async function TiendaPage({ searchParams }: { searchParams: Searc
         ) : supplies.length > 0 ? (
           <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
             {supplies.map((supply) => (
-              <SupplyCard key={supply.id} supply={supply} />
+              <SupplyCard
+                key={supply.id}
+                supply={supply}
+                displayCurrency={displayCurrency}
+                usdRate={usdRate}
+              />
             ))}
           </div>
         ) : (
