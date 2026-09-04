@@ -143,12 +143,23 @@ export async function POST(req: Request) {
   outgoingForm.append('images', imageBlob, imageFilename)
   outgoingForm.append('organs', 'auto')
 
+  const trimmedKey = apiKey.trim()
+
   const url = new URL(PLANTNET_ENDPOINT)
   // .trim() por si la key se pegó con un espacio o salto de línea de más al
   // configurarla en Vercel — eso alcanza para que Pl@ntNet la rechace.
-  url.searchParams.set('api-key', apiKey.trim())
+  url.searchParams.set('api-key', trimmedKey)
   url.searchParams.set('lang', 'es')
   url.searchParams.set('nb-results', '5')
+
+  // Diagnóstico temporal: nunca logueamos la key completa, solo su forma
+  // (largo + primeros/últimos caracteres) para poder compararla con la que
+  // figura en my.plantnet.org sin exponerla. También logueamos qué le
+  // estamos mandando a Pl@ntNet (tamaño/tipo de la imagen) para descartar
+  // que el archivo llegue corrupto o sin content-type.
+  payload.logger.info(
+    `[identify-plant] enviando a Pl@ntNet: key.length=${trimmedKey.length} key.head="${trimmedKey.slice(0, 4)}" key.tail="${trimmedKey.slice(-4)}" image.size=${imageBlob.size} image.type="${imageBlob.type}" filename="${imageFilename}"`,
+  )
 
   let plantnetRes: Response
   try {
