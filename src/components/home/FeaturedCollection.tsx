@@ -5,6 +5,7 @@ import { MediaImage } from '@/components/ui/MediaImage'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import type { Locale } from '@/lib/i18n/locales'
+import type { DisplayCurrency } from '@/lib/utils'
 
 type FeaturedCollectionProps = {
   products: ProductCardData[]
@@ -23,6 +24,8 @@ type FeaturedCollectionProps = {
   }>
   locale?: Locale
   prefix?: string
+  displayCurrency: DisplayCurrency
+  usdRate: number
 }
 
 export function FeaturedCollection({
@@ -30,6 +33,8 @@ export function FeaturedCollection({
   genusHighlights = [],
   locale,
   prefix = '',
+  displayCurrency,
+  usdRate,
 }: FeaturedCollectionProps) {
   const t = getDictionary(locale)
   const showProducts = products.length > 0
@@ -66,7 +71,14 @@ export function FeaturedCollection({
         {showProducts ? (
           <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} locale={locale} prefix={prefix} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                locale={locale}
+                prefix={prefix}
+                displayCurrency={displayCurrency}
+                usdRate={usdRate}
+              />
             ))}
           </div>
         ) : photoHighlights.length > 0 ? (
