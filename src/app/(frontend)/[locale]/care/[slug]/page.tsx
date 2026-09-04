@@ -9,7 +9,7 @@ import type { CareSheet } from '@/payload-types'
 import { getCollectionSeo } from '@/lib/content'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
-import { withCelsius } from '@/lib/temperature'
+import { withFahrenheit } from '@/lib/temperature'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { isSupportedLocale, type Locale } from '@/lib/i18n/locales'
 import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
@@ -122,7 +122,7 @@ export default async function LocaleCareSheetPage({ params }: PageProps) {
           {sheet.temperature && (
             <div>
               <dt className="ro-label">{t.careDetail.temperature}</dt>
-              <dd className="mt-2 font-sans text-sm">{withCelsius(sheet.temperature)}</dd>
+              <dd className="mt-2 font-sans text-sm">{withFahrenheit(sheet.temperature)}</dd>
             </div>
           )}
         </dl>
