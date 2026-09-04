@@ -13,7 +13,7 @@ import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
-import { withCelsius } from '@/lib/temperature'
+import { withFahrenheit } from '@/lib/temperature'
 import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
 
 type PageProps = {
@@ -182,7 +182,7 @@ export default async function ProductPage({ params }: PageProps) {
               {product.temperature && (
                 <>
                   <dt className="ro-label">Temperatura</dt>
-                  <dd className="font-sans text-sm">{withCelsius(product.temperature)}</dd>
+                  <dd className="font-sans text-sm">{withFahrenheit(product.temperature)}</dd>
                 </>
               )}
               {product.lighting && (
