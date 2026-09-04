@@ -144,7 +144,9 @@ export async function POST(req: Request) {
   outgoingForm.append('organs', 'auto')
 
   const url = new URL(PLANTNET_ENDPOINT)
-  url.searchParams.set('api-key', apiKey)
+  // .trim() por si la key se pegó con un espacio o salto de línea de más al
+  // configurarla en Vercel — eso alcanza para que Pl@ntNet la rechace.
+  url.searchParams.set('api-key', apiKey.trim())
   url.searchParams.set('lang', 'es')
   url.searchParams.set('nb-results', '5')
 
@@ -183,6 +185,18 @@ export async function POST(req: Request) {
   }
 
   if (!plantnetRes.ok) {
+    // Diagnóstico temporal: Pl@ntNet no da detalle en el mensaje que ve el
+    // usuario, así que registramos el motivo real acá (nunca la api-key) para
+    // poder verlo en Vercel → Logs.
+    let bodySnippet = ''
+    try {
+      bodySnippet = (await plantnetRes.text()).slice(0, 500)
+    } catch {
+      // sin body legible, seguimos igual
+    }
+    payload.logger.error(
+      `[identify-plant] Pl@ntNet respondió ${plantnetRes.status} ${plantnetRes.statusText}: ${bodySnippet}`,
+    )
     return Response.json(
       { error: 'El servicio de identificación devolvió un error. Probá con otra foto.' },
       { status: 502 },
