@@ -381,7 +381,7 @@ export const Products: CollectionConfig = {
                   admin: {
                     width: '50%',
                     description:
-                      'e.g. 65–75°F day / 55–62°F night. The site adds °C automatically — no need to type it.',
+                      'e.g. 20–28°C day / 12–16°C night. The site adds °F automatically — no need to type it.',
                   },
                 },
               ],

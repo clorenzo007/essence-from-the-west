@@ -227,7 +227,11 @@ export const Specimens: CollectionConfig = {
                 {
                   name: 'temperature',
                   type: 'text',
-                  admin: { width: '50%', description: 'e.g. 65–75°F day / 55–62°F night' },
+                  admin: {
+                    width: '50%',
+                    description:
+                      'e.g. 20–28°C day / 12–16°C night. The site adds °F automatically — no need to type it.',
+                  },
                 },
               ],
             },
