@@ -10,7 +10,7 @@ import type { CareSheet } from '@/payload-types'
 import { getCollectionSeo } from '@/lib/content'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
-import { withCelsius } from '@/lib/temperature'
+import { withFahrenheit } from '@/lib/temperature'
 import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
 
 type PageProps = { params: Promise<{ slug: string }> }
@@ -103,7 +103,7 @@ export default async function CareSheetPage({ params }: PageProps) {
           {sheet.temperature && (
             <div>
               <dt className="ro-label">Temperatura</dt>
-              <dd className="mt-2 font-sans text-sm">{withCelsius(sheet.temperature)}</dd>
+              <dd className="mt-2 font-sans text-sm">{withFahrenheit(sheet.temperature)}</dd>
             </div>
           )}
         </dl>

@@ -13,7 +13,7 @@ import { getBnaUsdRate } from '@/lib/exchange-rate'
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
-import { withCelsius } from '@/lib/temperature'
+import { withFahrenheit } from '@/lib/temperature'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { isSupportedLocale, type Locale } from '@/lib/i18n/locales'
 
@@ -191,7 +191,7 @@ export default async function LocaleProductPage({ params }: PageProps) {
               {product.temperature && (
                 <>
                   <dt className="ro-label">{t.careDetail.temperature}</dt>
-                  <dd className="font-sans text-sm">{withCelsius(product.temperature)}</dd>
+                  <dd className="font-sans text-sm">{withFahrenheit(product.temperature)}</dd>
                 </>
               )}
               {product.lighting && (
