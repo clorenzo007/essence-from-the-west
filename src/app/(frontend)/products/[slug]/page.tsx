@@ -14,7 +14,12 @@ import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import { getPayloadClient } from '@/lib/payload'
 import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
 import { withFahrenheit } from '@/lib/temperature'
-import { difficultyLabel, lightingLabel } from '@/lib/i18n/careLabels'
+import {
+  difficultyLabel,
+  floweringSeasonLabel,
+  fragranceLabel,
+  lightingLabel,
+} from '@/lib/i18n/careLabels'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -72,8 +77,8 @@ export default async function ProductPage({ params }: PageProps) {
   const inStock = product.stock > 0
 
   const floweringSeasons = Array.isArray(product.floweringSeason)
-    ? product.floweringSeason.join(', ')
-    : product.floweringSeason
+    ? product.floweringSeason.map((season) => floweringSeasonLabel(season)).join(', ')
+    : floweringSeasonLabel(product.floweringSeason)
 
   return (
     <div className="pb-24 pt-32 md:pt-36">
@@ -164,13 +169,13 @@ export default async function ProductPage({ params }: PageProps) {
               {floweringSeasons && (
                 <>
                   <dt className="ro-label">Floración</dt>
-                  <dd className="font-sans text-sm capitalize">{floweringSeasons}</dd>
+                  <dd className="font-sans text-sm">{floweringSeasons}</dd>
                 </>
               )}
               {product.fragrance && (
                 <>
                   <dt className="ro-label">Fragancia</dt>
-                  <dd className="font-sans text-sm capitalize">{product.fragrance}</dd>
+                  <dd className="font-sans text-sm">{fragranceLabel(product.fragrance)}</dd>
                 </>
               )}
               {product.humidity && (

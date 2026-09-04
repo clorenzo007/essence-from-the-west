@@ -16,6 +16,12 @@ import { getPrimaryGalleryImage, getProductSeo } from '@/lib/products'
 import { withFahrenheit } from '@/lib/temperature'
 import { getDictionary } from '@/lib/i18n/dictionary'
 import { isSupportedLocale, type Locale } from '@/lib/i18n/locales'
+import {
+  difficultyLabel,
+  floweringSeasonLabel,
+  fragranceLabel,
+  lightingLabel,
+} from '@/lib/i18n/careLabels'
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> }
 
@@ -80,8 +86,10 @@ export default async function LocaleProductPage({ params }: PageProps) {
   const inStock = product.stock > 0
 
   const floweringSeasons = Array.isArray(product.floweringSeason)
-    ? product.floweringSeason.join(', ')
-    : product.floweringSeason
+    ? product.floweringSeason
+        .map((season) => floweringSeasonLabel(season, locale as Locale))
+        .join(', ')
+    : floweringSeasonLabel(product.floweringSeason, locale as Locale)
 
   return (
     <div className="pb-24 pt-32 md:pt-36">
@@ -173,13 +181,15 @@ export default async function LocaleProductPage({ params }: PageProps) {
               {floweringSeasons && (
                 <>
                   <dt className="ro-label">{t.productDetail.flowering}</dt>
-                  <dd className="font-sans text-sm capitalize">{floweringSeasons}</dd>
+                  <dd className="font-sans text-sm">{floweringSeasons}</dd>
                 </>
               )}
               {product.fragrance && (
                 <>
                   <dt className="ro-label">{t.productDetail.fragrance}</dt>
-                  <dd className="font-sans text-sm capitalize">{product.fragrance}</dd>
+                  <dd className="font-sans text-sm">
+                    {fragranceLabel(product.fragrance, locale as Locale)}
+                  </dd>
                 </>
               )}
               {product.humidity && (
@@ -197,15 +207,17 @@ export default async function LocaleProductPage({ params }: PageProps) {
               {product.lighting && (
                 <>
                   <dt className="ro-label">{t.careDetail.light}</dt>
-                  <dd className="font-sans text-sm capitalize">
-                    {product.lighting.replace('-', ' ')}
+                  <dd className="font-sans text-sm">
+                    {lightingLabel(product.lighting, locale as Locale)}
                   </dd>
                 </>
               )}
               {product.difficulty && (
                 <>
                   <dt className="ro-label">{t.careDetail.difficulty}</dt>
-                  <dd className="font-sans text-sm capitalize">{product.difficulty}</dd>
+                  <dd className="font-sans text-sm">
+                    {difficultyLabel(product.difficulty, locale as Locale)}
+                  </dd>
                 </>
               )}
             </dl>
