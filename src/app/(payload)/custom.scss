@@ -16,17 +16,24 @@ body::before {
   filter: var(--ro-watermark-filter);
 }
 
-/* :not([class*='popup']) — Payload posiciona los menús flotantes (Per Page,
-   Filters, el selector de ordenamiento, etc.) como hijos directos de <body>
-   usando su propio position/top calculado en JS. Si los forzamos acá a
-   position:relative, Payload sigue interpretando ese "top" como si fuera
-   fixed/absolute, y el menú termina renderizado cientos de píxeles más abajo
-   de lo que corresponde (a veces fuera de la pantalla) — eso es lo que hacía
-   que "Per Page" pareciera roto: el menú SÍ se abría, solo que invisible más
-   abajo del todo. Excluir estos elementos deja que Payload los posicione con
-   su propio CSS, y no afecta la marca de agua (el resto del contenido real
-   sigue recibiendo z-index:1 para quedar por encima de ella). */
-body > *:not([class*='popup']) {
+/* :not([class*='popup']):not([class*='modal']) — Payload posiciona varios
+   componentes flotantes como hijos directos de <body>, con su propio CSS
+   asumiendo que ese contenedor queda con position:fixed cubriendo toda la
+   pantalla: los menús tipo "popup" (Per Page, Filters, el selector de orden)
+   y también los "drawers" (el panel que se abre al hacer "Create New" o
+   "Choose from existing" en un campo de imagen/relación), que usan la clase
+   payload__modal-container. Si forzamos acá position:relative, ese
+   contenedor pasa a posicionarse en el flujo normal del documento en vez de
+   cubrir la pantalla, y el drawer (que se dibuja con position:absolute;
+   inset:0 relativo a ese contenedor) termina renderizado cientos de píxeles
+   más abajo, fuera de la vista — por eso al tocar "Create New" no pasaba
+   nada visible y parecía que no se podían subir fotos: el drawer para
+   cargar la imagen SÍ se abría, solo que invisible más abajo del todo, igual
+   que pasaba antes con "Per Page". Excluir estos elementos deja que Payload
+   los posicione con su propio CSS, y no afecta la marca de agua (el resto
+   del contenido real sigue recibiendo z-index:1 para quedar por encima de
+   ella). */
+body > *:not([class*='popup']):not([class*='modal']) {
   position: relative;
   z-index: 1;
 }
