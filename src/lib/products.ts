@@ -20,7 +20,10 @@ export function mapProductToCard(product: Product): ProductCardData {
     price: product.price,
     currency: product.currency ?? 'ARS',
     stock: product.stock,
-    imageUrl: getMediaUrl(image),
+    // ProductCard renders this into an aspect-[4/5] box — request the
+    // matching crop from Cloudinary so it picks the flower, not the browser
+    // blindly cropping whatever aspect ratio the original happens to be.
+    imageUrl: getMediaUrl(image, { width: 800, height: 1000 }),
     imageAlt: getMediaAlt(image, product.name),
     shortDescription: product.shortDescription,
     featured: product.featured ?? false,
