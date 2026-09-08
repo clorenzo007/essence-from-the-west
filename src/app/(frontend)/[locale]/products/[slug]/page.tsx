@@ -97,9 +97,9 @@ export default async function LocaleProductPage({ params }: PageProps) {
         <div className="grid gap-16 lg:grid-cols-2">
           <div className="space-y-4">
             <div className="relative aspect-[4/5] overflow-hidden rounded-ro bg-ro-card ring-1 ring-ro-charcoal/5">
-              {getMediaUrl(heroImage) ? (
+              {getMediaUrl(heroImage, { width: 1200, height: 1500 }) ? (
                 <MediaImage
-                  src={getMediaUrl(heroImage)!}
+                  src={getMediaUrl(heroImage, { width: 1200, height: 1500 })!}
                   alt={getMediaAlt(heroImage, product.name)}
                   fill
                   className="object-cover"
@@ -113,7 +113,7 @@ export default async function LocaleProductPage({ params }: PageProps) {
             {gallery.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
                 {gallery.slice(1, 5).map((item, i) => {
-                  const url = getMediaUrl(item.image)
+                  const url = getMediaUrl(item.image, { width: 300, height: 300 })
                   if (!url) return null
                   return (
                     <div
