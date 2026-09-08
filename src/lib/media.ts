@@ -5,11 +5,29 @@ import { SERVER_URL } from '@/lib/constants'
 
 type MediaLike = (Media & { cloudinaryPublicId?: string | null }) | string | null | undefined
 
-export function getMediaUrl(media: MediaLike): string | null {
+export function getMediaUrl(
+  media: MediaLike,
+  /**
+   * Target display box for this image, e.g. { width: 800, height: 1000 }
+   * for a 4:5 product photo slot. When given (and Cloudinary is enabled),
+   * the crop is requested from Cloudinary itself (fill + subject-aware
+   * gravity) instead of serving the raw original and leaving the browser's
+   * CSS to blindly object-fit:cover-crop it — see getCloudinaryImageUrl for
+   * why that matters. Omit for slots that should show the image uncropped.
+   */
+  crop?: { width: number; height: number },
+): string | null {
   if (!media || typeof media === 'string') return null
 
   if (isCloudinaryEnabled() && media.cloudinaryPublicId) {
-    return getCloudinaryImageUrl(media.cloudinaryPublicId) ?? media.url ?? null
+    return (
+      getCloudinaryImageUrl(media.cloudinaryPublicId, {
+        width: crop?.width,
+        height: crop?.height,
+        crop: crop ? 'fill' : undefined,
+        gravity: crop ? 'auto' : undefined,
+      }) ?? media.url ?? null
+    )
   }
 
   const raw = media.url ?? null
