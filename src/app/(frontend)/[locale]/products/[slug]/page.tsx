@@ -102,7 +102,7 @@ export default async function LocaleProductPage({ params }: PageProps) {
                   src={getMediaUrl(heroImage, { width: 1200, height: 1500 })!}
                   alt={getMediaAlt(heroImage, product.name)}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
@@ -124,7 +124,7 @@ export default async function LocaleProductPage({ params }: PageProps) {
                         src={url}
                         alt={getMediaAlt(item.image, product.name)}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                         sizes="120px"
                       />
                     </div>
