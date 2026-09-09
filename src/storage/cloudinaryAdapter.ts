@@ -25,6 +25,22 @@ export const cloudinaryAdapter: Adapter = ({ prefix }) => {
   return {
     name: 'cloudinary',
     async handleUpload({ file, data }) {
+      // Payload's cloud-storage plugin calls this once for the original file
+      // AND once per configured collection imageSize, all sharing the SAME
+      // `data` (the doc so far) — then shallow-merges every return value onto
+      // the doc's TOP-LEVEL fields, last call wins. If a size's result were
+      // returned the same way as the original's, whichever size uploads last
+      // would silently overwrite the real original's url/filename/
+      // cloudinaryPublicId/width/height with that size's own (possibly
+      // cropped) file — which is exactly what corrupted every product photo
+      // that wasn't already 16:9 before the Media collection's imageSizes
+      // were removed. Media no longer defines any sizes, so this should
+      // never actually trigger — kept as a guard in case a size gets
+      // reintroduced there or on another collection reusing this adapter.
+      const sizeName = Object.entries(
+        (data as { sizes?: Record<string, { filename?: string }> } | undefined)?.sizes ?? {},
+      ).find(([, size]) => size?.filename === file.filename)?.[0]
+
       const result = await new Promise<UploadApiResponse>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
@@ -47,6 +63,23 @@ export const cloudinaryAdapter: Adapter = ({ prefix }) => {
       const filename = result.original_filename
         ? `${result.original_filename}${extension}`
         : file.filename
+
+      if (sizeName) {
+        // A size's own entry has no cloudinaryPublicId field in Payload's
+        // schema — only the fields a size derivative actually has.
+        return {
+          sizes: {
+            [sizeName]: {
+              url: result.secure_url,
+              filename,
+              width: result.width,
+              height: result.height,
+              filesize: result.bytes,
+              mimeType: file.mimeType,
+            },
+          },
+        }
+      }
 
       return {
         ...data,
