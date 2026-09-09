@@ -30,15 +30,11 @@ export function getCloudinaryImageUrl(
   const transforms = [
     'f_auto',
     'q_auto',
-    // c_/g_ only make sense together with w_/h_ — without a crop mode,
-    // Cloudinary just constrains the image (no cropping), so a landscape
-    // original gets served at its native aspect ratio and it's left to the
-    // browser's CSS object-fit:cover to crop it, blindly, with no idea
-    // where the actual subject is. That's what caused the product hero
-    // image bug: a tall orchid photo forced into a 4:5 box ended up
-    // showing only a sliver of the flower. Requesting the crop from
-    // Cloudinary directly (crop:'fill', gravity:'auto') lets it pick the
-    // interesting region instead.
+    // c_/g_ only make sense together with w_/h_. Product photos pass
+    // crop:'fit' (no gravity needed) so Cloudinary scales the whole image
+    // down to fit inside the box without cropping anything out — see
+    // getMediaUrl for why: a smart center-of-subject crop (fill + auto
+    // gravity) still cut into the photo, which isn't what was wanted.
     options?.width && options?.height && options?.crop && `c_${options.crop}`,
     options?.width && options?.height && options?.gravity && `g_${options.gravity}`,
     options?.width && `w_${options.width}`,
