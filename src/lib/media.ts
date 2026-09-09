@@ -9,23 +9,29 @@ export function getMediaUrl(
   media: MediaLike,
   /**
    * Target display box for this image, e.g. { width: 800, height: 1000 }
-   * for a 4:5 product photo slot. When given (and Cloudinary is enabled),
-   * the crop is requested from Cloudinary itself (fill + subject-aware
-   * gravity) instead of serving the raw original and leaving the browser's
-   * CSS to blindly object-fit:cover-crop it — see getCloudinaryImageUrl for
-   * why that matters. Omit for slots that should show the image uncropped.
+   * for a product photo slot. When given (and Cloudinary is enabled), the
+   * image is scaled to fit entirely inside that box (Cloudinary crop:
+   * 'fit') instead of serving the raw original at native resolution — the
+   * whole photo stays visible, just resized; nothing is cropped out.
+   *
+   * We tried a smart center-of-subject crop here first (fill + auto
+   * gravity), which fixed the "only the flower's pouch is visible" bug,
+   * but it still zoomed in and cut off part of the photo to fill the box
+   * edge-to-edge. The ask is to always show the whole original photo, so
+   * pair this with `object-contain` (not `object-cover`) on the <img> —
+   * the box's own background shows as letterboxing where the photo's
+   * aspect ratio doesn't match the box's.
    */
-  crop?: { width: number; height: number },
+  box?: { width: number; height: number },
 ): string | null {
   if (!media || typeof media === 'string') return null
 
   if (isCloudinaryEnabled() && media.cloudinaryPublicId) {
     return (
       getCloudinaryImageUrl(media.cloudinaryPublicId, {
-        width: crop?.width,
-        height: crop?.height,
-        crop: crop ? 'fill' : undefined,
-        gravity: crop ? 'auto' : undefined,
+        width: box?.width,
+        height: box?.height,
+        crop: box ? 'fit' : undefined,
       }) ?? media.url ?? null
     )
   }
