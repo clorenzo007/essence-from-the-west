@@ -46,7 +46,17 @@ export const cloudinaryAdapter: Adapter = ({ prefix }) => {
           {
             filename_override: file.filename,
             folder,
-            resource_type: 'auto',
+            // This collection only ever accepts images (mimeTypes: ['image/*']
+            // in Media.ts), so we can — and must — say so explicitly instead
+            // of asking Cloudinary to auto-detect. Cloudinary's API rejects
+            // 'auto' as a literal resource_type on this account ("Invalid
+            // resource type 'auto'. Must be one of: image, javascript, css,
+            // video, raw."), which made every replace-the-file save on an
+            // existing Media doc fail with a 500 — the exact bug that kept
+            // the corrupted Paphiopedilum charlesworthii photo from being
+            // fixed by re-uploading. See the matching change in handleDelete
+            // below.
+            resource_type: 'image',
             use_filename: true,
             unique_filename: true,
             overwrite: false,
@@ -96,7 +106,9 @@ export const cloudinaryAdapter: Adapter = ({ prefix }) => {
       const publicId = (doc as { cloudinaryPublicId?: string }).cloudinaryPublicId
       if (!publicId) return
 
-      await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' })
+      // Same reasoning as handleUpload above: this account's Cloudinary API
+      // rejects 'auto' as a resource_type, image-only is always correct here.
+      await cloudinary.uploader.destroy(publicId, { resource_type: 'image' })
     },
     generateURL: ({ data, filename }) => {
         const publicId = (data as { cloudinaryPublicId?: string } | undefined)?.cloudinaryPublicId
