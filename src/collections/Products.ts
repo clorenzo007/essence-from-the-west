@@ -305,6 +305,24 @@ export const Products: CollectionConfig = {
           description: 'Growing requirements for serious collectors.',
           fields: [
             {
+              name: 'speciesTemplate',
+              type: 'relationship',
+              relationTo: 'species-templates',
+              admin: {
+                description:
+                  'Elegí la plantilla de la especie/género y tocá "Aplicar plantilla" (debajo) para autocompletar luz, temperatura, riego, humedad, fertilización, etc. Todo queda editable después.',
+              },
+            },
+            {
+              name: 'applySpeciesTemplateHelper',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/components/admin/ApplySpeciesTemplateField#ApplySpeciesTemplateField',
+                },
+              },
+            },
+            {
               type: 'row',
               fields: [
                 {
