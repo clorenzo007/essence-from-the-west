@@ -21,6 +21,7 @@ import { Customers } from './collections/Customers'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
 import { Specimens } from './collections/Specimens'
+import { SpeciesTemplates } from './collections/SpeciesTemplates'
 import { Supplies } from './collections/Supplies'
 import { Users } from './collections/Users'
 
@@ -118,6 +119,7 @@ export default buildConfig({
     Users,
     Media,
     Categories,
+    SpeciesTemplates,
     Products,
     Supplies,
     Specimens,
