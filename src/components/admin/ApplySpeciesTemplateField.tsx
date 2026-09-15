@@ -3,43 +3,25 @@
 import { useAllFormFields } from '@payloadcms/ui'
 import { useState } from 'react'
 
+import { getTemplateFieldUpdates, relationValueToId, type SpeciesTemplateDoc } from '@/lib/species-template-fields'
+
 /**
  * "Aplicar plantilla" — vive en la pestaña Cultivo, justo debajo del campo
  * "Species Template". Copia los valores de la plantilla de especie/género
  * elegida (luz, temperatura, riego, humedad, fertilización, floración,
- * origen, género, guía de cuidados, etc.) a este producto.
+ * origen, género, short description, description, guía de cuidados, etc.)
+ * a este producto.
  *
  * Es un campo `type: 'ui'` — no guarda nada por sí mismo, solo autocompleta
  * los demás campos. Todo sigue siendo editable después: esto no vincula ni
  * bloquea nada, solo ahorra tener que tipear todo de nuevo en cada orquídea
  * nueva de la misma especie.
+ *
+ * A diferencia del autocompletado automático al elegir Categoría (ver
+ * AutoApplyTemplateOnCategory.tsx), este botón es una acción explícita del
+ * usuario — por eso SIEMPRE sobreescribe los campos con datos en la
+ * plantilla, incluso si ya tenían algo cargado.
  */
-
-type SpeciesTemplateDoc = {
-  id: string
-  name?: string
-  genus?: string
-  origin?: string
-  fragrance?: string
-  difficulty?: string
-  humidity?: string
-  temperature?: string
-  lighting?: string
-  floweringSeason?: string[]
-  bloomSize?: string
-  wateringNotes?: string
-  fertilizerNotes?: string
-  careSheet?: string | { id: string }
-}
-
-const relationValueToId = (value: unknown): string | null => {
-  if (typeof value === 'string' && value) return value
-  if (value && typeof value === 'object' && 'id' in (value as Record<string, unknown>)) {
-    const id = (value as Record<string, unknown>).id
-    return typeof id === 'string' ? id : null
-  }
-  return null
-}
 
 export const ApplySpeciesTemplateField = () => {
   const [allFields, dispatchFields] = useAllFormFields()
@@ -60,24 +42,9 @@ export const ApplySpeciesTemplateField = () => {
       if (!res.ok) throw new Error('not-ok')
       const doc: SpeciesTemplateDoc = await res.json()
 
-      const setIfPresent = (path: string, value: unknown) => {
-        if (value === undefined || value === null || value === '') return
-        if (Array.isArray(value) && value.length === 0) return
+      for (const { path, value } of getTemplateFieldUpdates(doc)) {
         dispatchFields({ type: 'UPDATE', path, value })
       }
-
-      setIfPresent('genus', doc.genus)
-      setIfPresent('origin', doc.origin)
-      setIfPresent('fragrance', doc.fragrance)
-      setIfPresent('difficulty', doc.difficulty)
-      setIfPresent('humidity', doc.humidity)
-      setIfPresent('temperature', doc.temperature)
-      setIfPresent('lighting', doc.lighting)
-      setIfPresent('floweringSeason', doc.floweringSeason)
-      setIfPresent('bloomSize', doc.bloomSize)
-      setIfPresent('wateringNotes', doc.wateringNotes)
-      setIfPresent('fertilizerNotes', doc.fertilizerNotes)
-      setIfPresent('careSheet', relationValueToId(doc.careSheet))
 
       setAppliedName(doc.name || 'la plantilla')
     } catch {
@@ -108,7 +75,7 @@ export const ApplySpeciesTemplateField = () => {
         </button>
         <span style={{ fontSize: '0.8rem', color: 'var(--theme-elevation-500)' }}>
           {templateId
-            ? 'Copia luz, temperatura, riego, humedad, fertilización y otros datos de cultivo a este producto. Podés editarlos después.'
+            ? 'Copia luz, temperatura, riego, humedad, fertilización, short description, description y otros datos a este producto (sobreescribe lo que ya esté cargado). Podés editarlo después.'
             : 'Elegí una plantilla arriba para poder aplicarla.'}
         </span>
       </div>
@@ -128,8 +95,8 @@ export const ApplySpeciesTemplateField = () => {
 
       {appliedName && !error && (
         <p style={{ marginTop: '0.75rem', marginBottom: 0, fontSize: '0.85rem' }}>
-          Aplicado ✓ ({appliedName}) — revisá los campos de abajo (y Género/Origen en Resumen) y
-          ajustalos si hace falta.
+          Aplicado ✓ ({appliedName}) — revisá los campos de abajo (y Género/Origen/Short
+          Description/Description en Resumen) y ajustalos si hace falta.
         </p>
       )}
     </div>
