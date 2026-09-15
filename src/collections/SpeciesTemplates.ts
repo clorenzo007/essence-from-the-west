@@ -62,6 +62,23 @@ export const SpeciesTemplates: CollectionConfig = {
       },
     },
     {
+      name: 'shortDescriptionTemplate',
+      type: 'textarea',
+      maxLength: 280,
+      admin: {
+        description:
+          'Texto de partida para "Short Description" (pestaña Resumen del producto). Se copia solo si ese campo está vacío — después es 100% editable por planta.',
+      },
+    },
+    {
+      name: 'descriptionTemplate',
+      type: 'textarea',
+      admin: {
+        description:
+          'Texto de partida para "Description" (pestaña Resumen del producto). Separá párrafos con una línea en blanco. Se copia solo si ese campo está vacío — pensalo como punto de partida genérico de la especie/género, no como la ficha final de cada planta.',
+      },
+    },
+    {
       type: 'row',
       fields: [
         {

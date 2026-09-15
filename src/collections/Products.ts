@@ -159,6 +159,15 @@ export const Products: CollectionConfig = {
               },
             },
             {
+              name: 'autoApplyTemplateOnCategoryHelper',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/components/admin/AutoApplyTemplateOnCategory#AutoApplyTemplateOnCategory',
+                },
+              },
+            },
+            {
               name: 'shortDescription',
               type: 'textarea',
               required: true,
